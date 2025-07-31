@@ -7,13 +7,15 @@ import Leaderboard from "./Pages/Leaderboard";
 import Profile from "./Pages/Profile";
 import Settings from "./Pages/Settings";
 import Help from "./Pages/Help";
+import Landing from "./Pages/Landing";
 
 function App() {
   return (
     <Router>
       <NavBar />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/deck-centre" element={<DeckCentre />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />

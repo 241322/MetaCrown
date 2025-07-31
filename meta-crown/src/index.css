@@ -6,6 +6,7 @@
   --black-color: #000000;
   --accent-1: #2ECC71;
   --accent-2: #E74C3C;
+  --gold-gradient: linear-gradient(0deg, #fdca01 0%, #fef153 40%, #f29e00 100%);
 }
 
 h1 {
@@ -53,6 +54,9 @@ body {
   F=font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--background-gradient, linear-gradient(180deg, #16263A 0%, #061324 100%));
+  background-repeat: no-repeat;
+  height: 100vh;
 }
 
 code {

@@ -1,33 +1,73 @@
-nav{
+nav {
+    position: fixed;
+    top: 13px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 80%;
     height: 52px;
-    flex-shrink: 0;
     background-color: rgba(12, 23, 37, 0.50);
-    border: 1px solid var(--white-color);
     box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
     filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
     backdrop-filter: blur(5px);
-    position: sticky;
-    top: 13px;
     border-radius: 100px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
+    padding: 0 32px;
+    z-index: 10;
+    border: none; 
+    overflow: visible; 
 }
 
-nav ul {
+nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--white-color);
+    border-radius: 100px;
+    pointer-events: none;
+    mix-blend-mode: overlay; 
+    z-index: 1;
+    opacity: 0.6; 
+}
+
+.nav-left {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    gap: 1rem;
-    list-style: none;
+    gap: 32px;
 }
 
-nav ul li a {
+.crown-logo {
+    height: 36px;
+    width: auto;
+    display: block;
+}
+
+.nav-main-links {
+    display: flex;
+    gap: 64px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-main-links li a {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--white-color);
+    text-decoration: none;
+}
+
+.nav-right-links {
+    display: flex;
+    gap: 45px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-right-links li a {
     font-size: 16px;
     font-weight: 400;
     color: var(--white-color);
