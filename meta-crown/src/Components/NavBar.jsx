@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "../Styles/NavBar.css";
 import crown from "../Assets/crown.png";
 
@@ -8,15 +8,21 @@ const NavBar = () => (
     <div className="nav-left">
       <Link to="/"><img src={crown} alt="Crown Logo" className="crown-logo" /></Link>
       <ul className="nav-main-links">
-        <li><Link to="/dashboard">My Dashboard</Link></li>
-        <li><Link to="/deck-centre">Deck Centre</Link></li>
-        <li><Link to="/leaderboard">Leaderboard</Link></li>
+        <li>
+          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>My Dashboard</NavLink>
+        </li>
+        <li>
+          <NavLink to="/deck-centre" className={({ isActive }) => isActive ? "active-link" : ""}>Deck Centre</NavLink>
+        </li>
+        <li>
+          <NavLink to="/leaderboard" className={({ isActive }) => isActive ? "active-link" : ""}>Leaderboard</NavLink>
+        </li>
       </ul>
     </div>
     <ul className="nav-right-links">
-      <li style={{ fontSize: "14px" }}><Link to="/profile">Profile</Link></li>
-      <li style={{ fontSize: "14px" }}><Link to="/settings">Settings</Link></li>
-      <li style={{ fontSize: "14px" }}><Link to="/help">Help</Link></li>
+      <li><NavLink to="/profile" className={({ isActive }) => isActive ? "active-link" : ""}>Profile</NavLink></li>
+      <li><NavLink to="/settings" className={({ isActive }) => isActive ? "active-link" : ""}>Settings</NavLink></li>
+      <li><NavLink to="/help" className={({ isActive }) => isActive ? "active-link" : ""}>Help</NavLink></li>
     </ul>
   </nav>
 );

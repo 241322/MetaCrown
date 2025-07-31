@@ -1,12 +1,15 @@
 :root {
   --primary-color: #0F1B2A;
   --secondary-color: #1E2D44;
+  --secondary-color-dark: #1a283dff;
   --tertiary-color: #F1C40F;
   --white-color: #FFFFFF;
   --black-color: #000000;
   --accent-1: #2ECC71;
   --accent-2: #E74C3C;
-  --gold-gradient: linear-gradient(0deg, #fdca01 0%, #fef153 40%, #f29e00 100%);
+  --gold-gradient: linear-gradient(90deg, #fdca01 0%, #fef153 40%, #f29e00 100%);
+  --indented-shadow: 0 -2px 2px 0 rgba(255, 255, 255, 0.15) inset, 0 6px 12px 0 rgba(0, 0, 0, 0.25) inset;
+  color: var(--white-color);
 }
 
 h1 {
@@ -51,15 +54,21 @@ body {
   font-family: 'YouBlockhead', sans-serif;
   font-size: 16px;
   font-weight: normal;
-  F=font-style: normal;
+  font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--background-gradient, linear-gradient(180deg, #16263A 0%, #061324 100%));
   background-repeat: no-repeat;
-  height: 100vh;
+  height: 100%;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+/* Transparent scrollbar track */
+::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
 }

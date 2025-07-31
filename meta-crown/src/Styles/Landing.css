@@ -1,6 +1,9 @@
 body{
     padding: 0;
     margin: 0;
+    overflow-x: hidden; /* Add this */
+    max-width: 100vw;
+    height: fit-content !important;
 }
 
 .hero{
@@ -65,7 +68,7 @@ body{
 }
 
 .heroSlider {
-    width: 100vw;
+    width: 100%;
     height: auto;
     padding: 10px 0;
     align-items: center;
@@ -100,7 +103,7 @@ body{
     list-style: none;
     margin: 0;
     padding: 0;
-    animation: slider-scroll 45s linear infinite;
+    animation: slider-scroll 60s linear infinite;
     /* Duplicate content for seamless loop */
     width: max-content;
 }
@@ -120,4 +123,105 @@ body{
     100% {
         transform: translateX(-50%);
     }
+}
+
+.topPicks {
+    background: var(--secondary-color);
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    padding: 42px 0; /* Remove side padding here */
+    border-radius: 0 0 20px 20px;
+}
+
+.topPickTitle{
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 42px;
+    /* top: 42px; */
+}
+
+.topPickContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    width: 60vw;           /* 60% of viewport width */
+    margin: 0 auto;        /* Center the container */
+    height: 100%;
+    margin-top: 42px;
+}
+
+.topPickCard {
+    background: var(--primary-color); /* Use your primary color */
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    flex: 1 1 0;
+    aspect-ratio: 69/88;
+    min-width: 0;
+    height: auto;
+    /* border: 1px solid #FFF; */
+    box-shadow: 0 -5px 10px 0 rgba(255, 255, 255, 0.1) inset, 0 5px 20px 0 rgba(0, 0, 0, 1) inset;
+    backdrop-filter: blur(5px);
+}
+
+.topPickCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--white-color);
+    border-radius: 20px;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+.welcome {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 100vw;
+    padding-left: 120px;
+    padding-right: 120px;
+    margin: 120px 0 0 0;
+    box-sizing: border-box;
+    gap: 187px;
+}
+
+.welcomeImg {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.welcomeImg img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    display: block;
+    height: auto;
+
+}
+
+.welcomeText {
+    flex: 1 1 0;
+    max-width: 50vw;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.55rem;
+    color: var(--white-color);
 }

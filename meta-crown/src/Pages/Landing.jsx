@@ -2,14 +2,21 @@ import React from "react";
 import "../Styles/Landing.css";
 import crown from "../Assets/crown.png";
 import heroKings from "../Assets/heroKings.png";
+import welcomeImg from "../Assets/welcomeIMG.jpg";
 
 const sliderItems = [
     "View card stats",
-    "View Leaderboard",
     "Nerf Miner",
+    "View Leaderboard",
     "Zap is Love",
+    "View my stats",
     "Hog Riiiiiider!",
-    "View my stats"
+    "View card stats",
+    "Nerf Miner",
+    "View Leaderboard",
+    "Zap is Love",
+    "View my stats",
+    "Hog Riiiiiider!",
 ];
 
 const Landing = () => {
@@ -28,6 +35,23 @@ const Landing = () => {
                             <li className="sliderContent" key={idx}>{item}</li>
                         ))}
                     </ul>
+                </div>
+            </div>
+            <div className="topPicks">
+                <h3 className="topPickTitle">Today's Top Picks</h3>
+                <div className="topPickContent">
+                    <div className="topPickCard"></div>
+                    <div className="topPickCard"></div>
+                    <div className="topPickCard"></div>
+                    <div className="topPickCard"></div>
+                </div>
+            </div>
+            <div className="welcome">
+                <div className="welcomeImg"> <img src={welcomeImg} alt="Welcome" /> 
+                </div>
+                <div className="welcomeText">
+                    <p>Welcome to Meta Crown, your competitive edge in Clash Royale. Whether you're climbing the ladder or refining your strategy, Meta Crown delivers actionable insights with clarity and precision. Explore personalised match analytics, optimise your decks with smart comparisons, and track your performance like a true contender. The battle is data driven now—rule the arena with confidence
+</p>
                 </div>
             </div>
         </div>
