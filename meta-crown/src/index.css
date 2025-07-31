@@ -1,0 +1,61 @@
+:root {
+  --primary-color: #0F1B2A;
+  --secondary-color: #1E2D44;
+  --tertiary-color: #F1C40F;
+  --white-color: #FFFFFF;
+  --black-color: #000000;
+  --accent-1: #2ECC71;
+  --accent-2: #E74C3C;
+}
+
+h1 {
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 88px;
+  color: var(--white-color);
+}
+
+h2 {
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 60px;
+  color: var(--white-color);
+}
+
+h3 {
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 40px;
+  color: var(--white-color);
+}
+
+h4{
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 32px;
+  color: var(--white-color);
+}
+
+h5 {
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 25px;
+  color: var(--white-color);
+}
+
+@font-face {
+  font-family: 'YouBlockhead';
+  src: url('../public/fonts/You Blockhead.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  font-family: 'YouBlockhead', sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  F=font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
