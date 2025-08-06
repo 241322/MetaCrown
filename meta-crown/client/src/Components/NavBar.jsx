@@ -6,7 +6,9 @@ import crown from "../Assets/crown.png";
 const NavBar = () => (
   <nav>
     <div className="nav-left">
-      <Link to="/"><img src={crown} alt="Crown Logo" className="crown-logo" /></Link>
+      <Link to="/landing">
+        <img src={crown} alt="Crown Logo" className="crown-logo" />
+      </Link>
       <ul className="nav-main-links">
         <li>
           <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active-link" : ""}>My Dashboard</NavLink>
