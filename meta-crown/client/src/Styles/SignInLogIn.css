@@ -1,0 +1,244 @@
+.splashPage{
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../Assets/Card Evolution.png') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    z-index: 0;
+    backdrop-filter: blur(5px);
+    /* background-position: 50% 50%;
+    transition: background-position 0.2s ease-in-out, backdrop-filter 0.5s ease; */
+}
+
+.splashContainer {
+    text-align: center;
+    background-color: #01031b27;
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    margin: 0 auto;
+    /* border: 2px solid rgba(255, 255, 255, 1); */
+    transition: box-shadow 0.3s ease, background-color 0.3s ease, backdrop-filter 0.5s ease;
+}
+
+.splashContainer:hover{
+    box-shadow: 0 -4px 10px 0 rgba(255, 255, 255, 0.15) inset, 0 8px 10px 0 rgba(0, 0, 0, 0.50) inset;
+    background-color: #01031b38;
+    backdrop-filter: blur(12px);
+}
+
+.splashContainer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid #ffffff50;
+    pointer-events: none;
+    mix-blend-mode: overlay; 
+    z-index: 1;
+    opacity: 0.6;
+    border-radius: 20px;
+}
+
+.splashButton {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto; /* Changed from 40% to auto */
+    min-width: 120px;
+    aspect-ratio: unset;
+    background-color: #1e2d441c;
+    color: var(--white-color);
+    box-shadow: 0 -2px 3px 0 rgba(255, 255, 255, 0.07) inset, 0 3px 5px 0 rgba(0, 0, 0, 0.50) inset;
+    backdrop-filter: blur(15px);
+    font-family: 'YouBlockhead', sans-serif;
+    font-weight: bold;
+    position: relative;
+    font-size: 1.5rem;
+    display: inline-block;
+    mix-blend-mode: darker;
+    transition: background 0.5s ease, color 1s ease;
+
+}
+
+.splashButton::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid #ffffff50;
+    pointer-events: none;
+    mix-blend-mode: overlay; 
+    z-index: 1;
+    opacity: 0.6;
+    border-radius: 20px;
+}
+
+.splashButton:hover {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.splashButton.secondary {
+  background: transparent;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: normal;
+  box-shadow: none;
+  border: none;
+  padding: 10px 16px;
+  min-width: unset;
+  transition: color 0.2s;
+}
+
+.splashButton.secondary:hover,
+.splashButton.secondary:focus {
+  color: var(--gold-color, #fdca01);
+  background: transparent;
+}
+
+.splashContainer h1 {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #fdca0155, 0 2px 8px #f29e0055;
+    /* color: transparent; */
+    -webkit-text-stroke-width: 0.1px; /* Sets the thickness of the outline */
+    -webkit-text-stroke-color: #00000050; /* Sets the color of the outline */
+}
+
+.splashContainer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.splashInput {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #ffffff55;
+  background: #01031b27;
+  color: #e0e0e0; /* Less bright white when not focused */
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  outline: none;
+  transition: border 0.2s, color 0.2s;
+}
+
+.splashInput:focus {
+  border: 1.5px solid var(--gold-gradient, #fdca01);
+}
+
+.splashInput.focused {
+  color: #fff; /* Bright white when focused */
+}
+
+/* Add these styles to your SignInLogIn.css */
+
+.signup-container {
+  overflow: hidden;
+  position: relative;
+  width: 400px;
+  max-width: 90vw;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-steps-wrapper {
+  width: 100%;
+  height: 340px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.signup-step {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(.77,0,.18,1);
+  z-index: 1;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-step.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2;
+  position: relative;
+}
+
+.signup-progress-bar {
+  position: relative;
+  width: 80%;
+  height: 10px;
+  background: #ffffff33;
+  border-radius: 5px;
+  margin: 80px auto 0 auto; /* Increased margin-top for more space */
+  overflow: visible;
+}
+
+.signup-progress {
+  height: 100%;
+  background: var(--gold-gradient);
+  border-radius: 5px;
+  transition: width 0.5s cubic-bezier(.77,0,.18,1);
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.signup-notch {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid var(--gold-gradient, #fdca01);
+  transform: translateY(-50%);
+  z-index: 3;
+  transition: background 0.3s;
+  box-shadow: 0 0 6px #fdca0155;
+}
+
+.signup-notch.filled {
+  background: var(--gold-gradient);
+}
+
+.signup-notch.notch-1 { left: 0%; }
+.signup-notch.notch-2 { left: 50%; transform: translate(-50%, -50%); }
+.signup-notch.notch-3 { right: 0%; }
+
+@media (max-width: 500px) {
+  .signup-container {
+    width: 98vw;
+    min-width: 0;
+    padding: 0 2vw;
+  }
+  .signup-steps-wrapper {
+    height: 380px;
+  }
+}
