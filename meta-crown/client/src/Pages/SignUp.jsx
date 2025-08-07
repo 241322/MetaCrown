@@ -76,6 +76,7 @@ const SignUp = () => {
   // Step 3 submit (finish)
   const handleStep3 = (e) => {
     e.preventDefault();
+    localStorage.setItem("username", username); // For SignUp
     // TODO: Add sign up logic here
     navigate("/landing");
   };

@@ -185,43 +185,82 @@ body{
 
 .welcome {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 60vw;
+    min-height: 1000px;
+    padding: 40px;
+    margin: 120px auto;
+    box-sizing: border-box;
+    gap: 32px;
+    background: var(--secondary-color);
+    border-radius: 20px;
+    box-shadow: 0 -5px 10px 0 rgba(255, 255, 255, 0.1) inset, 0 5px 20px 0 rgba(0, 0, 0, 1) inset;
+}
+
+.welcomeHeading {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 24px;
+    font-size: 2.5rem;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.welcomeContent {
+    display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
-    max-width: 100vw;
-    padding-left: 120px;
-    padding-right: 120px;
-    margin: 120px 0 0 0;
-    box-sizing: border-box;
-    gap: 187px;
+    gap: 40px;
+}
+
+.welcomeImgWrapper {
+    flex: 0 0 auto;
+    margin: 0 40px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .welcomeImg {
-    flex: 1 1 0;
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-}
-
-.welcomeImg img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 800px;
+    width: auto;
     height: auto;
     border-radius: 20px;
-    display: block;
-    height: auto;
-
+    object-fit: cover;
+    box-shadow: 0 2px 12px #0008;
 }
 
 .welcomeText {
     flex: 1 1 0;
-    max-width: 50vw;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    text-align: center;
-    font-size: 1.55rem;
+    text-align: left;
+    font-size: 1.2rem;
     color: var(--white-color);
+    padding-right: 40px;
+    height: 800px;
+    box-sizing: border-box;
+}
+
+.welcomeText h4 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--white-color);
+}
+
+.welcomeText p {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: var(--white-color);
+    width: 100%;
 }

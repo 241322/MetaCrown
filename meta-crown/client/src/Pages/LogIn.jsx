@@ -39,6 +39,9 @@ const LogIn = () => {
     setSubmitted(true);
     if (!emailValid || !passwordValid) return;
     // TODO: Add login logic here
+    // After successful login logic, e.g., fetching user data
+    const fetchedUsername = email.split("@")[0]; // Mocked fetched username
+    localStorage.setItem("username", fetchedUsername); // For LogIn, after fetching user data
     navigate("/landing");
   };
 

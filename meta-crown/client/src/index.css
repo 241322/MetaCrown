@@ -15,7 +15,9 @@
 h1 {
   font-family: 'YouBlockhead', sans-serif;
   font-size: 88px;
-  color: var(--white-color);
+  background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 h2 {

@@ -47,11 +47,17 @@ const Landing = () => {
                 </div>
             </div>
             <div className="welcome">
-                <div className="welcomeImg"> <img src={welcomeImg} alt="Welcome" /> 
-                </div>
-                <div className="welcomeText">
-                    <p>Welcome to Meta Crown, your competitive edge in Clash Royale. Whether you're climbing the ladder or refining your strategy, Meta Crown delivers actionable insights with clarity and precision. Explore personalised match analytics, optimise your decks with smart comparisons, and track your performance like a true contender. The battle is data driven now—rule the arena with confidence
-</p>
+                <h2 className="welcomeHeading">Welcome to Meta Crown</h2>
+                <div className="welcomeContent">
+                    <div className="welcomeImgWrapper">
+                        <img className="welcomeImg" src={welcomeImg} alt="Welcome" />
+                    </div>
+                    <div className="welcomeText">
+                        <h4>your competitive edge in Clash Royale.</h4>
+                        <p>
+                            Whether you're <strong className="p-highlight">climbing the ladder</strong> or refining your strategy, Meta Crown delivers actionable insights with clarity and precision. Explore personalised match analytics, optimise your decks with smart comparisons, and track your performance like a true contender. The battle is data driven now—rule the arena with confidence
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
