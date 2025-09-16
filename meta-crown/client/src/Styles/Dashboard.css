@@ -1,0 +1,95 @@
+.dashboard-searchbar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100vw;
+  margin-top: 100px; /* Adjust to be below NavBar */
+}
+
+.dashboard-searchbar {
+  display: flex;
+  align-items: center;
+  background: #1e2d44cc;
+  border-radius: 32px;
+  box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px); /* Lower blur */
+  padding: 12px 28px;
+  gap: 16px;
+  width: 420px;
+  max-width: 90vw;
+}
+
+.search-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  color: var(--white-color, #fff);
+  font-size: 1.2rem;
+  outline: none;
+  width: 100%;
+  padding: 0 8px;
+  text-align: center; /* Center the input text */
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+.search-input::placeholder {
+  color: #cccccc;
+  opacity: 0.7;
+  font-size: 0.95rem; /* Slightly smaller placeholder */
+}
+
+.dashboard-username{
+    margin-top: 20px;
+    font-size: 24px;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: 'YouBlockhead', sans-serif;
+    font-size: 4rem;
+    text-align: center;
+    line-height: 1.1;
+    margin-top: 45px;
+}
+
+.bigComponents {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 90%;
+    max-width: 1600px;
+    margin-top: 40px;
+}
+
+.bigComponent {
+    background: #1e2d44cc;
+    border-radius: 16px;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px);
+    height: 300px; /* Fixed height for uniformity */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 1rem;
+    
+}
+
+.componentAsset{
+    width: 100%;
+    height: 100%;
+    /* background: #2e3b4e; */
+    /* border-radius: 8px; */
+}

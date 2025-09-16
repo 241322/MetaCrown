@@ -246,7 +246,7 @@ const SignUp = () => {
             <h1>Welcome, {username}!</h1>
             <h2>Your account has been created.</h2>
             <button className="splashButton" onClick={handleStep3}>
-              Go to Landing
+              Continue to MetaCrown
             </button>
           </div>
         </div>
