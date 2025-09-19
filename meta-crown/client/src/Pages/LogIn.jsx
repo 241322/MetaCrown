@@ -34,14 +34,21 @@ const LogIn = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
     if (!emailValid || !passwordValid) return;
-    // TODO: Add login logic here
-    // After successful login logic, e.g., fetching user data
-    const fetchedUsername = email.split("@")[0]; // Mocked fetched username
-    localStorage.setItem("username", fetchedUsername); // For LogIn, after fetching user data
+
+    // TODO: Replace with real API call:
+    // const res = await api.login({ email, password });
+    // const { username: apiUsername, playerTag: apiPlayerTag } = res.data;
+
+    const apiUsername = localStorage.getItem("username") || "Player"; // temp fallback
+    const apiPlayerTag = localStorage.getItem("playerTag") || "#000000000"; // temp fallback
+
+    localStorage.setItem("username", apiUsername);
+    localStorage.setItem("playerTag", apiPlayerTag);
+
     navigate("/landing");
   };
 

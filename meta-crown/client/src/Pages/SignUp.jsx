@@ -70,14 +70,20 @@ const SignUp = () => {
     e.preventDefault();
     setSubmitted2(true);
     if (!usernameValid || !playerTagValid) return;
+    // Persist now so Step 3 + Dashboard have data
+    localStorage.setItem("username", username);
+    localStorage.setItem("playerTag", playerTag);
     setStep(3);
   };
 
   // Step 3 submit (finish)
   const handleStep3 = (e) => {
     e.preventDefault();
-    localStorage.setItem("username", username); // For SignUp
-    // TODO: Add sign up logic here
+    // Safety (in case not already saved)
+    if (!localStorage.getItem("username")) {
+      localStorage.setItem("username", username);
+    }
+    if (playerTagValid) localStorage.setItem("playerTag", playerTag);
     navigate("/landing");
   };
 
