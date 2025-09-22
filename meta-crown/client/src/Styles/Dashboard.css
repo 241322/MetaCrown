@@ -20,6 +20,10 @@
   gap: 16px;
   width: 420px;
   max-width: 90vw;
+  background: linear-gradient(#1e2d44cc, #1e2d44cc) padding-box,
+              linear-gradient(to bottom, #ffffff00, #ffffff90) border-box;
+  border: 1px solid transparent; /* Define a transparent border */
+  mix-blend-mode: screen; /* Optional: for a subtle light effect */
 }
 
 .search-icon {
@@ -54,6 +58,7 @@
     justify-content: center;
     /* margin-top: 30px; */
     width: 100%;
+    max-width: 1920px;
     background: url('../Assets/Balloon_card_render.png') no-repeat left 80% center;
     background-size: contain;
     background-opacity: 0.1;
@@ -191,4 +196,352 @@
     width: 100%;
     line-height: 1.1;
     /* margin-top: 5px; */
+}
+
+.currentDeckDashboard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  max-width: 1600px;
+  margin-top: 40px;
+  height: 491px;
+  margin-bottom: 40px;
+}
+
+.dashboardDeckMain{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+}
+
+.dashboardDeckStats{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  height: 100%;
+  width: 50%;
+  /* background: #a17516cc; */
+}
+
+.dashboardDeckStat{
+  font-size: 1.1rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  line-height: 1.1;
+  background: url("../Assets/statBackground.png") no-repeat center;
+  background-size: cover;
+  border-radius: 20px;
+  /* box-shadow: inset 0px 2px 2px #000000; */
+}
+
+.dashboardDeckStatIcon{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.dashboardDeckStatIcon img{
+  height: 40px;
+  width: auto;
+}
+
+.dashboardDeckStatContent{
+  margin-right: 10px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+
+.dashboardDeckCards{
+  height: 100%;
+  width: 85%;
+  background: rgba(30, 45, 68, 0.70);
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px);
+  padding: 10px;
+  /* margin-top: 20px; */
+}
+
+.dashboardDeckCard1{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/Evolution/LumberjackCardEvolution.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard2{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/Evolution/BarbariansCardEvolution.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard3{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/WizardCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard4{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/ElectroWizardCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard4{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/ElectroWizardCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard5{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/BalloonCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+
+.dashboardDeckCard6{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/RageCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard7{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/IceSpiritCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+.dashboardDeckCard8{
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  aspect-ratio: 198.02/230.50;
+  /* background: var(--secondary-colour, #2e3b4e); */
+  background: url('../Assets/Cards/BatsCard.webp') no-repeat center;
+  background-size: contain;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  /* box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset; */
+    /* filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25)); */
+    /* backdrop-filter: blur(3px); */
+}
+
+
+.dashboardDeckCTA{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  height: 100%;
+  width: 50%;
+  /* background: #a32fb3cc; */
+}
+
+.dashboardDeckCTAButton{
+  width: 100%;
+  height: 100%;
+  /* background: url("../Assets/deckCTABackground.png") no-repeat center ; */
+  background: #1E2D44;
+  background-size: fit;
+  border-radius: 20px;
+  font-size: 1.8rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 8px 8px 6px #000E20, inset -8px -45px 6px #000E20;
+}
+
+.dashboardDeckCTAButton:hover {
+  box-shadow: inset 8px 8px 6px #000E20, inset -8px -45px 6px #000E20,3px 3px 20px #2d407035, -3px -3px 20px #2d407035;
+  transition: all 0.3s ease-in-out;
+}
+
+.matchHistoryContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  max-height: 600px;
+  max-width: 1600px;
+  margin-bottom: 40px;
+  margin-top: 100px;
+  /* padding: 20px; */
+  background: var(--primary-colour);
+  border-radius: 16px;
+  /* padding: 20px; */
+  box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px);
+    padding-bottom: 20px;
+}
+
+.matchHistoryContainer h4{
+  font-size: 2rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.matchHistoryRecords{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-height: 500px;
+  overflow-y: scroll;
+  gap: 20px;
+  width: 100%;
+  /* margin-top: 20px; */
+  /* background: #000; */
+  /* box-shadow: inset 0px 5px 5px #2e3b4e; */
+  padding-top: 20px;
+  -ms-overflow-style: auto;
+  /* IE/Edge legacy */
+  scrollbar-width: thin;                 /* Firefox */
+  scrollbar-color: var(--white-color) transparent;
+  position: relative;
+}
+
+.matchHistoryRecords::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0; /* optional spacing */
+}
+
+.matchHistoryRecords::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background .25s ease;
+}
+
+.matchHistoryRecords:hover::-webkit-scrollbar-thumb {
+  background: var(--gold-gradient);
+}
+
+.matchHistoryRecords {
+  scrollbar-gutter: stable;
+}
+
+.matchHistoryRecord{
+  width: 95%;
+  min-height: 300px;
+  height: 406px;
+  max-height: 406px;
+  /* background: var(--primary-colour, #1e2d44); */
+  border-radius: 20px;
+border: 5px solid var(--Accent-1, #2ECC71);
+background: rgba(46, 204, 113, 0.50);
+
+/* effect 1 */
+box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset, 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+backdrop-filter: blur(5px);
+}
+
+.matchHistoryRecords::last-child {
+  margin-bottom: 20px;
 }

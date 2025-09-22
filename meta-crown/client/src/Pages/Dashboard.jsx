@@ -4,6 +4,18 @@ import PlayerSearch from "../Assets/PlayerSearch.svg";
 import Arena24 from "../Assets/Legendary_Arena.webp";
 import Master1 from "../Assets/RankedMaster1.png";
 import MergeGold3 from "../Assets/Merge Tactics Gold 3.svg";
+import ElixerIcon from "../Assets/ElixerIcon.png";
+import ATK from "../Assets/ATK.svg";
+import DEF from "../Assets/DEF.svg";
+import F2P from "../Assets/F2P.svg";
+import LumberjackEvoCard from "../Assets/Cards/Evolution/LumberjackCardEvolution.webp";
+import BarbarianEvoCard from "../Assets/Cards/Evolution/BarbariansCardEvolution.webp";
+import WizardCard from "../Assets/Cards/WizardCard.webp";
+import ElectroWizardCard from "../Assets/Cards/ElectroWizardCard.webp";
+import BalloonCard from "../Assets/Cards/BalloonCard.webp";
+import RageCard from "../Assets/Cards/RageCard.webp";
+import IceSpiritCard from "../Assets/Cards/IceSpiritCard.webp";
+import BatsCard from "../Assets/Cards/BatsCard.webp";
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
@@ -110,6 +122,45 @@ const Dashboard = () => {
           <div className="smallComponentLabel">Favourite Card</div>
           <div className="smallComponentStat">Balloon</div>
         </div>
+      </div>
+      </div>
+      <div className="currentDeckDashboard">
+        <h4>Current Deck</h4>
+        <div className="dashboardDeckMain">
+          <div className="dashboardDeckStats">
+            <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={ElixerIcon} alt="Elixir Icon" /></div>
+            <div className="dashboardDeckStatContent">3.5</div></div>
+            <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={ATK} alt="ATK Icon" /></div>
+            <div className="dashboardDeckStatContent">7/10</div></div>
+            <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={DEF} alt="DEF Icon" /></div>
+            <div className="dashboardDeckStatContent">9/10</div></div>
+            <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={F2P} alt="F2P Icon" /></div>
+            <div className="dashboardDeckStatContent">9/10</div></div>
+          </div>
+          <div className="dashboardDeckCards">
+            <div className="dashboardDeckCard1" id="1"></div>
+            <div className="dashboardDeckCard2" id="2"></div>
+            <div className="dashboardDeckCard3" id="3"></div>
+            <div className="dashboardDeckCard4" id="4"></div>
+            <div className="dashboardDeckCard5" id="5"></div>
+            <div className="dashboardDeckCard6" id="6"></div>
+            <div className="dashboardDeckCard7" id="7"></div>
+            <div className="dashboardDeckCard8" id="8"></div>
+          </div>
+          <div className="dashboardDeckCTA">
+            <div className="dashboardDeckCTAButton">Copy</div>
+            <div className="dashboardDeckCTAButton">Improve</div>
+            <div className="dashboardDeckCTAButton">Compare</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="matchHistoryContainer">
+        <h4>Meta Rewind</h4>
+      <div className="matchHistoryRecords">
+        <div className="matchHistoryRecord"></div>
+        <div className="matchHistoryRecord"></div>
+        <div className="matchHistoryRecord"></div>
       </div>
       </div>
     </div>
