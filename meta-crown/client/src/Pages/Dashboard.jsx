@@ -8,14 +8,9 @@ import ElixerIcon from "../Assets/ElixerIcon.png";
 import ATK from "../Assets/ATK.svg";
 import DEF from "../Assets/DEF.svg";
 import F2P from "../Assets/F2P.svg";
-import LumberjackEvoCard from "../Assets/Cards/Evolution/LumberjackCardEvolution.webp";
-import BarbarianEvoCard from "../Assets/Cards/Evolution/BarbariansCardEvolution.webp";
-import WizardCard from "../Assets/Cards/WizardCard.webp";
-import ElectroWizardCard from "../Assets/Cards/ElectroWizardCard.webp";
-import BalloonCard from "../Assets/Cards/BalloonCard.webp";
-import RageCard from "../Assets/Cards/RageCard.webp";
-import IceSpiritCard from "../Assets/Cards/IceSpiritCard.webp";
-import BatsCard from "../Assets/Cards/BatsCard.webp";
+import VSswords from "../Assets/vsSwords.png"
+import TrophyIcon from "../Assets/trophy.png"
+
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
@@ -158,7 +153,24 @@ const Dashboard = () => {
       <div className="matchHistoryContainer">
         <h4>Meta Rewind</h4>
       <div className="matchHistoryRecords">
-        <div className="matchHistoryRecord"></div>
+        <div className="matchHistoryRecord">
+          <div className="metaRewindYou">
+            <div className="rewindPlayerHeader">
+              <div className="rewindPlayerUsername">{username}</div><div className="rewindPlayerTrophies"> <img src={TrophyIcon} alt="Trophy Icon" /> 9736 </div>
+            </div>
+            <div className="rewindPlayerDeck"></div>
+          </div>
+          <div className="metaRewindVs">
+            Victory
+            <div className="metaRewindVsIcon"> <strong>3</strong> <img src={VSswords} alt="VS Icon" /> 1</div>
+          </div>
+          <div className="metaRewindOpponent">
+            <div className="rewindPlayerHeader">
+              <div className="rewindPlayerUsername">Boepensvark</div><div className="rewindPlayerTrophies"> <img src={TrophyIcon} alt="Trophy Icon" /> 12000 </div>
+            </div>
+            <div className="rewindPlayerDeck"></div>
+          </div>
+        </div>
         <div className="matchHistoryRecord"></div>
         <div className="matchHistoryRecord"></div>
       </div>
