@@ -270,7 +270,7 @@
 }
 
 
-.dashboardDeckCards{
+.dashboardDeckCards {
   height: 100%;
   width: 85%;
   background: rgba(30, 45, 68, 0.70);
@@ -280,10 +280,29 @@
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
-    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
-    backdrop-filter: blur(3px);
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+  backdrop-filter: blur(3px);
   padding: 10px;
-  /* margin-top: 20px; */
+}
+
+.dashboardDeckCard {
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 198.02/230.50;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+}
+
+.dashboardDeckCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 20px;
 }
 
 .dashboardDeckCard1{

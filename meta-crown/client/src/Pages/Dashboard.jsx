@@ -11,14 +11,26 @@ import F2P from "../Assets/F2P.svg";
 import VSswords from "../Assets/vsSwords.png"
 import TrophyIcon from "../Assets/trophy.png"
 
+const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 93, 84];
 
 const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
+  const [deckCards, setDeckCards] = useState([]);
 
   useEffect(() => {
+    fetch("http://localhost:6969/cards")
+      .then(res => res.json())
+      .then(data => {
+        // Filter for the specified deck card IDs
+        const filtered = data.filter(card => DECK_CARD_IDS.includes(card.card_id));
+        // Sort by the order in DECK_CARD_IDS
+        const sorted = DECK_CARD_IDS.map(id => filtered.find(card => card.card_id === id)).filter(Boolean);
+        setDeckCards(sorted);
+      });
+
     const storedUsername = localStorage.getItem("username") || "";
     const storedPlayerTag = localStorage.getItem("playerTag") || "";
     setUsername(storedUsername);
@@ -32,7 +44,7 @@ const Dashboard = () => {
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
-
+  
   const handleChange = (e) => {
     let value = e.target.value;
     if (focused) {
@@ -133,14 +145,16 @@ const Dashboard = () => {
             <div className="dashboardDeckStatContent">9/10</div></div>
           </div>
           <div className="dashboardDeckCards">
-            <div className="dashboardDeckCard1" id="1"></div>
-            <div className="dashboardDeckCard2" id="2"></div>
-            <div className="dashboardDeckCard3" id="3"></div>
-            <div className="dashboardDeckCard4" id="4"></div>
-            <div className="dashboardDeckCard5" id="5"></div>
-            <div className="dashboardDeckCard6" id="6"></div>
-            <div className="dashboardDeckCard7" id="7"></div>
-            <div className="dashboardDeckCard8" id="8"></div>
+            {deckCards.map((card, idx) => (
+              <div className="dashboardDeckCard" key={card.card_id}>
+                <img
+                  src={`../Assets/Cards/${card.image_url}`}
+                  alt={card.name}
+                  className="dashboardDeckCardImg"
+                  style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "20px" }}
+                />
+              </div>
+            ))}
           </div>
           <div className="dashboardDeckCTA">
             <div className="dashboardDeckCTAButton">Copy</div>
@@ -158,7 +172,17 @@ const Dashboard = () => {
             <div className="rewindPlayerHeader">
               <div className="rewindPlayerUsername">{username}</div><div className="rewindPlayerTrophies"> <img src={TrophyIcon} alt="Trophy Icon" /> 9736 </div>
             </div>
-            <div className="rewindPlayerDeck"></div>
+            <div className="rewindPlayerDeck">
+              {deckCards.map((card, idx) => (
+                <div className="dashboardDeckCard" key={card.card_id}>
+                  <img
+                    src={card.image_url}
+                    alt={card.name}
+                    className="dashboardDeckCardImg"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
           <div className="metaRewindVs">
             Victory

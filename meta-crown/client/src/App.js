@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./Components/NavBar";
 import Dashboard from "./Pages/Dashboard";
@@ -13,6 +13,14 @@ import LogIn from "./Pages/LogIn";
 import SignUp from "./Pages/SignUp";
 
 function AppContent() {
+  const [data, setData] = useState([])
+  useEffect(() => {
+    document.title = "MetaCrown";
+    fetch("http://localhost:6969/cards")
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error("Error fetching cards:", error));
+  }, []);
   const location = useLocation();
   // List of routes where NavBar should be hidden
   const hideNavBarRoutes = ["/", "/login", "/signup"];

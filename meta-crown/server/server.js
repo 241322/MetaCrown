@@ -1,19 +1,28 @@
 import express from 'express';
 import cors from 'cors';
-import db from './models/index.js';
+import mysql from 'mysql';
 
 const app = express();
-
-db.sequelize.sync().then(() => {
-  console.log("Database synced");
-});
-
 app.use(cors());
-app.use(express.json());
+
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'meta_crown_db'
+})
 
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'Hello from Express!' });
+  return res.json("From Backend Side, API is working fine");
 });
 
-const PORT = 5000;
+app.get('/cards', (req, res) => {
+  const sql = "SELECT * FROM cards";
+  db.query(sql, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  })
+})
+
+const PORT = 6969;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
