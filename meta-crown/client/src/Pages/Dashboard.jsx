@@ -13,6 +13,15 @@ import TrophyIcon from "../Assets/trophy.png"
 
 const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 93, 84];
 
+const ASSETS_BASE = process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/';
+
+const toCardSrc = (imageUrl) => {
+  const clean = String(imageUrl || '')
+    .replace(/\\/g, '/')   // windows -> web slashes
+    .replace(/^\/+/, '');  // drop leading slashes
+  return `${ASSETS_BASE}${clean}`;
+};
+
 const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [focused, setFocused] = useState(false);
@@ -24,9 +33,19 @@ const Dashboard = () => {
     fetch("http://localhost:6969/cards")
       .then(res => res.json())
       .then(data => {
-        // Filter for the specified deck card IDs
-        const filtered = data.filter(card => DECK_CARD_IDS.includes(card.card_id));
-        // Sort by the order in DECK_CARD_IDS
+        // Try to find the array in the response
+        let cardsArray = [];
+        if (Array.isArray(data)) {
+          cardsArray = data;
+        } else if (Array.isArray(data.cards)) {
+          cardsArray = data.cards;
+        } else if (Array.isArray(data.result)) {
+          cardsArray = data.result;
+        } else {
+          console.error("API response does not contain an array of cards:", data);
+          return;
+        }
+        const filtered = cardsArray.filter(card => DECK_CARD_IDS.includes(card.card_id));
         const sorted = DECK_CARD_IDS.map(id => filtered.find(card => card.card_id === id)).filter(Boolean);
         setDeckCards(sorted);
       });
@@ -145,13 +164,12 @@ const Dashboard = () => {
             <div className="dashboardDeckStatContent">9/10</div></div>
           </div>
           <div className="dashboardDeckCards">
-            {deckCards.map((card, idx) => (
+            {deckCards.map((card) => (
               <div className="dashboardDeckCard" key={card.card_id}>
                 <img
-                  src={`../Assets/Cards/${card.image_url}`}
+                  src={toCardSrc(card.image_url)}
                   alt={card.name}
                   className="dashboardDeckCardImg"
-                  style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: "20px" }}
                 />
               </div>
             ))}
@@ -176,7 +194,7 @@ const Dashboard = () => {
               {deckCards.map((card, idx) => (
                 <div className="dashboardDeckCard" key={card.card_id}>
                   <img
-                    src={card.image_url}
+                    src={`../Assets/Cards/${card.image_url}`}
                     alt={card.name}
                     className="dashboardDeckCardImg"
                   />

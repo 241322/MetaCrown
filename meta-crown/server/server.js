@@ -3,6 +3,8 @@ import cors from 'cors';
 import mysql from 'mysql';
 import bodyParser from 'body-parser';
 import twilio from 'twilio';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 app.use(cors());
@@ -15,16 +17,21 @@ const authToken = '63e4ad0312e6185c617736dfbb6294c7';
 const twilioClient = twilio(accountSID, authToken);
 const otpStore = {};
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Endpoint to send OTP
 app.post('/send-otp', (req, res) => {
   const { phoneNumber } = req.body;
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   otpStore[phoneNumber] = otp;
 
-  Client.messages
-    .create({
-      body: `Your OTP is ${otp}`,
-      from: 
+  // Client.messages
+  //   .create({
+  //     body: `Your OTP is ${otp}`,
+  //     from: 
+  // TODO: Add your Twilio phone number here
+});
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -44,6 +51,8 @@ app.get('/cards', (req, res) => {
     return res.json(data);
   })
 })
+
+app.use('/assets', express.static(path.join(__dirname, '..', 'client', 'src', 'Assets')));
 
 const PORT = 6969;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
