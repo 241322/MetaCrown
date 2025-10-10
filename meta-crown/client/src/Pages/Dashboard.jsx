@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "../Styles/Dashboard.css";
 import PlayerSearch from "../Assets/PlayerSearch.svg";
 import Arena24 from "../Assets/Legendary_Arena.webp";
@@ -29,6 +29,47 @@ const Dashboard = () => {
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
   const [deckCards, setDeckCards] = useState([]);
+
+  // Average Elixir (kept as is)
+  const avgElixir = useMemo(() => {
+    if (!Array.isArray(deckCards) || deckCards.length === 0) return "0.0";
+    const total = deckCards.reduce((sum, c) => {
+      const val = Number(c.elixir_cost ?? c.elixer_cost ?? 0);
+      return sum + (Number.isFinite(val) ? val : 0);
+    }, 0);
+    return (total / deckCards.length).toFixed(1);
+  }, [deckCards]);
+
+  // NEW: Average ratings (0–10, integer)
+  const avgAtk = useMemo(() => {
+    if (!Array.isArray(deckCards) || deckCards.length === 0) return 0;
+    const total = deckCards.reduce((s, c) => {
+      const v = Number(c.attack_rating);
+      return s + (Number.isFinite(v) ? v : 0);
+    }, 0);
+    const rounded = Math.round(total / deckCards.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [deckCards]);
+
+  const avgDef = useMemo(() => {
+    if (!Array.isArray(deckCards) || deckCards.length === 0) return 0;
+    const total = deckCards.reduce((s, c) => {
+      const v = Number(c.defense_rating);
+      return s + (Number.isFinite(v) ? v : 0);
+    }, 0);
+    const rounded = Math.round(total / deckCards.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [deckCards]);
+
+  const avgF2P = useMemo(() => {
+    if (!Array.isArray(deckCards) || deckCards.length === 0) return 0;
+    const total = deckCards.reduce((s, c) => {
+      const v = Number(c.f2p_rating);
+      return s + (Number.isFinite(v) ? v : 0);
+    }, 0);
+    const rounded = Math.round(total / deckCards.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [deckCards]);
 
   useEffect(() => {
     fetch("http://localhost:6969/cards")
@@ -156,13 +197,13 @@ const Dashboard = () => {
         <div className="dashboardDeckMain">
           <div className="dashboardDeckStats">
             <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={ElixerIcon} alt="Elixir Icon" /></div>
-            <div className="dashboardDeckStatContent">3.5</div></div>
+            <div className="dashboardDeckStatContent">{avgElixir}</div></div>
             <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={ATK} alt="ATK Icon" /></div>
-            <div className="dashboardDeckStatContent">7/10</div></div>
+            <div className="dashboardDeckStatContent">{avgAtk}/10</div></div>
             <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={DEF} alt="DEF Icon" /></div>
-            <div className="dashboardDeckStatContent">9/10</div></div>
+            <div className="dashboardDeckStatContent">{avgDef}/10</div></div>
             <div className="dashboardDeckStat"><div className="dashboardDeckStatIcon"><img src={F2P} alt="F2P Icon" /></div>
-            <div className="dashboardDeckStatContent">9/10</div></div>
+            <div className="dashboardDeckStatContent">{avgF2P}/10</div></div>
           </div>
           <div className="dashboardDeckCards">
             {deckCards.map((card) => (
