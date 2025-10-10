@@ -36,20 +36,27 @@ const LogIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    if (!emailValid || !passwordValid) return;
-
-    // TODO: Replace with real API call:
-    // const res = await api.login({ email, password });
-    // const { username: apiUsername, playerTag: apiPlayerTag } = res.data;
-
-    const apiUsername = localStorage.getItem("username") || "Player"; // temp fallback
-    const apiPlayerTag = localStorage.getItem("playerTag") || "#000000000"; // temp fallback
-
-    localStorage.setItem("username", apiUsername);
-    localStorage.setItem("playerTag", apiPlayerTag);
-
-    navigate("/landing");
+    try {
+      const res = await fetch('http://localhost:6969/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email_address: email,
+          // password // optional if you still collect it
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('username', data.username || '');
+        localStorage.setItem('playerTag', data.player_tag || '');
+        localStorage.setItem('email', data.email_address || '');
+        navigate('/landing');
+      } else {
+        console.error('Login failed:', data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

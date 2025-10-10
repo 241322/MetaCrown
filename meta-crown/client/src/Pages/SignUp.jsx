@@ -87,6 +87,35 @@ const SignUp = () => {
     navigate("/landing");
   };
 
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:6969/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email_address: email,
+          username,
+          player_tag: playerTag,
+          // password // optional; include if you still collect it
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('username', data.username ?? username);
+        localStorage.setItem('playerTag', data.player_tag ?? playerTag);
+        localStorage.setItem('email', data.email_address ?? email);
+        // navigate as you already do
+        navigate('/landing');
+      } else {
+        console.error('Signup failed:', data);
+        // show a toast/message if you have one
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div
       className="splashPage"
