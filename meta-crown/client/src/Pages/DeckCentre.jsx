@@ -20,7 +20,8 @@ const toCardSrc = (imageUrl) => {
   const clean = String(imageUrl || '')
     .replace(/\\/g, '/')
     .replace(/^\/+/, '');
-  return `${ASSETS_BASE}${clean}`;
+  const withFolder = clean.startsWith('Cards/') ? clean : `Cards/${clean}`;
+  return `${ASSETS_BASE}${withFolder}`;
 };
 
 const DeckCentre = () => {

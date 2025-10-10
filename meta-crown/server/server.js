@@ -20,18 +20,8 @@ const otpStore = {};
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Endpoint to send OTP
-app.post('/send-otp', (req, res) => {
-  const { phoneNumber } = req.body;
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  otpStore[phoneNumber] = otp;
-
-  // Client.messages
-  //   .create({
-  //     body: `Your OTP is ${otp}`,
-  //     from: 
-  // TODO: Add your Twilio phone number here
-});
+// Expose client/src/Assets at http://localhost:6969/assets/*
+app.use('/assets', express.static(path.join(__dirname, '..', 'client', 'src', 'Assets')));
 
 const db = mysql.createConnection({
   host: 'localhost',
@@ -51,8 +41,6 @@ app.get('/cards', (req, res) => {
     return res.json(data);
   })
 })
-
-app.use('/assets', express.static(path.join(__dirname, '..', 'client', 'src', 'Assets')));
 
 const PORT = 6969;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

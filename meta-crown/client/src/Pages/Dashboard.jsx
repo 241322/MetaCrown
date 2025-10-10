@@ -17,9 +17,10 @@ const ASSETS_BASE = process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/
 
 const toCardSrc = (imageUrl) => {
   const clean = String(imageUrl || '')
-    .replace(/\\/g, '/')   // windows -> web slashes
-    .replace(/^\/+/, '');  // drop leading slashes
-  return `${ASSETS_BASE}${clean}`;
+    .replace(/\\/g, '/')
+    .replace(/^\/+/, '');
+  const withFolder = clean.startsWith('Cards/') ? clean : `Cards/${clean}`;
+  return `${ASSETS_BASE}${withFolder}`;
 };
 
 const Dashboard = () => {
@@ -191,10 +192,10 @@ const Dashboard = () => {
               <div className="rewindPlayerUsername">{username}</div><div className="rewindPlayerTrophies"> <img src={TrophyIcon} alt="Trophy Icon" /> 9736 </div>
             </div>
             <div className="rewindPlayerDeck">
-              {deckCards.map((card, idx) => (
+              {deckCards.map((card) => (
                 <div className="dashboardDeckCard" key={card.card_id}>
                   <img
-                    src={`../Assets/Cards/${card.image_url}`}
+                    src={toCardSrc(card.image_url)}  // was ../Assets/Cards/...
                     alt={card.name}
                     className="dashboardDeckCardImg"
                   />
