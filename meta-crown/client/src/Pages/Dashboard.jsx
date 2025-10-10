@@ -11,7 +11,7 @@ import F2P from "../Assets/F2P.svg";
 import VSswords from "../Assets/vsSwords.png"
 import TrophyIcon from "../Assets/trophy.png"
 
-const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 93, 84];
+const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 37, 84];
 
 const ASSETS_BASE = process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/';
 
@@ -194,11 +194,11 @@ const Dashboard = () => {
             <div className="rewindPlayerDeck">
               {deckCards.map((card) => (
                 <div className="dashboardDeckCard" key={card.card_id}>
-                  <img
-                    src={toCardSrc(card.image_url)}  // was ../Assets/Cards/...
+                  {/* <img
+                    src={toCardSrc(card.image_url)}
                     alt={card.name}
                     className="dashboardDeckCardImg"
-                  />
+                  /> */}
                 </div>
               ))}
             </div>
