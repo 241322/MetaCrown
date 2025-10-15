@@ -8,7 +8,7 @@ const LogIn = () => {
   const splashRef = useRef(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  // const [submitted, setSubmitted] = useState(false);
   const [focus, setFocus] = useState({ email: false, password: false });
   const [touched, setTouched] = useState({ email: false, password: false });
 
