@@ -4,6 +4,7 @@ import cors from 'cors';
 import db from './models/index.js'; // Sequelize instance and models
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bcrypt from 'bcrypt';
 
 // Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -31,5 +32,64 @@ app.get('/cards', async (req, res) => {
   }
 });
 
+// Verify DB connection on start
 const PORT = process.env.PORT || 6969;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+(async () => {
+  try {
+    await db.sequelize.authenticate();
+    console.log('DB connected');
+  } catch (e) {
+    console.error('DB connection failed:', e.message);
+  }
+  app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+})();
+
+// Sign Up
+app.post('/api/auth/signup', async (req, res) => {
+  try {
+    const { email_address, password, username, player_tag } = req.body;
+    if (!email_address || !password || !username || !player_tag) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const exists = await db.User.findOne({ where: { email_address } });
+    if (exists) return res.status(409).json({ message: 'Email already in use' });
+
+    const hash = await bcrypt.hash(password, 10);
+    const user = await db.User.create({ email_address, password: hash, username, player_tag });
+
+    res.json({
+      user_id: user.user_id,
+      email_address: user.email_address,
+      username: user.username,
+      player_tag: user.player_tag,
+    });
+  } catch (e) {
+    console.error('Signup error:', e.message, e.original?.sqlMessage);
+    res.status(500).json({ message: 'Signup failed', detail: e.original?.sqlMessage || e.message });
+  }
+});
+
+// Log In
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email_address, password } = req.body;
+    if (!email_address || !password) {
+      return res.status(400).json({ message: 'Missing credentials' });
+    }
+    const user = await db.User.findOne({ where: { email_address } });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(401).json({ message: 'Invalid credentials' });
+
+    res.json({
+      user_id: user.user_id,
+      email_address: user.email_address,
+      username: user.username,
+      player_tag: user.player_tag,
+    });
+  } catch (e) {
+    console.error('Login error:', e.message, e.original?.sqlMessage);
+    res.status(500).json({ message: 'Login failed', detail: e.original?.sqlMessage || e.message });
+  }
+});

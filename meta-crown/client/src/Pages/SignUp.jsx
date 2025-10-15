@@ -7,8 +7,15 @@ const SignUp = () => {
   const navigate = useNavigate();
   const splashRef = useRef(null);
 
-  // Step state
+  // Step state (target) and visible step (what is "active" in DOM)
   const [step, setStep] = useState(1);
+  const [visibleStep, setVisibleStep] = useState(1);
+  const [isAdvancing, setIsAdvancing] = useState(false);
+
+  // Refs to steps for timing reads
+  const step1Ref = useRef(null);
+  const step2Ref = useRef(null);
+  const step3Ref = useRef(null);
 
   // Step 1 fields
   const [email, setEmail] = useState("");
@@ -57,63 +64,85 @@ const SignUp = () => {
     setPlayerTag(value.toUpperCase());
   };
 
+  // Replace the old getMaxAnimMs with a deep scanner:
+  const getMaxAnimMsDeep = (root) => {
+    if (!root) return 300;
+    const nodes = [root, ...root.querySelectorAll('*')];
+
+    const toMs = (val) =>
+      (val || '')
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(s => (s.endsWith('ms') ? parseFloat(s) : parseFloat(s) * 1000));
+
+    let max = 0;
+    for (const el of nodes) {
+      const cs = window.getComputedStyle(el);
+      const tDur = toMs(cs.transitionDuration);
+      const tDel = toMs(cs.transitionDelay);
+      const aDur = toMs(cs.animationDuration);
+      const aDel = toMs(cs.animationDelay);
+      const tMax = tDur.length ? Math.max(...tDur.map((d,i)=> d + (tDel[i] ?? tDel[0] ?? 0))) : 0;
+      const aMax = aDur.length ? Math.max(...aDur.map((d,i)=> d + (aDel[i] ?? aDel[0] ?? 0))) : 0;
+      max = Math.max(max, tMax, aMax);
+    }
+    return Math.max(300, max); // safety floor
+  };
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
   // Step 1 submit
-  const handleStep1 = (e) => {
+  const handleStep1 = async (e) => {
     e.preventDefault();
     setSubmitted1(true);
-    if (!emailValid || !passwordValid || !password2Valid) return;
+    if (!emailValid || !passwordValid || !password2Valid || isAdvancing) return;
+
+    setIsAdvancing(true);
+    const ms = getMaxAnimMsDeep(step1Ref.current);
+    setVisibleStep(0); // let step 1 animate out
+    await sleep(ms + 20); // small buffer
     setStep(2);
+    setVisibleStep(2); // now show step 2
+    setIsAdvancing(false);
   };
 
   // Step 2 submit
-  const handleStep2 = (e) => {
+  const handleStep2 = async (e) => {
     e.preventDefault();
     setSubmitted2(true);
-    if (!usernameValid || !playerTagValid) return;
-    // Persist now so Step 3 + Dashboard have data
+    if (!usernameValid || !playerTagValid || isAdvancing) return;
+
     localStorage.setItem("username", username);
     localStorage.setItem("playerTag", playerTag);
+
+    setIsAdvancing(true);
+    const ms = getMaxAnimMsDeep(step2Ref.current);
+    setVisibleStep(0); // let step 2 animate out
+    await sleep(ms + 20);
     setStep(3);
+    setVisibleStep(3);
+    setIsAdvancing(false);
   };
 
-  // Step 3 submit (finish)
-  const handleStep3 = (e) => {
+  // Step 3 submit (finish) — unchanged
+  const handleStep3 = async (e) => {
     e.preventDefault();
-    // Safety (in case not already saved)
     if (!localStorage.getItem("username")) {
       localStorage.setItem("username", username);
     }
     if (playerTagValid) localStorage.setItem("playerTag", playerTag);
+    await fetch('http://localhost:6969/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email_address: email,
+        password,                // if using passwords
+        username,
+        player_tag: playerTag,   // ensure hash included if you store it
+      }),
+    });
     navigate("/landing");
-  };
-
-  const handleProfileSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:6969/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email_address: email,
-          username,
-          player_tag: playerTag,
-          // password // optional; include if you still collect it
-        })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('username', data.username ?? username);
-        localStorage.setItem('playerTag', data.player_tag ?? playerTag);
-        localStorage.setItem('email', data.email_address ?? email);
-        // navigate as you already do
-        navigate('/landing');
-      } else {
-        console.error('Signup failed:', data);
-        // show a toast/message if you have one
-      }
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (
@@ -133,7 +162,8 @@ const SignUp = () => {
         <div className="signup-steps-wrapper">
           {/* Step 1 */}
           <form
-            className={`signup-step ${step === 1 ? "active" : ""}`}
+            ref={step1Ref}
+            className={`signup-step ${visibleStep === 1 ? "active" : ""}`}
             onSubmit={handleStep1}
             noValidate
           >
@@ -198,21 +228,24 @@ const SignUp = () => {
                 type="button"
                 onClick={() => navigate("/login")}
                 title="Already have an account? Log In"
+                disabled={isAdvancing}
               >
                 Log In
               </button>
               <button
                 className="splashButton"
                 type="submit"
-                disabled={!emailValid || !passwordValid || !password2Valid}
+                disabled={!emailValid || !passwordValid || !password2Valid || isAdvancing}
               >
                 Next
               </button>
             </div>
           </form>
+
           {/* Step 2 */}
           <form
-            className={`signup-step ${step === 2 ? "active" : ""}`}
+            ref={step2Ref}
+            className={`signup-step ${visibleStep === 2 ? "active" : ""}`}
             onSubmit={handleStep2}
             noValidate
           >
@@ -262,30 +295,34 @@ const SignUp = () => {
                 type="button"
                 onClick={() => navigate("/login")}
                 title="Already have an account? Log In"
+                disabled={isAdvancing}
               >
                 Log In
               </button>
               <button
                 className="splashButton"
                 type="submit"
-                disabled={step === 1
-                  ? !emailValid || !passwordValid || !password2Valid
-                  : !usernameValid || !playerTagValid}
+                disabled={!usernameValid || !playerTagValid || isAdvancing}
               >
                 Next
               </button>
             </div>
           </form>
+
           {/* Step 3 */}
-          <div className={`signup-step ${step === 3 ? "active" : ""}`}>
+          <div
+            ref={step3Ref}
+            className={`signup-step ${visibleStep === 3 ? "active" : ""}`}
+          >
             <h1>Welcome, {username}!</h1>
             <h2>Your account has been created.</h2>
-            <button className="splashButton" onClick={handleStep3}>
+            <button className="splashButton" onClick={handleStep3} disabled={isAdvancing}>
               Continue to MetaCrown
             </button>
           </div>
         </div>
-        {/* Progress Bar with Notches */}
+
+        {/* Progress Bar with Notches (driven by target step) */}
         <div className="signup-progress-bar">
           <div
             className="signup-progress"

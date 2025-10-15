@@ -108,9 +108,10 @@ const Dashboard = () => {
   
   const handleChange = (e) => {
     let value = e.target.value;
+    // Enforce hashtag and allow letters+numbers only, max 9 chars after '#'
     if (focused) {
       if (!value.startsWith("#")) value = "#" + value.replace(/^#+/, "");
-      value = "#" + value.slice(1).replace(/[^0-9]/g, "").slice(0, 9);
+      value = "#" + value.slice(1).replace(/[^A-Za-z0-9]/g, "").slice(0, 9);
     }
     setSearch(value);
   };
@@ -137,6 +138,7 @@ const Dashboard = () => {
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder="Search user tag"
+          maxLength={10} // '#' + up to 9 characters
         />
       </div>
       <div className="dashboardHeader">

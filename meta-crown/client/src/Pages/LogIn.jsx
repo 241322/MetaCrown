@@ -37,23 +37,23 @@ const LogIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:6969/api/login', {
+      const res = await fetch('http://localhost:6969/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email_address: email,
-          // password // optional if you still collect it
-        })
+          password, // if you use passwordless/OTP, remove
+        }),
       });
       const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('username', data.username || '');
-        localStorage.setItem('playerTag', data.player_tag || '');
-        localStorage.setItem('email', data.email_address || '');
-        navigate('/landing');
-      } else {
+      if (!res.ok) {
         console.error('Login failed:', data);
+        return;
       }
+      localStorage.setItem('username', data.username || '');
+      localStorage.setItem('playerTag', data.player_tag || '');
+      localStorage.setItem('email', data.email_address || '');
+      navigate('/landing');
     } catch (err) {
       console.error(err);
     }
