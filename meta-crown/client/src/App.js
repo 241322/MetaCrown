@@ -11,6 +11,8 @@ import Landing from "./Pages/Landing";
 import Splash from "./Pages/Splash";
 import LogIn from "./Pages/LogIn";
 import SignUp from "./Pages/SignUp";
+import NotFound from "./Pages/NotFound";
+import Footer from "./Components/Footer";
 
 function AppContent() {
   const [data, setData] = useState([])
@@ -24,24 +26,30 @@ function AppContent() {
   const location = useLocation();
   // List of routes where NavBar should be hidden
   const hideNavBarRoutes = ["/", "/login", "/signup"];
+  const hideFooterRoutes = ["/", "/login", "/signup"];
   const hideNavBar = hideNavBarRoutes.includes(location.pathname);
+  const hideFooter = hideFooterRoutes.includes(location.pathname);
 
   return (
-    <>
+    <div className="app-shell">
       {!hideNavBar && <NavBar />}
-      <Routes>
-        <Route path="/" element={<Splash />} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/deck-centre" element={<DeckCentre />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/help" element={<Help />} />
-      </Routes>
-    </>
+      <main className="app-main">
+        <Routes>
+          <Route path="/" element={<Splash />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/deck-centre" element={<DeckCentre />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      {!hideFooter && <Footer />}
+    </div>
   );
 }
 

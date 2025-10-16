@@ -1,0 +1,36 @@
+.site-footer {
+  width: 100%;
+  /* Background image from Assets */
+  background: url("../Assets/footerBackground.svg") center top / cover no-repeat;
+  /* Required top padding */
+  padding-top: 250px;
+  /* Some breathing room below links */
+  padding-bottom: 40px;
+
+  /* Center contents */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  position: relative; /* ensure not fixed */
+  margin-top: auto;   /* pushes footer to bottom when content is short */
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-link {
+  text-decoration: none;
+  color: inherit; /* follow your site theme */
+  font-weight: 600;
+}
+
+.footer-link:hover {
+  opacity: 0.85;
+}

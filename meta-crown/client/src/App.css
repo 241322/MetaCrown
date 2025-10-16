@@ -1,3 +1,21 @@
+html, body, #root {
+  height: 100%;
+}
+
+/* Flex column layout so footer sits at bottom */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content grows to push footer down */
+.app-main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .App {
   text-align: center;
   

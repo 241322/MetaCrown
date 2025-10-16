@@ -1,11 +1,19 @@
 import React from "react";
+import NotFoundImg from "../Assets/404.png";
 
-const Help = () => {
+export default function Help() {
+  const pageCenterStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    minHeight: "calc(100vh - 120px)",
+    padding: "20px",
+  };
+
   return (
-    <div>
-      <h1>Help Page</h1>
+    <div style={pageCenterStyle}>
+      <img src={NotFoundImg} alt="Not available yet" style={{ maxWidth: "30%", width: "100%", height: "auto" }} />
     </div>
   );
-};
-
-export default Help;
+}
