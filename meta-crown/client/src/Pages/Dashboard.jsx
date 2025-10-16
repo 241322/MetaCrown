@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { getPlayer, normalizeTag } from "../api/clash";
 import "../Styles/Dashboard.css";
 import PlayerSearch from "../Assets/PlayerSearch.svg";
 import Arena24 from "../Assets/Legendary_Arena.webp";
@@ -29,6 +30,8 @@ const Dashboard = () => {
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
   const [deckCards, setDeckCards] = useState([]);
+  const [crPlayer, setCrPlayer] = useState(null);
+  const [crError, setCrError] = useState(null);
 
   // Average Elixir (kept as is)
   const avgElixir = useMemo(() => {
@@ -105,6 +108,15 @@ const Dashboard = () => {
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('playerTag') || '';
+    const tag = normalizeTag(stored).slice(1); // remove "#" for our server param
+    if (!tag) return;
+    getPlayer(tag)
+      .then(setCrPlayer)
+      .catch((e) => setCrError(e.message));
+  }, []);
   
   const handleChange = (e) => {
     let value = e.target.value;
@@ -142,57 +154,65 @@ const Dashboard = () => {
         />
       </div>
       <div className="dashboardHeader">
-      <div className="dashboard-user-info">
-        <div className="dashboard-username">{username}</div>
-        <div className="dashboard-playertag">{playerTag}</div>
-      </div>
-      <div className="bigComponents">
-        <div className="bigComponent">
-          <div className="componentLabel">Throphies</div> 
-            <div className="componentAsset">9736</div>
+        <div className="dashboard-user-info">
+          <div className="dashboard-username">{username}</div>
+          <div className="dashboard-playertag">{playerTag}</div>
+        </div>
+
+        <div className="bigComponents">
+          <div className="bigComponent">
+            <div className="componentLabel">Throphies</div>
+            <div className="componentAsset">{crPlayer?.trophies ?? 0}</div>
           </div>
-        
-        <div className="bigComponent">
-          <div className="componentLabel">Legendary Arena</div> 
+
+          <div className="bigComponent">
+            <div className="componentLabel">Legendary Arena</div>
             <div className="componentAsset"><img src={Arena24} alt="Arena" /></div>
+          </div>
+
+          <div className="bigComponent">
+            <div className="componentLabel">Master 1</div>
+            <div className="componentAsset"><img src={Master1} alt="Master 1" /></div>
+          </div>
+
+          <div className="bigComponent">
+            <div className="componentLabel">Merge Tactics</div>
+            <div className="componentAsset"><img src={MergeGold3} alt="Merge Tactics" /></div>
+          </div>
         </div>
-        
-        <div className="bigComponent">
-          <div className="componentLabel">Master 1</div> 
-          <div className="componentAsset"><img src={Master1} alt="Master 1" /></div>
+
+        <div className="smallComponents">
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Battles Won</div>
+            <div className="smallComponentStat">{crPlayer?.wins ?? 0}</div>
+          </div>
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Three Crown Wins</div>
+            <div className="smallComponentStat">{crPlayer?.threeCrownWins ?? 0}</div>
+          </div>
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Highest Trophies</div>
+            <div className="smallComponentStat">{crPlayer?.bestTrophies ?? 0}</div>
+          </div>
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Cards Found</div>
+            <div className="smallComponentStat">
+              {(crPlayer?.cards?.length ?? 0)}/121
+            </div>
+          </div>
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Total Donations</div>
+            <div className="smallComponentStat">
+              {crPlayer?.totalDonations ?? crPlayer?.donations ?? 0}
+            </div>
+          </div>
+          <div className="smallComponent">
+            <div className="smallComponentLabel">Favourite Card</div>
+            <div className="smallComponentStat">
+              {crPlayer?.currentFavouriteCard?.name ?? "—"}
+            </div>
+          </div>
         </div>
-        
-        <div className="bigComponent">
-          <div className="componentLabel">Merge Tactics</div> 
-          <div className="componentAsset"><img src={MergeGold3} alt="Merge Tactics" /></div>
-        </div>
-      </div>
-      <div className="smallComponents">
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Battles Won</div>
-          <div className="smallComponentStat">7000</div>
-        </div>
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Three Crown Wins</div>
-          <div className="smallComponentStat">5842</div>
-        </div>
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Highest Trophies</div>
-          <div className="smallComponentStat">9971</div>
-        </div>
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Cards Found</div>
-          <div className="smallComponentStat">120/121</div>
-        </div>
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Total Donations</div>
-          <div className="smallComponentStat">26309</div>
-        </div>
-        <div className="smallComponent">
-          <div className="smallComponentLabel">Favourite Card</div>
-          <div className="smallComponentStat">Balloon</div>
-        </div>
-      </div>
       </div>
       <div className="currentDeckDashboard">
         <h4>Current Deck</h4>
