@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { getPlayer, normalizeTag } from "../api/clash";
 import "../Styles/Dashboard.css";
 import PlayerSearch from "../Assets/PlayerSearch.svg";
@@ -25,7 +25,7 @@ const toCardSrc = (imageUrl) => {
 };
 
 const Dashboard = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(localStorage.getItem("playerTag") || "#2RC0P82YC");
   const [focused, setFocused] = useState(false);
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
@@ -118,26 +118,44 @@ const Dashboard = () => {
       .catch((e) => setCrError(e.message));
   }, []);
   
-  const handleChange = (e) => {
-    let value = e.target.value;
-    // Enforce hashtag and allow letters+numbers only, max 9 chars after '#'
-    if (focused) {
-      if (!value.startsWith("#")) value = "#" + value.replace(/^#+/, "");
-      value = "#" + value.slice(1).replace(/[^A-Za-z0-9]/g, "").slice(0, 9);
-    }
+  // Normalize input to "#"+A-Z0-9, max 9 after '#'
+  const handleSearchChange = (e) => {
+    let value = e.target.value || "";
+    if (!value.startsWith("#")) value = "#" + value.replace(/^#+/, "");
+    value = "#" + value.slice(1).replace(/[^A-Za-z0-9]/g, "").slice(0, 9);
     setSearch(value);
   };
 
-  const handleFocus = () => {
-    setFocused(true);
-    if (search === "") setSearch("#");
+  // Press Enter to fetch player and update stats
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const norm = normalizeTag(search);
+      const tagNoHash = norm.slice(1);
+      if (!tagNoHash) return;
+      getPlayer(tagNoHash)
+        .then((p) => {
+          setCrPlayer(p);
+          localStorage.setItem("playerTag", norm);
+        })
+        .catch(() => {
+          // keep previous stats if fetch fails
+        });
+    }
   };
 
-  const handleBlur = () => {
-    setFocused(false);
-    if (search === "#") setSearch("");
-  };
-
+  // Initial load from stored tag
+  useEffect(() => {
+    const stored = localStorage.getItem("playerTag") || search || "#2RC0P82YC";
+    const norm = normalizeTag(stored);
+    const tagNoHash = norm.slice(1);
+    if (!tagNoHash) return;
+    getPlayer(tagNoHash)
+      .then((p) => setCrPlayer(p))
+      .catch(() => setCrPlayer(null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
   return (
     <div className="dashboard-searchbar-wrapper">
       <div className="dashboard-searchbar">
@@ -146,9 +164,8 @@ const Dashboard = () => {
           type="text"
           className="search-input"
           value={search}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onChange={handleSearchChange}
+          onKeyDown={handleSearchKeyDown}
           placeholder="Search user tag"
           maxLength={10} // '#' + up to 9 characters
         />
