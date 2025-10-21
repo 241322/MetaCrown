@@ -8,6 +8,14 @@
   margin-top: 100px; /* Adjust to be below NavBar */
 }
 
+.dashboard-searchbar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Search Bar */
 .dashboard-searchbar {
   display: flex;
   align-items: center;
@@ -49,6 +57,42 @@
   color: #cccccc;
   opacity: 0.7;
   font-size: 0.95rem; /* Slightly smaller placeholder */
+}
+
+.return-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+.return-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateX(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.return-arrow-btn:active {
+  transform: translateX(-1px) scale(0.95);
+}
+
+.return-arrow-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.return-arrow-btn:hover .return-arrow-icon {
+  transform: translateX(-1px);
 }
 
 .dashboardHeader{

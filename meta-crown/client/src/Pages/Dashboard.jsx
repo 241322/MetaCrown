@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { getPlayer, getPlayerBattles, normalizeTag } from "../api/clash";
 import "../Styles/Dashboard.css";
 import PlayerSearch from "../Assets/PlayerSearch.svg";
+import LeftArrow from "../Assets/LeftArrow";
 import Arena24 from "../Assets/Legendary_Arena.webp";
 import Master1 from "../Assets/RankedMaster1.png";
 import MergeGold3 from "../Assets/Merge Tactics Gold 3.svg";
@@ -28,9 +29,12 @@ const Dashboard = () => {
   const [focused, setFocused] = useState(false);
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
-  const [clanName, setClanName] = useState(""); // New state for clan name
+  const [clanName, setClanName] = useState("");
   const [crPlayer, setCrPlayer] = useState(null);
   const [crError, setCrError] = useState(null);
+  
+  // Add state for user's own tag
+  const [userOwnTag, setUserOwnTag] = useState("#2RC0P82YC"); // This should come from user auth/localStorage
   
   // New state for CR deck and loading
   const [currentDeck, setCurrentDeck] = useState([]);
@@ -357,6 +361,30 @@ const Dashboard = () => {
     };
   };
 
+  // Check if currently viewing own dashboard
+  const isViewingOwnDashboard = useMemo(() => {
+    const currentTag = normalizeTag(playerTag);
+    const ownTag = normalizeTag(userOwnTag);
+    return currentTag === ownTag;
+  }, [playerTag, userOwnTag]);
+
+  // Initialize user's own tag (you might want to get this from authentication or localStorage)
+  useEffect(() => {
+    const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+    setUserOwnTag(storedOwnTag);
+  }, []);
+
+  // Function to return to own dashboard
+  const returnToOwnDashboard = () => {
+    const ownTag = normalizeTag(userOwnTag);
+    const tagNoHash = ownTag.slice(1);
+    
+    setSearch(ownTag);
+    setPlayerTag(ownTag);
+    localStorage.setItem("playerTag", ownTag);
+    fetchPlayerData(tagNoHash);
+  };
+
   return (
     <div className="dashboard-searchbar-wrapper">
       {/* Alert Component */}
@@ -382,18 +410,32 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Search Bar */}
-      <div className="dashboard-searchbar">
-        <img src={PlayerSearch} alt="Search Icon" className="search-icon" />
-        <input
-          type="text"
-          className="search-input"
-          value={search}
-          onChange={handleSearchChange}
-          onKeyDown={handleSearchKeyDown}
-          placeholder="Search user tag"
-          maxLength={10}
-        />
+      {/* Search Bar with Return Arrow */}
+      <div className="dashboard-searchbar-container">
+        {/* Return Arrow - only show when viewing another player */}
+        {!isViewingOwnDashboard && (
+          <button 
+            className="return-arrow-btn"
+            onClick={returnToOwnDashboard}
+            title="Return to own dashboard"
+            aria-label="Return to own dashboard"
+          >
+            <LeftArrow className="return-arrow-icon" />
+          </button>
+        )}
+        
+        <div className="dashboard-searchbar">
+          <img src={PlayerSearch} alt="Search Icon" className="search-icon" />
+          <input
+            type="text"
+            className="search-input"
+            value={search}
+            onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
+            placeholder="Search user tag"
+            maxLength={10}
+          />
+        </div>
       </div>
 
       <div className="dashboardHeader">
