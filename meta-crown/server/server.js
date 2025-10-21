@@ -51,6 +51,56 @@ app.get('/api/cr/player/:tag', async (req, res) => {
   const tag = encodeTag(req.params.tag); // pass "2RC0P82YC" here (no '#')
   await clashFetch(`/players/${tag}`, res);
 });
+
+app.get('/api/cr/cards', async (req, res) => {
+  try {
+    await clashFetch('/cards', res);
+  } catch (e) {
+    console.error('CR cards fetch error:', e);
+    res.status(500).json({ message: 'Failed to fetch cards' });
+  }
+});
+
+app.get('/api/cr/player/:tag/battles', async (req, res) => {
+  try {
+    const tagNoHash = String(req.params.tag || "").replace(/^#+/, "");
+    const encodedTag = `%23${tagNoHash.toUpperCase()}`;
+    const url = `${CLASH_API_BASE}/players/${encodedTag}/battlelog`;
+    
+    console.log('Fetching battlelog from:', url);
+    
+    const r = await fetch(url, { 
+      headers: { 
+        Authorization: `Bearer ${CLASH_API_TOKEN}`, 
+        Accept: 'application/json' 
+      } 
+    });
+    
+    const text = await r.text();
+    console.log('Battlelog response status:', r.status);
+    
+    if (!r.ok) {
+      try { 
+        return res.status(r.status).type('application/json').send(JSON.parse(text)); 
+      }
+      catch { 
+        return res.status(r.status).json({ message: 'Clash API error', status: r.status, body: text }); 
+      }
+    }
+    
+    try { 
+      const battleData = JSON.parse(text);
+      console.log('First battle data:', JSON.stringify(battleData[0], null, 2));
+      return res.json(battleData); 
+    }
+    catch { 
+      return res.status(502).json({ message: 'Invalid JSON from Clash API' }); 
+    }
+  } catch (e) {
+    console.error('CR battlelog fetch error:', e);
+    res.status(500).json({ message: 'Failed to fetch battlelog' });
+  }
+});
 // --- end CR routes ---
 
 // Example cards endpoint using Sequelize (adjust to your model name)

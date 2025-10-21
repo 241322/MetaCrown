@@ -8,9 +8,9 @@ export async function getPlayer(tag) {
   return res.json();
 }
 
-export async function getPlayerBattles(tag) {
-  const clean = String(tag || '').replace(/^#+/, '');
+export async function getPlayerBattles(tagOrWithHash) {
+  const clean = String(tagOrWithHash || "").replace(/^#+/, ""); // no '#'
   const res = await fetch(`http://localhost:6969/api/cr/player/${clean}/battles`);
-  if (!res.ok) throw new Error('Battlelog fetch failed');
+  if (!res.ok) throw new Error("Failed to fetch battlelog");
   return res.json();
 }

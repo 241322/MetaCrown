@@ -21,7 +21,7 @@ const Footer = () => {
                 <div className="footer-right-links">
                 <a href="https://discord.com/invite/clashroyale" rel="noreferrer" target="_blank"><img src={discord} alt="Discord" className="footer-right-icons" /></a>
                 <a href="https://youtube.com/@clashroyale?si=w8JGCRxv0em_-Muv" rel="noreferrer" target="_blank"><img src={youtube} alt="YouTube" className="footer-right-icons" /></a>
-                <a href="https://www.instagram.com/clashroyale/" rel="noreferrer" target="_blank"><img src={instagram} alt="Instagram" className="footer-right-icons" /></a>
+                <a href="https://www.instagram.com/xander.poalses?igsh=MTF1b2Nuenl1OXdrZA==" rel="noreferrer" target="_blank"><img src={instagram} alt="Instagram" className="footer-right-icons" /></a>
                 <a href="https://www.facebook.com/ClashRoyale/" rel="noreferrer" target="_blank"><img src={facebook} alt="Facebook" className="footer-right-icons" /></a>
                 </div>
             </div>

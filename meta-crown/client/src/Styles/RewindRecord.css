@@ -1,0 +1,114 @@
+.matchHistoryRecord {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.metaRewindYou,
+.metaRewindOpponent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rewindPlayerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rewindPlayerUsername {
+  font-weight: 600;
+  font-size: 20px;
+  color: #fff;
+}
+
+.rewindPlayerTrophies {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 20px;
+  color: #fff;
+  /* background: rgba(0, 0, 0, 0.2); */
+}
+
+.rewindPlayerTrophies img {
+  width: 30px;
+  height: 30px;
+}
+
+.rewindPlayerDeck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 450px;
+}
+
+.rewindPlayerDeck .dashboardDeckCard {
+  width: auto;
+  height: 100%;
+  /* aspect-ratio: 1; */
+}
+
+.rewindPlayerDeck .dashboardDeckCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* border-radius: 4px; */
+}
+
+.metaRewindVs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+/* Victory styling */
+.metaRewindVs.victory {
+  color: #4CAF50;
+}
+
+/* Defeat styling */
+.metaRewindVs.defeat {
+  color: #E74C3C;
+}
+
+.metaRewindVsIcon {
+  display: flex;
+  align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  gap: 3rem;
+  font-size: 4rem;
+  color: #fff;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.metaRewindVsIcon img {
+  width: 5rem;
+  height: auto;
+}
+
+/* Victory score color */
+.metaRewindVsIcon strong.victory {
+  color: #4CAF50;
+}
+
+/* Defeat score color */
+.metaRewindVsIcon strong.defeat {
+  color: #E74C3C;
+}
