@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "../Styles/DeckCentre.css";
 import DeckComponent from "../Components/DeckComponent";
+import ElixerIcon from "../Assets/ElixerIcon.png";
+import ATK from "../Assets/ATK.svg";
+import DEF from "../Assets/DEF.svg";
+import F2P from "../Assets/F2P.svg";
 
 const DeckCentre = () => {
   const [activeTab, setActiveTab] = useState("Builder");
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [allCards, setAllCards] = useState([]);
-  const [selectedDeck, setSelectedDeck] = useState(Array(8).fill(null)); // 8 slots for deck
+  const [selectedDeck, setSelectedDeck] = useState(Array(8).fill(null));
   const [cardsLoading, setCardsLoading] = useState(true);
 
   // Fetch all cards from Clash Royale API
@@ -28,27 +33,74 @@ const DeckCentre = () => {
 
   // Get cards that are currently in the deck
   const cardsInDeck = selectedDeck.filter(card => card !== null).map(card => card.id);
-
-  // Filter out cards that are already in the deck
   const availableCards = allCards.filter(card => !cardsInDeck.includes(card.id));
 
-  // Handle drag start
+  // Deck statistics calculations
+  const currentDeck = selectedDeck.filter(card => card !== null);
+
+  const avgElixir = useMemo(() => {
+    if (!Array.isArray(currentDeck) || currentDeck.length === 0) return "0.0";
+    const total = currentDeck.reduce((sum, card) => sum + (card.elixirCost || 0), 0);
+    return (total / currentDeck.length).toFixed(1);
+  }, [currentDeck]);
+
+  const avgAtk = useMemo(() => {
+    if (!Array.isArray(currentDeck) || currentDeck.length === 0) return 0;
+    const total = currentDeck.reduce((s, c) => {
+      const rating = 5; // Default rating - replace with actual mapping
+      return s + rating;
+    }, 0);
+    const rounded = Math.round(total / currentDeck.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [currentDeck]);
+
+  const avgDef = useMemo(() => {
+    if (!Array.isArray(currentDeck) || currentDeck.length === 0) return 0;
+    const total = currentDeck.reduce((s, c) => {
+      const rating = 5; // Default rating - replace with actual mapping
+      return s + rating;
+    }, 0);
+    const rounded = Math.round(total / currentDeck.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [currentDeck]);
+
+  const avgF2P = useMemo(() => {
+    if (!Array.isArray(currentDeck) || currentDeck.length === 0) return 0;
+    const total = currentDeck.reduce((s, c) => {
+      const rating = 5; // Default rating - replace with actual mapping
+      return s + rating;
+    }, 0);
+    const rounded = Math.round(total / currentDeck.length);
+    return Math.max(0, Math.min(10, rounded));
+  }, [currentDeck]);
+
+  // Handle tab transitions with fade effect
+  const handleTabClick = (tabName) => {
+    if (tabName === activeTab) return;
+    
+    setIsTransitioning(true);
+    
+    setTimeout(() => {
+      setActiveTab(tabName);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 10);
+    }, 150);
+  };
+
+  // Drag and drop handlers
   const handleDragStart = (e, card) => {
     e.dataTransfer.setData('application/json', JSON.stringify(card));
     e.dataTransfer.effectAllowed = 'copy';
   };
 
-  // Handle drop on deck slot
   const handleDrop = (e, slotIndex) => {
     e.preventDefault();
     try {
       const cardData = JSON.parse(e.dataTransfer.getData('application/json'));
-      
-      // Check if card is already in deck
       if (cardsInDeck.includes(cardData.id)) {
-        return; // Don't allow duplicate cards
+        return;
       }
-      
       const newDeck = [...selectedDeck];
       newDeck[slotIndex] = {
         ...cardData,
@@ -60,13 +112,11 @@ const DeckCentre = () => {
     }
   };
 
-  // Handle drag over (required for drop to work)
   const handleDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
   };
 
-  // Remove card from deck slot
   const handleRemoveCard = (slotIndex) => {
     const newDeck = [...selectedDeck];
     newDeck[slotIndex] = null;
@@ -81,14 +131,10 @@ const DeckCentre = () => {
     return `${process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/'}${withFolder}`;
   };
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
-  };
-
   return (
     <div className="deck-centre-header">
       <div className="deckCentrePages">
-      <div className="deckCentrePagesNames">
+        <div className="deckCentrePagesNames">
         <div
           className="deckCentrePageName"
           onClick={() => handleTabClick("Builder")}
@@ -107,7 +153,7 @@ const DeckCentre = () => {
         >
           Compare
         </div>
-      </div>
+        </div>
         <div className="deckCentreUnderlineWrapper">
           <div
             className="deckCentreUnderline"
@@ -117,21 +163,48 @@ const DeckCentre = () => {
                 activeTab === "Library" ? "100%" : "200%"
               })`,
             }}
-          >
-          </div>
+          ></div>
         </div>
       </div>
 
-      <div className="deckCentreContent">
+      <div className={`deckCentreContent ${isTransitioning ? 'transitioning' : ''}`}>
         {activeTab === "Builder" && (
-          <div className="builder-section">
-          
+          <div className="builder-section tab-content">
+            <h2>Deck Builder</h2>
             
-            
-            {/* Wrapped DeckComponent for better centering */}
-            <div className="deck-component-wrapper">
+            {/* Deck Main Container */}
+            <div className="deckCentreDeckMain">
+              {/* Left Stats */}
+              <div className="deckCentreDeckStats">
+                <div className="deckCentreDeckStat">
+                  <div className="deckCentreDeckStatIcon">
+                    <img src={ElixerIcon} alt="Elixir Icon" />
+                  </div>
+                  <div className="deckCentreDeckStatContent">{avgElixir}</div>
+                </div>
+                <div className="deckCentreDeckStat">
+                  <div className="deckCentreDeckStatIcon">
+                    <img src={ATK} alt="ATK Icon" />
+                  </div>
+                  <div className="deckCentreDeckStatContent">{avgAtk}/10</div>
+                </div>
+                <div className="deckCentreDeckStat">
+                  <div className="deckCentreDeckStatIcon">
+                    <img src={DEF} alt="DEF Icon" />
+                  </div>
+                  <div className="deckCentreDeckStatContent">{avgDef}/10</div>
+                </div>
+                <div className="deckCentreDeckStat">
+                  <div className="deckCentreDeckStatIcon">
+                    <img src={F2P} alt="F2P Icon" />
+                  </div>
+                  <div className="deckCentreDeckStatContent">{avgF2P}/10</div>
+                </div>
+              </div>
+
+              {/* Center Deck */}
               <DeckComponent 
-                currentDeck={selectedDeck.filter(card => card !== null)}
+                currentDeck={currentDeck}
                 deckCards={[]}
                 deckLoading={false}
                 toCardSrc={toCardSrc}
@@ -142,18 +215,17 @@ const DeckCentre = () => {
                 onRemoveCard={handleRemoveCard}
                 isDeckBuilder={true}
               />
+
+              {/* Right CTA Buttons */}
+              <div className="deckCentreDeckCTA">
+                <div className="deckCentreDeckCTAButton">Copy</div>
+                <div className="deckCentreDeckCTAButton">Import</div>
+                <div className="deckCentreDeckCTAButton">Compare</div>
+                <div className="deckCentreDeckCTAButton">Save</div>
+              </div>
             </div>
 
-            <div className="deck-info">
-              <span className="cards-count">
-                Available Cards: {availableCards.length}/{allCards.length}
-              </span>
-              <span className="deck-count">
-                Deck: {cardsInDeck.length}/8 cards
-              </span>
-            </div>
-
-            {/* Card List Container - now shows only available cards */}
+            {/* Card List Container */}
             <div className="cardListContainer">
               {cardsLoading ? (
                 <div className="cards-loading">
@@ -186,11 +258,50 @@ const DeckCentre = () => {
         )}
 
         {activeTab === "Library" && (
-          <div>Library Content</div>
+          <div className="library-section tab-content">
+            <h2>Saved Decks</h2>
+            <div className="library-decks-container">
+              {/* Left Column */}
+              <div className="library-decks-column">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <div key={`left-${index}`} className="library-deck-item">
+                    <DeckComponent 
+                      currentDeck={[]}
+                      deckCards={[]}
+                      deckLoading={false}
+                      toCardSrc={toCardSrc}
+                      showPlaceholders={true}
+                      isDeckBuilder={false}
+                    />
+                    <div className="deleteFromSavedBTN">Delete</div>
+                  </div>
+                ))}
+              </div>
+              
+              {/* Right Column */}
+              <div className="library-decks-column">
+                {Array.from({ length: 5 }, (_, index) => (
+                  <div key={`right-${index}`} className="library-deck-item">
+                    <DeckComponent 
+                      currentDeck={[]}
+                      deckCards={[]}
+                      deckLoading={false}
+                      toCardSrc={toCardSrc}
+                      showPlaceholders={true}
+                      isDeckBuilder={false}
+                    />
+                    <div className="deleteFromSavedBTN">Delete</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
 
         {activeTab === "Compare" && (
-          <div>Compare Content</div>
+          <div className="compare-section tab-content">
+            <div>Compare Content</div>
+          </div>
         )}
       </div>
     </div>

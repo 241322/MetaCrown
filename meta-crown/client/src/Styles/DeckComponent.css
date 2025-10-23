@@ -1,7 +1,8 @@
 .dashboardDeckCards {
   height: 100%;
   width: 85%;
-  max-width: 1000px; /* Add max-width for better control */
+  max-width: 1200px;
+  min-width: 1000px; /* Add max-width for better control */
   margin: 0 auto; /* Center the component */
   background: rgba(30, 45, 68, 0.70);
   border-radius: 20px;
@@ -146,6 +147,8 @@
 /* Placeholder div updates for deck builder */
 .placeholder-div {
     width: 100%;
+    /* min-width: 242px; */
+    aspect-ratio: 198.02/230.50;
     height: 100%;
     background-color: #0B1829;
     border-radius: 20px;

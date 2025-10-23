@@ -27,6 +27,7 @@
 
 .deckCentrePagesNames {
     display: flex;
+    flex-direction: row;
     width: 100%;
     justify-content: space-around;
 }
@@ -36,9 +37,9 @@
     padding: 10px;
     border-bottom: 3px solid transparent;
     margin: 0 5px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color 200ms ease-in-out;
     color: var(--white-color);
 }
 
@@ -60,13 +61,24 @@
     height: 3px;
     background: var(--white-color, #ffffffff);
     border-radius: 2px;
-    transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+    transition: transform 400ms cubic-bezier(.77,0,.18,1); /* Slightly longer for underline */
     z-index: 2;
 }
 
 .deckCentreContent {
     margin-top: 40px;
     width: 100%;
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
+}
+
+.deckCentreContent.transitioning {
+    opacity: 0;
+}
+
+.tab-content {
+    opacity: 1;
+    transition: opacity 300ms ease-in-out;
 }
 
 .builder-section {
@@ -249,4 +261,320 @@
         width: 95% !important; /* Almost full width on very small screens */
         min-width: 280px;
     }
+}
+
+/* Deck Main Container - 80% width, max 1600px */
+.deckCentreDeckMain {
+    width: 80%;
+    max-width: 1600px;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Left Stats Column */
+.deckCentreDeckStats {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.deckCentreDeckStat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    min-width: 100px;
+}
+
+.deckCentreDeckStatIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.deckCentreDeckStatIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.deckCentreDeckStatContent {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Right CTA Buttons Column */
+.deckCentreDeckCTA {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.deckCentreDeckCTAButton {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 25px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 100px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.deckCentreDeckCTAButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.deckCentreDeckCTAButton:active {
+    transform: translateY(0);
+}
+
+/* Ensure DeckComponent doesn't grow/shrink */
+.deckCentreDeckMain .dashboardDeckCards {
+    flex-shrink: 0;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .deckCentreDeckMain {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .deckCentreDeckStats,
+    .deckCentreDeckCTA {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .deckCentreDeckMain {
+        width: 95%;
+    }
+
+    .deckCentreDeckStat,
+    .deckCentreDeckCTAButton {
+        min-width: 80px;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+.deckCentreDeckCTA{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  height: 100%;
+  width: 300px;
+  /* background: #a32fb3cc; */
+}
+
+.deckCentreDeckCTAButton{
+  width: 100%;
+  height: 100%;
+  /* background: url("../Assets/deckCTABackground.png") no-repeat center ; */
+  background: #1E2D44;
+  background-size: fit;
+  border-radius: 20px;
+  font-size: 1.8rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 8px 8px 6px #000E20, inset -8px -45px 6px #000E20;
+}
+
+.deckCentreDeckCTAButton:hover {
+  box-shadow: inset 8px 8px 6px #000E20, inset -8px -45px 6px #000E20,3px 3px 20px #2d407035, -3px -3px 20px #2d407035;
+  transition: all 0.3s ease-in-out;
+}
+
+.deckCentreDeckStats{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  height: 100%;
+  width: 300px;
+  /* background: #a17516cc; */
+}
+
+.deckCentreDeckStat{
+  font-size: 1.1rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  line-height: 1.1;
+  background: url("../Assets/statBackground.png") no-repeat center;
+  background-size: cover;
+  border-radius: 20px;
+  /* box-shadow: inset 0px 1px 1px #000000; */
+}
+
+.deckCentreDeckStatIcon{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.deckCentreDeckStatIcon img{
+  height: 40px;
+  width: auto;
+}
+
+.deckCentreDeckStatContent{
+  margin-right: 10px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+/* Library Section Styles */
+.library-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.library-section h2 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.library-decks-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30rem; /* Exactly 30rem gap between columns */
+    width: 100%;
+    max-width: none; /* Remove max-width constraint */
+    margin: 0 auto; /* Ensure perfect centering */
+    padding: 0 2rem; /* Add padding to prevent edge overflow */
+}
+
+.library-decks-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 0 0 auto; /* Don't allow flex grow/shrink to prevent overlap */
+    width: 400px; /* Fixed width for each column */
+    max-width: 400px;
+}
+
+.library-deck-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Scale down the deck components in library view */
+.library-deck-item .dashboardDeckCards {
+    width: 100% !important;
+    max-width: 400px;
+    height: auto;
+    transform: scale(0.8);
+    transform-origin: center;
+}
+
+.library-deck-info {
+    text-align: center;
+}
+
+.library-deck-name {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments for Library */
+@media (max-width: 1400px) {
+    .library-decks-container {
+        gap: 20rem; /* Reduce gap on smaller screens */
+    }
+}
+
+@media (max-width: 1200px) {
+    .library-decks-container {
+        gap: 15rem; /* Further reduce gap */
+    }
+}
+
+@media (max-width: 1024px) {
+    .library-decks-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .library-decks-column {
+        width: 100%;
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .library-deck-item .dashboardDeckCards {
+        transform: scale(0.7);
+        max-width: 350px;
+    }
+    
+    .library-deck-name {
+        font-size: 14px;
+    }
+    
+    .library-decks-container {
+        padding: 0 1rem;
+    }
+}
+
+.deleteFromSavedBTN{
+  width: 100%;
+  padding: 10px 0;
+  background: #ff4d4d;
+  border-radius: 15px;
+  font-size: 1.2rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 4px #aa0000, inset -2px -2px 4px #ff6666;
+  transition: all 0.3s ease-in-out;
 }

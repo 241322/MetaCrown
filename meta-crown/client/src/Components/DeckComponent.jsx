@@ -42,7 +42,7 @@ const DeckComponent = ({
             </div>
           ) : (
             <div className="placeholder-div">
-              <span className="drop-text">Drop card here</span>
+              <span className="drop-text">No card</span>
             </div>
           )}
         </div>
