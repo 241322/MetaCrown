@@ -17,6 +17,7 @@ const DeckCentre = () => {
   const [saveMessage, setSaveMessage] = useState("");
   const [savedDecks, setSavedDecks] = useState([]);
   const [loadingDecks, setLoadingDecks] = useState(false);
+  const [editingDeckId, setEditingDeckId] = useState(null); // Track which deck is being edited
   
   // Sorting state
   const [sortType, setSortType] = useState("Alphabetical"); // "Alphabetical", "By Elixir", "By Rarity"
@@ -314,24 +315,77 @@ const DeckCentre = () => {
       };
 
       console.log('Save deck - Sending data:', deckData);
+      console.log('Save deck - Editing deck ID:', editingDeckId);
 
-      const response = await fetch('http://localhost:6969/api/decks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(deckData),
-      });
+      let response;
+      let successMessage;
+
+      if (editingDeckId) {
+        // Update existing deck
+        response = await fetch(`http://localhost:6969/api/decks/${editingDeckId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(deckData),
+        });
+        successMessage = "Deck updated successfully!";
+      } else {
+        // Create new deck
+        response = await fetch('http://localhost:6969/api/decks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(deckData),
+        });
+        successMessage = "Deck saved successfully!";
+      }
 
       console.log('Save deck - Response status:', response.status);
       const data = await response.json();
       console.log('Save deck - Response data:', data);
 
       if (response.ok) {
-        setSaveMessage("Deck saved successfully!");
+        setSaveMessage(successMessage);
+        
+        if (editingDeckId) {
+          // Update the deck in the saved decks list
+          setSavedDecks(prevDecks => 
+            prevDecks.map(deck => 
+              deck.deck_id === editingDeckId 
+                ? { ...deck, deck_name: deckName.trim(), cards: completeDeck, avg_elixir: parseFloat(avgElixir), avg_attack: avgAtk, avg_defense: avgDef, avg_f2p: avgF2P }
+                : deck
+            )
+          );
+          // Clear editing state
+          setEditingDeckId(null);
+        } else {
+          // Add new deck to the list if we're in library view
+          if (activeTab === "Library") {
+            // Refresh the library to show the new deck
+            setTimeout(() => {
+              const fetchUserDecks = async () => {
+                try {
+                  setLoadingDecks(true);
+                  const response = await fetch(`http://localhost:6969/api/decks/user/${userId}`);
+                  if (response.ok) {
+                    const decks = await response.json();
+                    setSavedDecks(decks);
+                  }
+                } catch (error) {
+                  console.error('Failed to refresh decks:', error);
+                } finally {
+                  setLoadingDecks(false);
+                }
+              };
+              fetchUserDecks();
+            }, 100);
+          }
+        }
+        
         setDeckName(""); // Clear the deck name
-        // Optionally clear the deck
-        // setSelectedDeck(Array(8).fill(null));
+        setSelectedDeck(Array(8).fill(null)); // Clear the deck
         setTimeout(() => setSaveMessage(""), 3000);
       } else {
         setSaveMessage(data.message || "Failed to save deck");
@@ -368,6 +422,7 @@ const DeckCentre = () => {
     })) : [];
     
     console.log('Loading deck with processed cards:', deckCards);
+    console.log('Setting editing deck ID to:', deck.deck_id);
     
     // Create a new array with 8 slots, filling with cards or null
     const loadedDeck = Array(8).fill(null);
@@ -379,6 +434,7 @@ const DeckCentre = () => {
     
     setSelectedDeck(loadedDeck);
     setDeckName(deck.deck_name);
+    setEditingDeckId(deck.deck_id); // Set the editing deck ID
     
     // Force tab change and component update
     setTimeout(() => {
@@ -524,6 +580,21 @@ const DeckCentre = () => {
               <div className="deckCentreDeckCTA">
                 <div className="deckCentreDeckCTAButton">Copy</div>
                 <div className="deckCentreDeckCTAButton">Import</div>
+                {editingDeckId && (
+                  <div 
+                    className="deckCentreDeckCTAButton"
+                    onClick={() => {
+                      setEditingDeckId(null);
+                      setDeckName("");
+                      setSelectedDeck(Array(8).fill(null));
+                      setSaveMessage("Started new deck!");
+                      setTimeout(() => setSaveMessage(""), 2000);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    New Deck
+                  </div>
+                )}
                 <div 
                   className={`deckCentreDeckCTAButton ${isSaving ? 'saving' : ''}`}
                   onClick={handleSaveDeck}
@@ -532,7 +603,7 @@ const DeckCentre = () => {
                     cursor: isSaving ? 'not-allowed' : 'pointer' 
                   }}
                 >
-                  {isSaving ? 'Saving...' : 'Save'}
+                  {isSaving ? 'Saving...' : editingDeckId ? 'Update' : 'Save'}
                 </div>
               </div>
             </div>
