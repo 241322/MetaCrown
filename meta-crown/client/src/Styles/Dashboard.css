@@ -315,6 +315,356 @@
 }
 
 
+/* Remove these styles from Dashboard.css since they're now in DeckComponent.css: */
+
+/* REMOVE:
+.dashboardDeckCards {
+  // ... all styles
+}
+
+.dashboardDeckCard {
+  // ... all styles  
+}
+
+.dashboardDeckCardImg {
+  // ... all styles
+}
+
+.deck-loading-spinner {
+  // ... all styles
+}
+
+.spinner {
+  // ... all styles
+}
+
+@keyframes spin {
+  // ... all styles
+}
+
+.deck-loading-spinner span {
+  // ... all styles
+}
+*/
+
+/* Keep all other existing Dashboard.css styles */
+.dashboard-searchbar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100vw;
+  margin-top: 100px; /* Adjust to be below NavBar */
+}
+
+.dashboard-searchbar-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Search Bar */
+.dashboard-searchbar {
+  display: flex;
+  align-items: center;
+  background: #1e2d44cc;
+  border-radius: 32px;
+  box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px); /* Lower blur */
+  padding: 12px 28px;
+  gap: 16px;
+  width: 420px;
+  max-width: 90vw;
+  background: linear-gradient(#1e2d44cc, #1e2d44cc) padding-box,
+              linear-gradient(to bottom, #ffffff00, #ffffff90) border-box;
+  border: 1px solid transparent; /* Define a transparent border */
+  mix-blend-mode: screen; /* Optional: for a subtle light effect */
+}
+
+.search-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  color: var(--white-color, #fff);
+  font-size: 1.2rem;
+  outline: none;
+  width: 100%;
+  padding: 0 8px;
+  text-align: center; /* Center the input text */
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+.search-input::placeholder {
+  color: #cccccc;
+  opacity: 0.7;
+  font-size: 0.95rem; /* Slightly smaller placeholder */
+}
+
+.return-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  color: #fff;
+}
+
+.return-arrow-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateX(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.return-arrow-btn:active {
+  transform: translateX(-1px) scale(0.95);
+}
+
+.return-arrow-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.return-arrow-btn:hover .return-arrow-icon {
+  transform: translateX(-1px);
+}
+
+.dashboardHeader{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* margin-top: 30px; */
+    width: 100%;
+    max-width: 1920px;
+    background: url('../Assets/Balloon_card_render.png') no-repeat left 80% center;
+    background-size: contain;
+    background-opacity: 0.1;
+}
+
+.dashboard-username{
+    margin-top: 20px;
+    font-size: 3rem;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: 'YouBlockhead', sans-serif;
+    font-size: 4rem;
+    text-align: center;
+    line-height: 1.1;
+    margin-top: 45px;
+}
+
+
+.dashboard-clan-name{
+    font-size: 1.3rem;
+    color:  #cccccc;
+    font-family: 'YouBlockhead', sans-serif;
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0.7;
+}
+
+.bigComponents {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    width: 90%;
+    max-width: 1600px;
+    margin-top: 40px;
+}
+
+.bigComponent {
+    background: #1e2d44cc;
+    border-radius: 16px;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px);
+    height: 230px; /* Fixed height for uniformity */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 1.3rem;
+    
+}
+
+.componentLabel {
+    font-size: 1rem;
+    color: var(--white-color, #fff);
+    font-family: 'YouBlockhead', sans-serif;
+    text-align: center;
+    margin-bottom: -25px;
+}
+
+.componentAsset{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 3.5rem;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-family: 'YouBlockhead', sans-serif;
+    text-align: center;
+    line-height: 1.1;
+
+    /* background: #2e3b4e; */
+    /* border-radius: 8px; */
+}
+
+.componentAsset img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    margin-top: 25px;
+}
+
+.smallComponents {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    width: 90%;
+    max-width: 1600px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.smallComponent {
+    background: #1e2d44cc;
+    border-radius: 16px;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
+    backdrop-filter: blur(3px);
+    height: 120px; /* Fixed height for uniformity */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    padding: 1rem;
+}
+
+.smallComponentLabel {
+    font-size: 0.8rem;
+    color: var(--white-color, #fff);
+    font-family: 'YouBlockhead', sans-serif;
+    text-align: center;
+    margin-top: 3px;
+}
+
+.smallComponentStat{
+    font-size: 1.8rem;
+    color: var(--white-color, #fff);
+    font-family: 'YouBlockhead', sans-serif;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    line-height: 1.1;
+    /* margin-top: 5px; */
+}
+
+.currentDeckDashboard{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  max-width: 1600px;
+  margin-top: 40px;
+  height: 491px;
+  margin-bottom: 40px;
+}
+
+.dashboardDeckMain{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 20px;
+}
+
+.dashboardDeckStats{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  height: 100%;
+  width: 50%;
+  /* background: #a17516cc; */
+}
+
+.dashboardDeckStat{
+  font-size: 1.1rem;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  line-height: 1.1;
+  background: url("../Assets/statBackground.png") no-repeat center;
+  background-size: cover;
+  border-radius: 20px;
+  /* box-shadow: inset 0px 1px 1px #000000; */
+}
+
+.dashboardDeckStatIcon{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.dashboardDeckStatIcon img{
+  height: 40px;
+  width: auto;
+}
+
+.dashboardDeckStatContent{
+  margin-right: 10px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--white-color, #fff);
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+
 .dashboardDeckCards {
   height: 100%;
   width: 85%;

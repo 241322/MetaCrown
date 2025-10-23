@@ -11,6 +11,7 @@ import ATK from "../Assets/ATK.svg";
 import DEF from "../Assets/DEF.svg";
 import F2P from "../Assets/F2P.svg";
 import RewindRecord from "../Components/RewindRecord";
+import DeckComponent from "../Components/DeckComponent";
 
 const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 37, 84];
 
@@ -520,42 +521,14 @@ const Dashboard = () => {
               <div className="dashboardDeckStatContent">{avgF2P}/10</div>
             </div>
           </div>
-          
-          <div className="dashboardDeckCards">
-            {deckLoading ? (
-              // Loading spinner
-              <div className="deck-loading-spinner">
-                <div className="spinner"></div>
-                <span>Loading deck...</span>
-              </div>
-            ) : currentDeck.length > 0 ? (
-              // Current deck from CR API
-              currentDeck.map((card, index) => (
-                <div className="dashboardDeckCard" key={card.id || index}>
-                  <img
-                    src={card.imageUrl}
-                    alt={card.name}
-                    className="dashboardDeckCardImg"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                    }}
-                  />
-                </div>
-              ))
-            ) : (
-              // Fallback to local deck if no current deck
-              deckCards.map((card) => (
-                <div className="dashboardDeckCard" key={card.card_id}>
-                  <img
-                    src={toCardSrc(card.image_url)}
-                    alt={card.name}
-                    className="dashboardDeckCardImg"
-                  />
-                </div>
-              ))
-            )}
-          </div>
-          
+
+          <DeckComponent
+            currentDeck={currentDeck}
+            deckCards={deckCards}
+            deckLoading={deckLoading}
+            toCardSrc={toCardSrc}
+          />
+
           <div className="dashboardDeckCTA">
             <div className="dashboardDeckCTAButton">Copy</div>
             <div className="dashboardDeckCTAButton">Improve</div>
