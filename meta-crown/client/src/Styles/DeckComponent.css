@@ -1,8 +1,21 @@
+/* Deck builder specific styling with higher specificity */
+.dashboardDeckCards.deck-builder-mode {
+  width: 1000px !important; /* Fixed width for builder - exactly 1000px */
+  min-width: 1000px !important; /* Prevent shrinking */
+  max-width: 1000px !important; /* Prevent growing */
+  height: auto !important; /* Let height follow aspect ratio */
+  margin: 0 auto !important; /* Ensure centering */
+  /* Lock the grid structure */
+  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-rows: repeat(2, 1fr) !important;
+  box-sizing: border-box !important;
+  /* Fixed aspect ratio 12:7 (1.71:1) */
+  aspect-ratio: 12/7 !important;
+}
+
 .dashboardDeckCards {
-  height: 100%;
   width: 85%;
-  max-width: 1200px;
-  min-width: 1000px; /* Add max-width for better control */
+  max-width: 1600px; /* Increase to allow larger deck builder */
   margin: 0 auto; /* Center the component */
   background: rgba(30, 45, 68, 0.70);
   border-radius: 20px;
@@ -14,12 +27,13 @@
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.25));
   backdrop-filter: blur(3px);
   padding: 10px;
+  /* Fixed aspect ratio 12:7 (1.71:1) */
+  aspect-ratio: 12/7;
 }
 
 .dashboardDeckCard {
   justify-self: center;
   align-self: center;
-  height: 100%;
   width: 100%;
   aspect-ratio: 198.02/230.50;
   border-radius: 20px;
@@ -27,6 +41,7 @@
   align-items: center;
   justify-content: center;
   background: none;
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .dashboardDeckCardImg {
@@ -36,25 +51,21 @@
   border-radius: 20px;
 }
 
-/* Placeholder div styles */
+/* Builder-specific card image sizing */
+.deck-slot .dashboardDeckCardImg {
+  width: 100%; /* Fill the slot completely */
+  height: 100%; /* Fill the slot completely */
+  object-fit: contain; /* Maintain aspect ratio */
+  max-width: none; /* Remove size limit to make cards larger */
+  max-height: none; /* Remove height limit */
+}
+
+/* Placeholder div styles - unified version */
 .placeholder-card {
   position: relative;
 }
 
-.placeholder-div {
-  width: 100%;
-  height: 100%;
-  background-color: #0e1b2ddf;
-  border-radius: 20px;
-  aspect-ratio: 198.02/230.50;
-  transition: all 0.3s ease;
-  box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
-}
-
-.placeholder-div:hover {
-  background-color: #0e1b2dff;
-  transform: scale(0.99);
-}
+/* Deck builder placeholder styling will be defined later in builder-specific section */
 
 /* Loading spinner for deck cards */
 .deck-loading-spinner {
@@ -88,9 +99,17 @@
 
 /* Deck Builder Specific Styles */
 .deck-slot {
-    /* position: relative; */
-    /* border: 2px dashed rgba(255, 255, 255, 0.3); */
     transition: all 0.3s ease;
+    /* Ensure consistent slot sizing with proper aspect ratio */
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 198.02/230.50; /* Clash Royale card aspect ratio */
+    min-height: 0; /* Allow flexbox to work properly */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevent shrinking */
+    flex-grow: 0; /* Prevent growing */
 }
 
 .deck-slot.empty-slot {
@@ -106,36 +125,7 @@
     position: relative;
     width: 100%;
     height: 100%;
-}
-
-.remove-card-btn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #e74c3c;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 10;
-}
-
-.deck-card-container:hover .remove-card-btn {
-    opacity: 1;
-}
-
-.remove-card-btn:hover {
-    background: #c0392b;
-    transform: scale(1.1);
+    cursor: pointer; /* Show it's interactive */
 }
 
 .drop-text {
@@ -147,17 +137,24 @@
 /* Placeholder div updates for deck builder */
 .placeholder-div {
     width: 100%;
-    /* min-width: 242px; */
-    aspect-ratio: 198.02/230.50;
     height: 100%;
+    aspect-ratio: 198.02/230.50; /* Clash Royale card aspect ratio */
     background-color: #0B1829;
     border-radius: 20px;
-    aspect-ratio: 198.02/230.50;
     transition: all 0.3s ease;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 -3px 5px 0 rgba(255, 255, 255, 0.07) inset, 0 5px 8px 0 rgba(0, 0, 0, 0.50) inset;
+}
+
+/* Builder-specific placeholder sizing */
+.deck-slot .placeholder-div {
+    width: 100%; /* Fill the slot completely */
+    height: 100%; /* Fill the slot completely */
+    aspect-ratio: 198.02/230.50; /* Maintain card aspect ratio */
+    margin: 0; /* Remove centering margin */
 }
 
 .deck-slot .placeholder-div {
@@ -168,4 +165,36 @@
 .deck-slot .placeholder-div:hover {
     /* background: rgba(255, 255, 255, 0.15); */
     /* border-color: rgba(255, 255, 255, 0.5); */
+}
+
+/* Context Menu Styles */
+.context-menu {
+    background: rgba(42, 42, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    padding: 4px 0;
+    min-width: 120px;
+}
+
+.context-menu-item {
+    width: 100%;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    text-align: left;
+    transition: background-color 0.2s ease;
+}
+
+.context-menu-item:hover {
+    background: rgba(231, 76, 60, 0.8);
+}
+
+.context-menu-item:active {
+    background: rgba(192, 57, 43, 0.9);
 }

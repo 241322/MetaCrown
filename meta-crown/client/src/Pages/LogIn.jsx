@@ -50,6 +50,7 @@ const LogIn = () => {
         console.error('Login failed:', data);
         return;
       }
+      localStorage.setItem('user_id', data.user_id || '');
       localStorage.setItem('username', data.username || '');
       localStorage.setItem('playerTag', data.player_tag || '');
       localStorage.setItem('email', data.email_address || '');

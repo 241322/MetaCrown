@@ -1424,3 +1424,8 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.8; }
 }
+
+/* Dashboard specific deck component sizing */
+.dashboard-searchbar-wrapper .dashboardDeckCards {
+  min-width: 1000px;
+}

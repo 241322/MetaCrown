@@ -12,6 +12,15 @@ const DeckCentre = () => {
   const [allCards, setAllCards] = useState([]);
   const [selectedDeck, setSelectedDeck] = useState(Array(8).fill(null));
   const [cardsLoading, setCardsLoading] = useState(true);
+  const [deckName, setDeckName] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState("");
+  const [savedDecks, setSavedDecks] = useState([]);
+  const [loadingDecks, setLoadingDecks] = useState(false);
+  
+  // Sorting state
+  const [sortType, setSortType] = useState("Alphabetical"); // "Alphabetical", "By Elixir", "By Rarity"
+  const [sortDirection, setSortDirection] = useState("asc"); // "asc" (up arrow) or "desc" (down arrow)
 
   // Fetch all cards from Clash Royale API
   useEffect(() => {
@@ -31,16 +40,148 @@ const DeckCentre = () => {
     fetchCards();
   }, []);
 
+  // Fetch user's saved decks
+  useEffect(() => {
+    const fetchUserDecks = async () => {
+      const userId = localStorage.getItem('user_id');
+      if (!userId) return;
+
+      try {
+        setLoadingDecks(true);
+        console.log('Fetching decks for user ID:', userId);
+        const response = await fetch(`http://localhost:6969/api/decks/user/${userId}`);
+        if (response.ok) {
+          const decks = await response.json();
+          console.log('Fetched decks:', decks);
+          console.log('First deck cards:', decks[0]?.cards);
+          
+          // Log each card's structure
+          if (decks[0]?.cards && Array.isArray(decks[0].cards)) {
+            decks[0].cards.forEach((card, i) => {
+              console.log(`Card ${i}:`, {
+                id: card.id,
+                name: card.name,
+                imageUrl: card.imageUrl,
+                iconUrls: card.iconUrls
+              });
+            });
+          } else if (decks[0]?.cards) {
+            console.log('Cards is not an array, type:', typeof decks[0].cards);
+            console.log('Cards value:', decks[0].cards);
+            
+            // Try to parse if it's a JSON string
+            try {
+              const parsedCards = JSON.parse(decks[0].cards);
+              console.log('Parsed cards:', parsedCards);
+              if (Array.isArray(parsedCards)) {
+                parsedCards.forEach((card, i) => {
+                  console.log(`Parsed Card ${i}:`, {
+                    id: card.id,
+                    name: card.name,
+                    imageUrl: card.imageUrl,
+                    iconUrls: card.iconUrls
+                  });
+                });
+              }
+            } catch (e) {
+              console.log('Failed to parse cards as JSON:', e);
+            }
+          }
+          
+          setSavedDecks(decks);
+        } else {
+          console.error('Failed to fetch decks:', response.status);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user decks:', error);
+      } finally {
+        setLoadingDecks(false);
+      }
+    };
+
+    if (activeTab === "Library") {
+      fetchUserDecks();
+    }
+  }, [activeTab]);
+
   // Get cards that are currently in the deck
   const cardsInDeck = selectedDeck.filter(card => card !== null).map(card => card.id);
-  const availableCards = allCards.filter(card => !cardsInDeck.includes(card.id));
+  
+  // Sorting functions
+  const sortCards = (cards, type, direction) => {
+    const sortedCards = [...cards];
+    
+    switch (type) {
+      case "Alphabetical":
+        sortedCards.sort((a, b) => {
+          const comparison = a.name.localeCompare(b.name);
+          return direction === "asc" ? comparison : -comparison;
+        });
+        break;
+        
+      case "By Elixir":
+        sortedCards.sort((a, b) => {
+          // Try different possible property names for elixir cost
+          const elixirA = a.elixirCost || a.elixir || a.cost || 0;
+          const elixirB = b.elixirCost || b.elixir || b.cost || 0;
+          const comparison = elixirA - elixirB;
+          return direction === "asc" ? comparison : -comparison;
+        });
+        break;
+        
+      case "By Rarity":
+        const rarityOrder = {
+          "common": 1,
+          "rare": 2, 
+          "epic": 3,
+          "legendary": 4,
+          "champion": 5,
+          // Also handle capitalized versions
+          "Common": 1,
+          "Rare": 2, 
+          "Epic": 3,
+          "Legendary": 4,
+          "Champion": 5
+        };
+        sortedCards.sort((a, b) => {
+          // Access rarity.name from Clash Royale API structure
+          const rarityA = rarityOrder[a.rarity?.name] || rarityOrder[a.rarity] || rarityOrder[a.rarityName] || 0;
+          const rarityB = rarityOrder[b.rarity?.name] || rarityOrder[b.rarity] || rarityOrder[b.rarityName] || 0;
+          const comparison = rarityA - rarityB;
+          return direction === "asc" ? comparison : -comparison;
+        });
+        break;
+        
+      default:
+        break;
+    }
+    
+    return sortedCards;
+  };
+  
+  // Sort the available cards based on current sort settings
+  const filteredCards = allCards.filter(card => !cardsInDeck.includes(card.id));
+  const availableCards = sortCards(filteredCards, sortType, sortDirection);
+  
+  // Handle sort type cycling
+  const handleSortTypeClick = () => {
+    const sortTypes = ["Alphabetical", "By Elixir", "By Rarity"];
+    const currentIndex = sortTypes.indexOf(sortType);
+    const nextIndex = (currentIndex + 1) % sortTypes.length;
+    setSortType(sortTypes[nextIndex]);
+  };
+  
+  // Handle sort direction toggle
+  const handleSortDirectionClick = (direction) => {
+    setSortDirection(direction);
+  };
 
   // Deck statistics calculations
   const currentDeck = selectedDeck.filter(card => card !== null);
 
   const avgElixir = useMemo(() => {
     if (!Array.isArray(currentDeck) || currentDeck.length === 0) return "0.0";
-    const total = currentDeck.reduce((sum, card) => sum + (card.elixirCost || 0), 0);
+    const total = currentDeck.reduce((sum, card) => sum + (card.elixirCost || card.elixir || card.cost || 0), 0);
     return (total / currentDeck.length).toFixed(1);
   }, [currentDeck]);
 
@@ -131,6 +272,159 @@ const DeckCentre = () => {
     return `${process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/'}${withFolder}`;
   };
 
+  // Save deck function
+  const handleSaveDeck = async () => {
+    const userId = localStorage.getItem('user_id');
+    console.log('Save deck - User ID from localStorage:', userId);
+    
+    if (!userId) {
+      setSaveMessage("Please log in to save decks");
+      setTimeout(() => setSaveMessage(""), 3000);
+      return;
+    }
+
+    if (!deckName.trim()) {
+      setSaveMessage("Please enter a deck name");
+      setTimeout(() => setSaveMessage(""), 3000);
+      return;
+    }
+
+    const completeDeck = selectedDeck.filter(card => card !== null);
+    console.log('Save deck - Complete deck:', completeDeck);
+    console.log('Save deck - Deck length:', completeDeck.length);
+    
+    if (completeDeck.length !== 8) {
+      setSaveMessage("Please complete your deck (8 cards required)");
+      setTimeout(() => setSaveMessage(""), 3000);
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      setSaveMessage("");
+
+      const deckData = {
+        user_id: parseInt(userId),
+        deck_name: deckName.trim(),
+        cards: completeDeck,
+        avg_elixir: parseFloat(avgElixir),
+        avg_attack: avgAtk,
+        avg_defense: avgDef,
+        avg_f2p: avgF2P
+      };
+
+      console.log('Save deck - Sending data:', deckData);
+
+      const response = await fetch('http://localhost:6969/api/decks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deckData),
+      });
+
+      console.log('Save deck - Response status:', response.status);
+      const data = await response.json();
+      console.log('Save deck - Response data:', data);
+
+      if (response.ok) {
+        setSaveMessage("Deck saved successfully!");
+        setDeckName(""); // Clear the deck name
+        // Optionally clear the deck
+        // setSelectedDeck(Array(8).fill(null));
+        setTimeout(() => setSaveMessage(""), 3000);
+      } else {
+        setSaveMessage(data.message || "Failed to save deck");
+        setTimeout(() => setSaveMessage(""), 5000);
+      }
+    } catch (error) {
+      console.error('Save deck error:', error);
+      setSaveMessage("Failed to save deck. Please try again.");
+      setTimeout(() => setSaveMessage(""), 5000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Load deck into builder
+  const handleLoadDeck = (deck) => {
+    let deckCards = [];
+    
+    if (Array.isArray(deck.cards)) {
+      deckCards = deck.cards;
+    } else if (typeof deck.cards === 'string') {
+      try {
+        deckCards = JSON.parse(deck.cards);
+      } catch (e) {
+        console.error('Failed to parse deck cards JSON for loading:', e);
+        deckCards = [];
+      }
+    }
+    
+    // Ensure it's an array and add imageUrl if missing
+    deckCards = Array.isArray(deckCards) ? deckCards.map(card => ({
+      ...card,
+      imageUrl: card.imageUrl || card.iconUrls?.medium || ''
+    })) : [];
+    
+    console.log('Loading deck with processed cards:', deckCards);
+    
+    // Create a new array with 8 slots, filling with cards or null
+    const loadedDeck = Array(8).fill(null);
+    deckCards.forEach((card, index) => {
+      if (index < 8) {
+        loadedDeck[index] = card;
+      }
+    });
+    
+    setSelectedDeck(loadedDeck);
+    setDeckName(deck.deck_name);
+    
+    // Force tab change and component update
+    setTimeout(() => {
+      setActiveTab("Builder");
+      setSaveMessage("Deck loaded successfully for editing!");
+      setTimeout(() => setSaveMessage(""), 3000);
+    }, 100);
+  };
+
+  // Delete deck function
+  const handleDeleteDeck = async (deckId) => {
+    const userId = localStorage.getItem('user_id');
+    if (!userId) return;
+
+    if (!window.confirm("Are you sure you want to delete this deck? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:6969/api/decks/${deckId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: parseInt(userId)
+        }),
+      });
+
+      if (response.ok) {
+        // Remove the deck from the local state
+        setSavedDecks(prevDecks => prevDecks.filter(deck => deck.deck_id !== deckId));
+        setSaveMessage("Deck deleted successfully!");
+        setTimeout(() => setSaveMessage(""), 3000);
+      } else {
+        const data = await response.json();
+        setSaveMessage(data.message || "Failed to delete deck");
+        setTimeout(() => setSaveMessage(""), 5000);
+      }
+    } catch (error) {
+      console.error('Delete deck error:', error);
+      setSaveMessage("Failed to delete deck. Please try again.");
+      setTimeout(() => setSaveMessage(""), 5000);
+    }
+  };
+
   return (
     <div className="deck-centre-header">
       <div className="deckCentrePages">
@@ -147,20 +441,13 @@ const DeckCentre = () => {
         >
           Library
         </div>
-        <div
-          className="deckCentrePageName"
-          onClick={() => handleTabClick("Compare")}
-        >
-          Compare
-        </div>
         </div>
         <div className="deckCentreUnderlineWrapper">
           <div
             className="deckCentreUnderline"
             style={{
               transform: `translateX(${
-                activeTab === "Builder" ? "0%" : 
-                activeTab === "Library" ? "100%" : "200%"
+                activeTab === "Builder" ? "0%" : "100%"
               })`,
             }}
           ></div>
@@ -171,6 +458,23 @@ const DeckCentre = () => {
         {activeTab === "Builder" && (
           <div className="builder-section tab-content">
             <h2>Deck Builder</h2>
+            
+            {/* Deck Name Input */}
+            <div className="deck-name-container">
+              <input
+                type="text"
+                placeholder="Enter deck name..."
+                value={deckName}
+                onChange={(e) => setDeckName(e.target.value)}
+                className="deck-name-input"
+                maxLength={50}
+              />
+              {saveMessage && (
+                <div className={`save-message ${saveMessage.includes('success') ? 'success' : 'error'}`}>
+                  {saveMessage}
+                </div>
+              )}
+            </div>
             
             {/* Deck Main Container */}
             <div className="deckCentreDeckMain">
@@ -220,8 +524,40 @@ const DeckCentre = () => {
               <div className="deckCentreDeckCTA">
                 <div className="deckCentreDeckCTAButton">Copy</div>
                 <div className="deckCentreDeckCTAButton">Import</div>
-                <div className="deckCentreDeckCTAButton">Compare</div>
-                <div className="deckCentreDeckCTAButton">Save</div>
+                <div 
+                  className={`deckCentreDeckCTAButton ${isSaving ? 'saving' : ''}`}
+                  onClick={handleSaveDeck}
+                  style={{ 
+                    opacity: isSaving ? 0.6 : 1, 
+                    cursor: isSaving ? 'not-allowed' : 'pointer' 
+                  }}
+                >
+                  {isSaving ? 'Saving...' : 'Save'}
+                </div>
+              </div>
+            </div>
+
+            {/* Card List Sorting Controls */}
+            <div className="card-sort-controls">
+              <button 
+                className="sort-type-button"
+                onClick={handleSortTypeClick}
+              >
+                {sortType}
+              </button>
+              <div className="sort-direction-buttons">
+                <button 
+                  className={`sort-direction-button ${sortDirection === 'asc' ? 'active' : ''}`}
+                  onClick={() => handleSortDirectionClick('asc')}
+                >
+                  ↑
+                </button>
+                <button 
+                  className={`sort-direction-button ${sortDirection === 'desc' ? 'active' : ''}`}
+                  onClick={() => handleSortDirectionClick('desc')}
+                >
+                  ↓
+                </button>
               </div>
             </div>
 
@@ -260,47 +596,98 @@ const DeckCentre = () => {
         {activeTab === "Library" && (
           <div className="library-section tab-content">
             <h2>Saved Decks</h2>
-            <div className="library-decks-container">
-              {/* Left Column */}
-              <div className="library-decks-column">
-                {Array.from({ length: 5 }, (_, index) => (
-                  <div key={`left-${index}`} className="library-deck-item">
+            
+            {loadingDecks ? (
+              <div className="library-loading">
+                <div className="spinner"></div>
+                <span>Loading your saved decks...</span>
+              </div>
+            ) : savedDecks.length === 0 ? (
+              <div className="no-decks-message">
+                <p>You haven't saved any decks yet.</p>
+                <p>Go to the Builder tab to create and save your first deck!</p>
+              </div>
+            ) : (
+              <div className="library-decks-container">
+                {savedDecks.map((deck, index) => {
+                  // Ensure deck.cards is an array and add imageUrl if missing
+                  let deckCards = [];
+                  
+                  if (Array.isArray(deck.cards)) {
+                    deckCards = deck.cards;
+                  } else if (typeof deck.cards === 'string') {
+                    try {
+                      deckCards = JSON.parse(deck.cards);
+                    } catch (e) {
+                      console.error('Failed to parse deck cards JSON:', e);
+                      deckCards = [];
+                    }
+                  }
+                  
+                  // Ensure it's an array and add imageUrl if missing
+                  deckCards = Array.isArray(deckCards) ? deckCards.map(card => ({
+                    ...card,
+                    imageUrl: card.imageUrl || card.iconUrls?.medium || ''
+                  })) : [];
+                  
+                  console.log(`Deck ${deck.deck_name} processed cards:`, deckCards);
+                  
+                  return (
+                    <div key={deck.deck_id} className="library-deck-item">
+                    <div className="library-deck-header">
+                      <h3 className="library-deck-name">{deck.deck_name}</h3>
+                      <div className="library-deck-stats">
+                        <span className="deck-stat">
+                          <img src={ElixerIcon} alt="Elixir" className="stat-icon" />
+                          {deck.avg_elixir}
+                        </span>
+                        <span className="deck-stat">
+                          <img src={ATK} alt="Attack" className="stat-icon" />
+                          {deck.avg_attack}/10
+                        </span>
+                        <span className="deck-stat">
+                          <img src={DEF} alt="Defense" className="stat-icon" />
+                          {deck.avg_defense}/10
+                        </span>
+                        <span className="deck-stat">
+                          <img src={F2P} alt="F2P" className="stat-icon" />
+                          {deck.avg_f2p}/10
+                        </span>
+                      </div>
+                    </div>
+                    
                     <DeckComponent 
-                      currentDeck={[]}
+                      currentDeck={deckCards}
                       deckCards={[]}
                       deckLoading={false}
                       toCardSrc={toCardSrc}
-                      showPlaceholders={true}
+                      showPlaceholders={false}
                       isDeckBuilder={false}
                     />
-                    <div className="deleteFromSavedBTN">Delete</div>
+                    
+                    <div className="library-deck-actions">
+                      <button 
+                        className="deck-action-btn load-btn"
+                        onClick={() => handleLoadDeck(deck)}
+                      >
+                        Edit deck
+                      </button>
+                      <button 
+                        className="deck-action-btn delete-btn"
+                        onClick={() => handleDeleteDeck(deck.deck_id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    
+                    <div className="library-deck-date">
+                      Saved: {new Date(deck.created_at).toLocaleDateString()}
+                    </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
-              
-              {/* Right Column */}
-              <div className="library-decks-column">
-                {Array.from({ length: 5 }, (_, index) => (
-                  <div key={`right-${index}`} className="library-deck-item">
-                    <DeckComponent 
-                      currentDeck={[]}
-                      deckCards={[]}
-                      deckLoading={false}
-                      toCardSrc={toCardSrc}
-                      showPlaceholders={true}
-                      isDeckBuilder={false}
-                    />
-                    <div className="deleteFromSavedBTN">Delete</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "Compare" && (
-          <div className="compare-section tab-content">
-            <div>Compare Content</div>
+            )}
           </div>
         )}
       </div>

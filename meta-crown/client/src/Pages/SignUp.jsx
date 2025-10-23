@@ -126,23 +126,42 @@ const SignUp = () => {
   };
 
   // Step 3 submit (finish) — unchanged
-  const handleStep3 = async (e) => {
+  const handleFinal = async (e) => {
     e.preventDefault();
     if (!localStorage.getItem("username")) {
       localStorage.setItem("username", username);
     }
     if (playerTagValid) localStorage.setItem("playerTag", playerTag);
-    await fetch('http://localhost:6969/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email_address: email,
-        password,                // if using passwords
-        username,
-        player_tag: playerTag,   // ensure hash included if you store it
-      }),
-    });
-    navigate("/landing");
+    
+    try {
+      const response = await fetch('http://localhost:6969/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email_address: email,
+          password,                // if using passwords
+          username,
+          player_tag: playerTag,   // ensure hash included if you store it
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Store user data in localStorage
+        localStorage.setItem('user_id', data.user_id || '');
+        localStorage.setItem('username', data.username || username);
+        localStorage.setItem('playerTag', data.player_tag || playerTag);
+        localStorage.setItem('email', data.email_address || email);
+        navigate("/landing");
+      } else {
+        console.error('Signup failed:', data);
+        // Handle signup error (you might want to show an error message)
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      // Handle network error
+    }
   };
 
   return (
@@ -316,7 +335,7 @@ const SignUp = () => {
           >
             <h1>Welcome, {username}!</h1>
             <h2>Your account has been created.</h2>
-            <button className="splashButton" onClick={handleStep3} disabled={isAdvancing}>
+            <button className="splashButton" onClick={handleFinal} disabled={isAdvancing}>
               Continue to MetaCrown
             </button>
           </div>

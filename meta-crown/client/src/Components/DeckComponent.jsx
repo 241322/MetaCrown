@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Styles/DeckComponent.css";
 
 const DeckComponent = ({ 
@@ -13,10 +13,49 @@ const DeckComponent = ({
   onRemoveCard,
   isDeckBuilder = false
 }) => {
+  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, cardIndex: null });
+
+  // Ensure currentDeck is always an array
+  const safeDeck = Array.isArray(currentDeck) ? currentDeck : [];
+  const safeSelectedDeck = Array.isArray(selectedDeck) ? selectedDeck : [];
+  const safeDeckCards = Array.isArray(deckCards) ? deckCards : [];
+
+  // Handle right-click context menu
+  const handleRightClick = (e, cardIndex) => {
+    e.preventDefault();
+    setContextMenu({
+      visible: true,
+      x: e.pageX,
+      y: e.pageY,
+      cardIndex: cardIndex
+    });
+  };
+
+  // Handle context menu actions
+  const handleRemoveFromContext = () => {
+    if (onRemoveCard && contextMenu.cardIndex !== null) {
+      onRemoveCard(contextMenu.cardIndex);
+    }
+    setContextMenu({ visible: false, x: 0, y: 0, cardIndex: null });
+  };
+
+  // Close context menu
+  const closeContextMenu = () => {
+    setContextMenu({ visible: false, x: 0, y: 0, cardIndex: null });
+  };
+
+  // Close context menu when clicking elsewhere
+  React.useEffect(() => {
+    const handleClick = () => closeContextMenu();
+    if (contextMenu.visible) {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
+  }, [contextMenu.visible]);
   // Render deck builder slots (8 slots with drag/drop)
   const renderDeckBuilderSlots = () => {
     return Array.from({ length: 8 }, (_, index) => {
-      const card = selectedDeck[index];
+      const card = safeSelectedDeck[index];
       
       return (
         <div
@@ -26,19 +65,15 @@ const DeckComponent = ({
           onDragOver={onDragOver}
         >
           {card ? (
-            <div className="deck-card-container">
+            <div 
+              className="deck-card-container"
+              onContextMenu={(e) => handleRightClick(e, index)}
+            >
               <img
                 src={card.imageUrl}
                 alt={card.name}
                 className="dashboardDeckCardImg"
               />
-              <button
-                className="remove-card-btn"
-                onClick={() => onRemoveCard && onRemoveCard(index)}
-                title="Remove card"
-              >
-                ×
-              </button>
             </div>
           ) : (
             <div className="placeholder-div">
@@ -60,49 +95,84 @@ const DeckComponent = ({
   };
 
   return (
-    <div className="dashboardDeckCards">
-      {deckLoading ? (
-        // Loading spinner
-        <div className="deck-loading-spinner">
-          <div className="spinner"></div>
-          <span>Loading deck...</span>
+    <>
+      <div className={`dashboardDeckCards ${isDeckBuilder ? 'deck-builder-mode' : ''}`}>
+        {deckLoading ? (
+          // Loading spinner
+          <div className="deck-loading-spinner">
+            <div className="spinner"></div>
+            <span>Loading deck...</span>
+          </div>
+        ) : isDeckBuilder ? (
+          // Deck builder mode with drag/drop slots
+          renderDeckBuilderSlots()
+        ) : showPlaceholders ? (
+          // Show bright pink placeholders
+          renderPlaceholders()
+        ) : safeDeck.length > 0 ? (
+          // Current deck from CR API
+          safeDeck.map((card, index) => {
+            const imageUrl = card.imageUrl || card.iconUrls?.medium || '';
+            console.log(`Card ${card.name || 'Unknown'} image URL:`, imageUrl);
+            
+            return (
+              <div className="dashboardDeckCard" key={card.id || index}>
+                {imageUrl ? (
+                  <img
+                    src={imageUrl}
+                    alt={card.name || 'Card'}
+                    className="dashboardDeckCardImg"
+                    onError={(e) => {
+                      console.log('Image failed to load:', imageUrl);
+                      e.target.style.display = 'none';
+                      // Show card name instead
+                      e.target.parentElement.innerHTML = `<div class="card-name-fallback">${card.name || 'Card'}</div>`;
+                    }}
+                  />
+                ) : (
+                  <div className="card-name-fallback">{card.name || 'Card'}</div>
+                )}
+              </div>
+            );
+          })
+        ) : safeDeckCards.length > 0 ? (
+          // Fallback to local deck if no current deck
+          safeDeckCards.map((card) => (
+            <div className="dashboardDeckCard" key={card.card_id}>
+              <img
+                src={toCardSrc ? toCardSrc(card.image_url) : card.image_url}
+                alt={card.name}
+                className="dashboardDeckCardImg"
+              />
+            </div>
+          ))
+        ) : (
+          // Default to placeholders when no cards
+          renderPlaceholders()
+        )}
+      </div>
+
+      {/* Context Menu */}
+      {contextMenu.visible && (
+        <div 
+          className="context-menu"
+          style={{ 
+            position: 'fixed', 
+            top: contextMenu.y, 
+            left: contextMenu.x, 
+            zIndex: 1000 
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button 
+            className="context-menu-item"
+            onClick={handleRemoveFromContext}
+          >
+            Remove Card
+          </button>
         </div>
-      ) : isDeckBuilder ? (
-        // Deck builder mode with drag/drop slots
-        renderDeckBuilderSlots()
-      ) : showPlaceholders ? (
-        // Show bright pink placeholders
-        renderPlaceholders()
-      ) : currentDeck.length > 0 ? (
-        // Current deck from CR API
-        currentDeck.map((card, index) => (
-          <div className="dashboardDeckCard" key={card.id || index}>
-            <img
-              src={card.imageUrl}
-              alt={card.name}
-              className="dashboardDeckCardImg"
-              onError={(e) => {
-                e.target.style.display = 'none';
-              }}
-            />
-          </div>
-        ))
-      ) : deckCards.length > 0 ? (
-        // Fallback to local deck if no current deck
-        deckCards.map((card) => (
-          <div className="dashboardDeckCard" key={card.card_id}>
-            <img
-              src={toCardSrc ? toCardSrc(card.image_url) : card.image_url}
-              alt={card.name}
-              className="dashboardDeckCardImg"
-            />
-          </div>
-        ))
-      ) : (
-        // Default to placeholders when no cards
-        renderPlaceholders()
       )}
-    </div>
+    </>
   );
 };
 

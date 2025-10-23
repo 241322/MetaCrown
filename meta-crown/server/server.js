@@ -120,6 +120,10 @@ const PORT = process.env.PORT || 6969;
   try {
     await db.sequelize.authenticate();
     console.log('DB connected');
+    
+    // Sync database tables (create if they don't exist)
+    await db.sequelize.sync({ alter: true });
+    console.log('Database tables synchronized');
   } catch (e) {
     console.error('DB connection failed:', e.message);
   }
@@ -234,5 +238,189 @@ app.get('/api/egress-ip', async (req, res) => {
   } catch (e) {
     console.error('egress-ip failed:', e);
     res.status(500).json({ message: 'Failed to resolve egress IP', error: String(e.message || e) });
+  }
+});
+
+// Test endpoint to check deck model
+app.get('/api/decks/test', async (req, res) => {
+  try {
+    console.log('Testing deck model...');
+    const testCards = [
+      { id: 1, name: 'Test Card 1', elixirCost: 3 },
+      { id: 2, name: 'Test Card 2', elixirCost: 4 },
+      { id: 3, name: 'Test Card 3', elixirCost: 2 },
+      { id: 4, name: 'Test Card 4', elixirCost: 5 },
+      { id: 5, name: 'Test Card 5', elixirCost: 1 },
+      { id: 6, name: 'Test Card 6', elixirCost: 3 },
+      { id: 7, name: 'Test Card 7', elixirCost: 4 },
+      { id: 8, name: 'Test Card 8', elixirCost: 2 }
+    ];
+
+    const testDeck = await db.Deck.create({
+      user_id: 1,
+      deck_name: 'Test Deck ' + Date.now(),
+      cards: testCards,
+      avg_elixir: 3.0,
+      avg_attack: 7,
+      avg_defense: 6,
+      avg_f2p: 8
+    });
+
+    console.log('Test deck created:', testDeck.deck_id);
+    res.json({ success: true, deck: testDeck });
+  } catch (e) {
+    console.error('Test deck creation failed:', e);
+    res.status(500).json({ error: e.message, details: e });
+  }
+});
+
+// Deck CRUD endpoints
+// Save a new deck
+app.post('/api/decks', async (req, res) => {
+  try {
+    console.log('Deck save request received:', req.body);
+    const { user_id, deck_name, cards, avg_elixir, avg_attack, avg_defense, avg_f2p } = req.body;
+    
+    if (!user_id || !deck_name || !cards || !Array.isArray(cards) || cards.length !== 8) {
+      console.log('Validation failed:', { user_id, deck_name, cardsLength: cards?.length });
+      return res.status(400).json({ message: 'Missing required fields or invalid deck data' });
+    }
+
+    // Check if deck name already exists for this user
+    const existingDeck = await db.Deck.findOne({ 
+      where: { 
+        user_id: user_id, 
+        deck_name: deck_name 
+      } 
+    });
+    
+    if (existingDeck) {
+      console.log('Deck name already exists for user:', user_id, deck_name);
+      return res.status(409).json({ message: 'Deck name already exists. Please choose a different name.' });
+    }
+
+    console.log('Creating deck with data:', {
+      user_id,
+      deck_name,
+      cardsCount: cards.length,
+      avg_elixir,
+      avg_attack,
+      avg_defense,
+      avg_f2p
+    });
+
+    const deck = await db.Deck.create({
+      user_id,
+      deck_name,
+      cards,
+      avg_elixir,
+      avg_attack,
+      avg_defense,
+      avg_f2p
+    });
+
+    console.log('Deck created successfully:', deck.deck_id);
+
+    res.status(201).json({
+      deck_id: deck.deck_id,
+      deck_name: deck.deck_name,
+      cards: deck.cards,
+      avg_elixir: deck.avg_elixir,
+      created_at: deck.created_at
+    });
+  } catch (e) {
+    console.error('Save deck error:', e.message, e.original?.sqlMessage);
+    console.error('Full error:', e);
+    res.status(500).json({ message: 'Failed to save deck', detail: e.original?.sqlMessage || e.message });
+  }
+});
+
+// Get all decks for a user
+app.get('/api/decks/user/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    const decks = await db.Deck.findAll({
+      where: { user_id: userId },
+      order: [['created_at', 'DESC']]
+    });
+
+    res.json(decks);
+  } catch (e) {
+    console.error('Get user decks error:', e.message);
+    res.status(500).json({ message: 'Failed to fetch decks', detail: e.message });
+  }
+});
+
+// Update an existing deck
+app.put('/api/decks/:deckId', async (req, res) => {
+  try {
+    const { deckId } = req.params;
+    const { user_id, deck_name, cards, avg_elixir, avg_attack, avg_defense, avg_f2p } = req.body;
+    
+    const deck = await db.Deck.findOne({
+      where: { 
+        deck_id: deckId,
+        user_id: user_id // Ensure user can only update their own decks
+      }
+    });
+    
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found or unauthorized' });
+    }
+
+    // Check if new deck name conflicts with existing deck (exclude current deck)
+    if (deck_name && deck_name !== deck.deck_name) {
+      const existingDeck = await db.Deck.findOne({ 
+        where: { 
+          user_id: user_id, 
+          deck_name: deck_name,
+          deck_id: { [db.Sequelize.Op.ne]: deckId }
+        } 
+      });
+      
+      if (existingDeck) {
+        return res.status(409).json({ message: 'Deck name already exists. Please choose a different name.' });
+      }
+    }
+
+    const updatedDeck = await deck.update({
+      deck_name: deck_name || deck.deck_name,
+      cards: cards || deck.cards,
+      avg_elixir: avg_elixir !== undefined ? avg_elixir : deck.avg_elixir,
+      avg_attack: avg_attack !== undefined ? avg_attack : deck.avg_attack,
+      avg_defense: avg_defense !== undefined ? avg_defense : deck.avg_defense,
+      avg_f2p: avg_f2p !== undefined ? avg_f2p : deck.avg_f2p
+    });
+
+    res.json(updatedDeck);
+  } catch (e) {
+    console.error('Update deck error:', e.message);
+    res.status(500).json({ message: 'Failed to update deck', detail: e.message });
+  }
+});
+
+// Delete a deck
+app.delete('/api/decks/:deckId', async (req, res) => {
+  try {
+    const { deckId } = req.params;
+    const { user_id } = req.body;
+    
+    const deck = await db.Deck.findOne({
+      where: { 
+        deck_id: deckId,
+        user_id: user_id // Ensure user can only delete their own decks
+      }
+    });
+    
+    if (!deck) {
+      return res.status(404).json({ message: 'Deck not found or unauthorized' });
+    }
+
+    await deck.destroy();
+    res.json({ message: 'Deck deleted successfully' });
+  } catch (e) {
+    console.error('Delete deck error:', e.message);
+    res.status(500).json({ message: 'Failed to delete deck', detail: e.message });
   }
 });
