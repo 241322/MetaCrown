@@ -369,10 +369,47 @@ const Dashboard = () => {
     return currentTag === ownTag;
   }, [playerTag, userOwnTag]);
 
-  // Initialize user's own tag (you might want to get this from authentication or localStorage)
+  // Fetch user's actual player_tag from database
   useEffect(() => {
-    const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
-    setUserOwnTag(storedOwnTag);
+    const fetchUserPlayerTag = async () => {
+      const userId = localStorage.getItem("user_id");
+      if (!userId) {
+        // Fallback if no user logged in
+        const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+        setUserOwnTag(storedOwnTag);
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:6969/api/users/${userId}`);
+        if (response.ok) {
+          const userData = await response.json();
+          const playerTag = userData.player_tag;
+          if (playerTag) {
+            // Ensure the tag has a # prefix
+            const formattedTag = playerTag.startsWith('#') ? playerTag : `#${playerTag}`;
+            setUserOwnTag(formattedTag);
+            localStorage.setItem("userOwnTag", formattedTag);
+          } else {
+            // Fallback if no player_tag in database
+            const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+            setUserOwnTag(storedOwnTag);
+          }
+        } else {
+          console.error('Failed to fetch user data:', response.status);
+          // Fallback on error
+          const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+          setUserOwnTag(storedOwnTag);
+        }
+      } catch (error) {
+        console.error('Error fetching user player tag:', error);
+        // Fallback on error
+        const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+        setUserOwnTag(storedOwnTag);
+      }
+    };
+
+    fetchUserPlayerTag();
   }, []);
 
   // Function to return to own dashboard

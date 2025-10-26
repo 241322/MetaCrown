@@ -5,8 +5,8 @@ import Dashboard from "./Pages/Dashboard";
 import DeckCentre from "./Pages/DeckCentre";
 import Leaderboard from "./Pages/Leaderboard";
 import Profile from "./Pages/Profile";
-import Settings from "./Pages/Settings";
 import Help from "./Pages/Help";
+import Admin from "./Pages/Admin";
 import Landing from "./Pages/Landing";
 import Splash from "./Pages/Splash";
 import LogIn from "./Pages/LogIn";
@@ -43,7 +43,7 @@ function AppContent() {
           <Route path="/deck-centre" element={<DeckCentre />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/help" element={<Help />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

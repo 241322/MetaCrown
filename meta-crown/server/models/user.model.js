@@ -8,6 +8,7 @@ export default (sequelize) => {
     password: { type: DataTypes.STRING(255), allowNull: false },
     player_tag: { type: DataTypes.STRING(20), allowNull: false },
     username: { type: DataTypes.STRING(50), allowNull: false },
+    is_admin: { type: DataTypes.BOOLEAN, defaultValue: false },
     created_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated_at: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
   }, {

@@ -54,6 +54,7 @@ const LogIn = () => {
       localStorage.setItem('username', data.username || '');
       localStorage.setItem('playerTag', data.player_tag || '');
       localStorage.setItem('email', data.email_address || '');
+      localStorage.setItem('is_admin', data.is_admin || false);
       navigate('/landing');
     } catch (err) {
       console.error(err);

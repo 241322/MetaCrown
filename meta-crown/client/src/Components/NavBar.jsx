@@ -6,11 +6,13 @@ import crown from "../Assets/crown.png";
 const NavBar = () => {
   const [username, setUsername] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     setUsername(localStorage.getItem("username") || "Profile");
+    setIsAdmin(localStorage.getItem("is_admin") === "true");
   }, []);
 
   // Close dropdown when clicking outside
@@ -32,13 +34,15 @@ const NavBar = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("user_id");
     localStorage.removeItem("email");
+    localStorage.removeItem("playerTag");
+    localStorage.removeItem("userOwnTag");
     // Add any other user-related localStorage items you might have
     
     // Close dropdown
     setShowDropdown(false);
     
-    // Navigate to landing page
-    navigate("/landing");
+    // Navigate to splash screen (initial load page)
+    navigate("/");
   };
 
   return (
@@ -78,7 +82,9 @@ const NavBar = () => {
             </div>
           )}
         </li>
-        <li><NavLink to="/settings" className={({ isActive }) => isActive ? "active-link" : ""}>Settings</NavLink></li>
+        {isAdmin && (
+          <li><NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""}>Admin</NavLink></li>
+        )}
         <li><NavLink to="/help" className={({ isActive }) => isActive ? "active-link" : ""}>Help</NavLink></li>
       </ul>
     </nav>

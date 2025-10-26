@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize';
 import dbConfig from '../config/db.config.js';
 import userModel from './user.model.js';
 import deckModel from './deck.model.js';
+import contactMessageModel from './contactMessage.model.js';
 
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
@@ -16,6 +17,7 @@ db.sequelize = sequelize;
 
 db.User = userModel(sequelize);
 db.Deck = deckModel(sequelize);
+db.ContactMessage = contactMessageModel(sequelize);
 
 // Define associations
 db.User.hasMany(db.Deck, { foreignKey: 'user_id', as: 'decks' });

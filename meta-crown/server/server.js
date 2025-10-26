@@ -311,10 +311,126 @@ app.post('/api/auth/login', async (req, res) => {
       email_address: user.email_address,
       username: user.username,
       player_tag: user.player_tag,
+      is_admin: user.is_admin || false,
     });
   } catch (e) {
     console.error('Login error:', e.message, e.original?.sqlMessage);
     res.status(500).json({ message: 'Login failed', detail: e.original?.sqlMessage || e.message });
+  }
+});
+
+// Get user by ID
+app.get('/api/users/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    const user = await db.User.findOne({ 
+      where: { user_id: parseInt(userId) },
+      attributes: ['user_id', 'email_address', 'username', 'player_tag'] // Exclude password
+    });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      user_id: user.user_id,
+      email_address: user.email_address,
+      username: user.username,
+      player_tag: user.player_tag,
+      is_admin: user.is_admin || false,
+    });
+  } catch (e) {
+    console.error('Get user error:', e.message, e.original?.sqlMessage);
+    res.status(500).json({ message: 'Failed to get user', detail: e.original?.sqlMessage || e.message });
+  }
+});
+
+// Contact form submission
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    // Save to database
+    const contactMessage = await db.ContactMessage.create({
+      name,
+      email,
+      subject,
+      message
+    });
+
+    console.log('Contact form submission saved:', contactMessage.message_id);
+    
+    res.json({ 
+      message: 'Message sent successfully! We will get back to you soon.',
+      success: true 
+    });
+  } catch (e) {
+    console.error('Contact form error:', e.message);
+    res.status(500).json({ message: 'Failed to submit contact form', detail: e.message });
+  }
+});
+
+// Admin endpoints
+// Get all contact messages (admin only)
+app.get('/api/admin/messages', async (req, res) => {
+  try {
+    const { user_id } = req.query;
+    
+    if (!user_id) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    // Check if user is admin
+    const user = await db.User.findOne({ where: { user_id: parseInt(user_id) } });
+    if (!user || !user.is_admin) {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    const messages = await db.ContactMessage.findAll({
+      order: [['created_at', 'DESC']]
+    });
+
+    res.json(messages);
+  } catch (e) {
+    console.error('Get admin messages error:', e.message);
+    res.status(500).json({ message: 'Failed to get messages', detail: e.message });
+  }
+});
+
+// Mark message as read (admin only)
+app.put('/api/admin/messages/:messageId/read', async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const { user_id } = req.body;
+    
+    if (!user_id) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    // Check if user is admin
+    const user = await db.User.findOne({ where: { user_id: parseInt(user_id) } });
+    if (!user || !user.is_admin) {
+      return res.status(403).json({ message: 'Access denied. Admin privileges required.' });
+    }
+
+    await db.ContactMessage.update(
+      { is_read: true },
+      { where: { message_id: parseInt(messageId) } }
+    );
+
+    res.json({ message: 'Message marked as read' });
+  } catch (e) {
+    console.error('Mark message read error:', e.message);
+    res.status(500).json({ message: 'Failed to mark message as read', detail: e.message });
   }
 });
 

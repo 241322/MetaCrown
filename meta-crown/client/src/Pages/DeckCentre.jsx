@@ -680,83 +680,164 @@ const DeckCentre = () => {
               </div>
             ) : (
               <div className="library-decks-container">
-                {savedDecks.map((deck, index) => {
-                  // Ensure deck.cards is an array and add imageUrl if missing
-                  let deckCards = [];
-                  
-                  if (Array.isArray(deck.cards)) {
-                    deckCards = deck.cards;
-                  } else if (typeof deck.cards === 'string') {
-                    try {
-                      deckCards = JSON.parse(deck.cards);
-                    } catch (e) {
-                      console.error('Failed to parse deck cards JSON:', e);
-                      deckCards = [];
+                <div className="library-decks-column">
+                  {savedDecks.filter((_, index) => index % 2 === 0).map((deck, index) => {
+                    // Ensure deck.cards is an array and add imageUrl if missing
+                    let deckCards = [];
+                    
+                    if (Array.isArray(deck.cards)) {
+                      deckCards = deck.cards;
+                    } else if (typeof deck.cards === 'string') {
+                      try {
+                        deckCards = JSON.parse(deck.cards);
+                      } catch (e) {
+                        console.error('Failed to parse deck cards JSON:', e);
+                        deckCards = [];
+                      }
                     }
-                  }
-                  
-                  // Ensure it's an array and add imageUrl if missing
-                  deckCards = Array.isArray(deckCards) ? deckCards.map(card => ({
-                    ...card,
-                    imageUrl: card.imageUrl || card.iconUrls?.medium || ''
-                  })) : [];
-                  
-                  console.log(`Deck ${deck.deck_name} processed cards:`, deckCards);
-                  
-                  return (
-                    <div key={deck.deck_id} className="library-deck-item">
-                    <div className="library-deck-header">
-                      <h3 className="library-deck-name">{deck.deck_name}</h3>
-                      <div className="library-deck-stats">
-                        <span className="deck-stat">
-                          <img src={ElixerIcon} alt="Elixir" className="stat-icon" />
-                          {deck.avg_elixir}
-                        </span>
-                        <span className="deck-stat">
-                          <img src={ATK} alt="Attack" className="stat-icon" />
-                          {deck.avg_attack}/10
-                        </span>
-                        <span className="deck-stat">
-                          <img src={DEF} alt="Defense" className="stat-icon" />
-                          {deck.avg_defense}/10
-                        </span>
-                        <span className="deck-stat">
-                          <img src={F2P} alt="F2P" className="stat-icon" />
-                          {deck.avg_f2p}/10
-                        </span>
+                    
+                    // Ensure it's an array and add imageUrl if missing
+                    deckCards = Array.isArray(deckCards) ? deckCards.map(card => ({
+                      ...card,
+                      imageUrl: card.imageUrl || card.iconUrls?.medium || ''
+                    })) : [];
+                    
+                    console.log(`Deck ${deck.deck_name} processed cards:`, deckCards);
+                    
+                    return (
+                      <div key={deck.deck_id} className="library-deck-item">
+                      <div className="library-deck-header">
+                        <h3 className="library-deck-name">{deck.deck_name}</h3>
+                        <div className="library-deck-stats">
+                          <span className="deck-stat">
+                            <img src={ElixerIcon} alt="Elixir" className="stat-icon" />
+                            {deck.avg_elixir}
+                          </span>
+                          <span className="deck-stat">
+                            <img src={ATK} alt="Attack" className="stat-icon" />
+                            {deck.avg_attack}/10
+                          </span>
+                          <span className="deck-stat">
+                            <img src={DEF} alt="Defense" className="stat-icon" />
+                            {deck.avg_defense}/10
+                          </span>
+                          <span className="deck-stat">
+                            <img src={F2P} alt="F2P" className="stat-icon" />
+                            {deck.avg_f2p}/10
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <DeckComponent 
+                        currentDeck={deckCards}
+                        deckCards={[]}
+                        deckLoading={false}
+                        toCardSrc={toCardSrc}
+                        showPlaceholders={false}
+                        isDeckBuilder={false}
+                      />
+                      
+                      <div className="library-deck-actions">
+                        <button 
+                          className="deck-action-btn load-btn"
+                          onClick={() => handleLoadDeck(deck)}
+                        >
+                          Edit deck
+                        </button>
+                        <button 
+                          className="deck-action-btn delete-btn"
+                          onClick={() => handleDeleteDeck(deck.deck_id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      
+                      <div className="library-deck-date">
+                        Saved: {new Date(deck.created_at).toLocaleDateString()}
                       </div>
                     </div>
+                    );
+                  })}
+                </div>
+                <div className="library-decks-column">
+                  {savedDecks.filter((_, index) => index % 2 === 1).map((deck, index) => {
+                    // Ensure deck.cards is an array and add imageUrl if missing
+                    let deckCards = [];
                     
-                    <DeckComponent 
-                      currentDeck={deckCards}
-                      deckCards={[]}
-                      deckLoading={false}
-                      toCardSrc={toCardSrc}
-                      showPlaceholders={false}
-                      isDeckBuilder={false}
-                    />
+                    if (Array.isArray(deck.cards)) {
+                      deckCards = deck.cards;
+                    } else if (typeof deck.cards === 'string') {
+                      try {
+                        deckCards = JSON.parse(deck.cards);
+                      } catch (e) {
+                        console.error('Failed to parse deck cards JSON:', e);
+                        deckCards = [];
+                      }
+                    }
                     
-                    <div className="library-deck-actions">
-                      <button 
-                        className="deck-action-btn load-btn"
-                        onClick={() => handleLoadDeck(deck)}
-                      >
-                        Edit deck
-                      </button>
-                      <button 
-                        className="deck-action-btn delete-btn"
-                        onClick={() => handleDeleteDeck(deck.deck_id)}
-                      >
-                        Delete
-                      </button>
+                    // Ensure it's an array and add imageUrl if missing
+                    deckCards = Array.isArray(deckCards) ? deckCards.map(card => ({
+                      ...card,
+                      imageUrl: card.imageUrl || card.iconUrls?.medium || ''
+                    })) : [];
+                    
+                    console.log(`Deck ${deck.deck_name} processed cards:`, deckCards);
+                    
+                    return (
+                      <div key={deck.deck_id} className="library-deck-item">
+                      <div className="library-deck-header">
+                        <h3 className="library-deck-name">{deck.deck_name}</h3>
+                        <div className="library-deck-stats">
+                          <span className="deck-stat">
+                            <img src={ElixerIcon} alt="Elixir" className="stat-icon" />
+                            {deck.avg_elixir}
+                          </span>
+                          <span className="deck-stat">
+                            <img src={ATK} alt="Attack" className="stat-icon" />
+                            {deck.avg_attack}/10
+                          </span>
+                          <span className="deck-stat">
+                            <img src={DEF} alt="Defense" className="stat-icon" />
+                            {deck.avg_defense}/10
+                          </span>
+                          <span className="deck-stat">
+                            <img src={F2P} alt="F2P" className="stat-icon" />
+                            {deck.avg_f2p}/10
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <DeckComponent 
+                        currentDeck={deckCards}
+                        deckCards={[]}
+                        deckLoading={false}
+                        toCardSrc={toCardSrc}
+                        showPlaceholders={false}
+                        isDeckBuilder={false}
+                      />
+                      
+                      <div className="library-deck-actions">
+                        <button 
+                          className="deck-action-btn load-btn"
+                          onClick={() => handleLoadDeck(deck)}
+                        >
+                          Edit deck
+                        </button>
+                        <button 
+                          className="deck-action-btn delete-btn"
+                          onClick={() => handleDeleteDeck(deck.deck_id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                      
+                      <div className="library-deck-date">
+                        Saved: {new Date(deck.created_at).toLocaleDateString()}
+                      </div>
                     </div>
-                    
-                    <div className="library-deck-date">
-                      Saved: {new Date(deck.created_at).toLocaleDateString()}
-                    </div>
-                  </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
