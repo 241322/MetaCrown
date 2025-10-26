@@ -242,3 +242,35 @@
     height: 380px;
   }
 }
+
+/* Beta Disclaimer Styles */
+.beta-disclaimer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.beta-disclaimer p {
+  margin: 0;
+  color: white;
+  font-size: 14px;
+  line-height: 1.4;
+  font-family: 'YouBlockhead', sans-serif;
+}
+
+.beta-disclaimer p:first-child {
+  font-weight: bold;
+  color: #FFD700;
+  margin-bottom: 4px;
+}
+
+.beta-disclaimer p:last-child {
+  font-size: 12px;
+  opacity: 0.9;
+}

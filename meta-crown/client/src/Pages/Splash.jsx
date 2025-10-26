@@ -42,6 +42,10 @@ const Splash = () => {
                     Sign Up
                 </button>
             </div>
+            <div className="beta-disclaimer">
+                <p>🚧 Currently in Beta</p>
+                <p>Our developers are working on big things!</p>
+            </div>
         </div>
     );
 };

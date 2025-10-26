@@ -5,7 +5,6 @@ import PlayerSearch from "../Assets/PlayerSearch.svg";
 import LeftArrow from "../Assets/LeftArrow";
 import Arena24 from "../Assets/Legendary_Arena.webp";
 import Master1 from "../Assets/RankedMaster1.png";
-import MergeGold3 from "../Assets/Merge Tactics Gold 3.svg";
 import ElixerIcon from "../Assets/ElixerIcon.png";
 import ATK from "../Assets/ATK.svg";
 import DEF from "../Assets/DEF.svg";
@@ -25,6 +24,8 @@ const toCardSrc = (imageUrl) => {
   return `${ASSETS_BASE}${withFolder}`;
 };
 
+
+
 const Dashboard = () => {
   const [search, setSearch] = useState(localStorage.getItem("playerTag") || "#2RC0P82YC");
   const [focused, setFocused] = useState(false);
@@ -36,6 +37,11 @@ const Dashboard = () => {
   
   // Add state for user's own tag
   const [userOwnTag, setUserOwnTag] = useState("#2RC0P82YC"); // This should come from user auth/localStorage
+  
+  // Add state for dynamic game mode data
+  const [arenaInfo, setArenaInfo] = useState(null);
+  const [leagueInfo, setLeagueInfo] = useState(null);
+  const [pathOfLegendsInfo, setPathOfLegendsInfo] = useState(null);
   
   // New state for CR deck and loading
   const [currentDeck, setCurrentDeck] = useState([]);
@@ -65,6 +71,64 @@ const Dashboard = () => {
     const total = currentDeck.reduce((sum, card) => sum + (card.elixirCost || 0), 0);
     return (total / currentDeck.length).toFixed(1);
   }, [currentDeck]);
+
+  // Helper functions to extract game mode information
+  const extractGameModeInfo = (playerData) => {
+    if (!playerData) return;
+
+    // Extract arena information
+    if (playerData.arena) {
+      setArenaInfo({
+        name: playerData.arena.name,
+        iconUrl: null, // API doesn't provide arena iconUrls in player data
+        id: playerData.arena.id
+      });
+    }
+
+    // Extract league information from leagueStatistics or league object
+    if (playerData.league) {
+      setLeagueInfo({
+        name: playerData.league.name,
+        iconUrl: playerData.league.iconUrls?.large || playerData.league.iconUrls?.medium,
+        id: playerData.league.id
+      });
+    } else if (playerData.leagueStatistics?.currentSeason) {
+      // Determine league name based on trophies (approximate)
+      const trophies = playerData.leagueStatistics.currentSeason.trophies;
+      let leagueName = "Unranked";
+      
+      if (trophies >= 7000) leagueName = "Ultimate Champion";
+      else if (trophies >= 6500) leagueName = "Grand Champion";
+      else if (trophies >= 6000) leagueName = "Royal Champion";
+      else if (trophies >= 5500) leagueName = "Champion";
+      else if (trophies >= 5000) leagueName = "Master III";
+      else if (trophies >= 4600) leagueName = "Master II";
+      else if (trophies >= 4300) leagueName = "Master I";
+      else if (trophies >= 4000) leagueName = "Challenger III";
+      else if (trophies >= 3700) leagueName = "Challenger II";
+      else if (trophies >= 3400) leagueName = "Challenger I";
+      
+      setLeagueInfo({
+        name: leagueName,
+        iconUrl: null, // No icon URL available
+        trophies: trophies
+      });
+    }
+
+    // Extract Path of Legends season result
+    if (playerData.currentPathOfLegendSeasonResult) {
+      setPathOfLegendsInfo({
+        trophies: playerData.currentPathOfLegendSeasonResult.trophies,
+        leagueNumber: playerData.currentPathOfLegendSeasonResult.leagueNumber,
+        rank: playerData.currentPathOfLegendSeasonResult.rank
+      });
+    }
+
+    console.log('Player arena info:', playerData.arena);
+    console.log('Player league info:', playerData.league);
+    console.log('League statistics:', playerData.leagueStatistics);
+    console.log('Path of Legends info:', playerData.currentPathOfLegendSeasonResult);
+  };
 
   // Keep existing avgAtk, avgDef, avgF2P (using deckCards fallback for now)
   const [deckCards, setDeckCards] = useState([]);
@@ -202,6 +266,9 @@ const Dashboard = () => {
       setCurrentPage(1);
       setShowPagination(false);
       setCrError(null);
+      
+      // Extract game mode information
+      extractGameModeInfo(playerData);
       
       // Show success message briefly
       showAlertMessage(`Player "${playerData?.name || tagNoHash}" loaded successfully!`, "success", 2000);
@@ -484,23 +551,27 @@ const Dashboard = () => {
 
         <div className="bigComponents">
           <div className="bigComponent">
-            <div className="componentLabel">Throphies</div>
+            <div className="componentLabel">Trophies</div>
             <div className="componentAsset">{crPlayer?.trophies ?? 0}</div>
           </div>
 
           <div className="bigComponent">
-            <div className="componentLabel">Legendary Arena</div>
-            <div className="componentAsset"><img src={Arena24} alt="Arena" /></div>
+            <div className="componentLabel">Arena</div>
+            <div className="componentAsset">
+              <span className="arena-name-text">{arenaInfo?.name || "Unknown Arena"}</span>
+            </div>
           </div>
 
           <div className="bigComponent">
-            <div className="componentLabel">Master 1</div>
-            <div className="componentAsset"><img src={Master1} alt="Master 1" /></div>
+            <div className="componentLabel">Ranked</div>
+            <div className="componentAsset">
+              <span className="coming-soon-text">Coming Soon</span>
+            </div>
           </div>
 
           <div className="bigComponent">
-            <div className="componentLabel">Merge Tactics</div>
-            <div className="componentAsset"><img src={MergeGold3} alt="Merge Tactics" /></div>
+            <div className="componentLabel">Highest Trophies</div>
+            <div className="componentAsset">{crPlayer?.bestTrophies ?? 0}</div>
           </div>
         </div>
 
@@ -514,8 +585,8 @@ const Dashboard = () => {
             <div className="smallComponentStat">{crPlayer?.threeCrownWins ?? 0}</div>
           </div>
           <div className="smallComponent">
-            <div className="smallComponentLabel">Highest Trophies</div>
-            <div className="smallComponentStat">{crPlayer?.bestTrophies ?? 0}</div>
+            <div className="smallComponentLabel">King Level</div>
+            <div className="smallComponentStat">{crPlayer?.expLevel ?? 0}</div>
           </div>
           <div className="smallComponent">
             <div className="smallComponentLabel">Cards Found</div>

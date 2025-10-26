@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "../Styles/Footer.css";
 import discord from "../Assets/discord.png";
 import youtube from "../Assets/youtube.png";
@@ -12,7 +11,7 @@ const Footer = () => {
     <footer className="site-footer">
         <div className="footer-content">
             <div className="footer-left">
-                <img src={footerLeftImg} className="footer-logo" />
+                <img src={footerLeftImg} className="footer-logo" alt="MetaCrown Logo" />
             </div>
             <div className="footer-middle">
             </div>
@@ -27,7 +26,7 @@ const Footer = () => {
             </div>
         </div>
         <div className="footer-bottom">
-            <p className="copyright">&copy; {new Date().getFullYear()} MetaCrown. All rights reserved.</p>
+            <p className="copyright">&copy; {new Date().getFullYear()} MetaCrown. All rights reserved. - Xander Poalses</p>
         </div>
     </footer>
   );
