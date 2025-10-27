@@ -976,3 +976,98 @@
 .builder-section .dashboardDeckCards {
   margin: 0 auto !important;
 }
+
+/* ========================================
+   RESPONSIVE DECK CENTRE ADJUSTMENTS
+   ======================================== */
+
+/* Mobile devices - hidden due to mobile override in index.css */
+@media (max-width: 768px) {
+  .deck-centre-header,
+  .deckCentrePages {
+    display: none;
+  }
+}
+
+/* Small desktop/large tablet - screens below 1921px */
+@media (min-width: 769px) and (max-width: 1920px) {
+  .deck-centre-header {
+    margin-top: 120px; /* Reduced from 200px */
+    width: 95%;
+    max-width: 1400px; /* Smaller max width */
+  }
+
+  .deckCentrePages {
+    max-width: 1200px; /* Smaller max width */
+    width: 85%; /* Wider percentage */
+  }
+
+  .deckCentrePageName {
+    font-size: 1rem; /* Smaller font */
+    padding: 8px; /* Smaller padding */
+  }
+
+  /* Smaller deck and card containers for this breakpoint */
+  .deck-builder-container {
+    padding: 16px; /* Reduced padding */
+  }
+
+  .deck-display {
+    transform: scale(0.85); /* 85% of original size */
+    transform-origin: center;
+  }
+
+  .cards-list {
+    gap: 8px; /* Reduced gap */
+  }
+
+  .card-item {
+    transform: scale(0.9); /* 90% of card size */
+  }
+
+  .library-deck-item {
+    padding: 12px; /* Reduced padding */
+  }
+
+  .library-deck-stats {
+    gap: 8px; /* Reduced gap */
+    font-size: 12px; /* Smaller font */
+  }
+
+  .deck-action-btn {
+    padding: 6px 12px; /* Smaller buttons */
+    font-size: 12px;
+  }
+}
+
+/* Medium desktop - screens below 2561px but above 1921px */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .deck-centre-header {
+    margin-top: 160px; /* Slightly reduced */
+    width: 92%;
+    max-width: 1600px; /* Slightly smaller */
+  }
+
+  .deckCentrePages {
+    max-width: 1400px; /* Slightly smaller */
+    width: 75%; /* Slightly wider */
+  }
+
+  .deckCentrePageName {
+    font-size: 1.1rem; /* Slightly smaller font */
+    padding: 9px; /* Slightly smaller padding */
+  }
+
+  .deck-builder-container {
+    padding: 18px; /* Slightly reduced padding */
+  }
+
+  .library-deck-item {
+    padding: 16px; /* Slightly reduced padding */
+  }
+
+  .deck-action-btn {
+    padding: 8px 14px; /* Slightly smaller buttons */
+    font-size: 13px;
+  }
+}

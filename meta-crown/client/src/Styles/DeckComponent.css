@@ -198,3 +198,68 @@
 .context-menu-item:active {
     background: rgba(192, 57, 43, 0.9);
 }
+
+/* ========================================
+   RESPONSIVE DECK COMPONENT ADJUSTMENTS
+   ======================================== */
+
+/* Mobile devices - hidden due to mobile override in index.css */
+@media (max-width: 768px) {
+  .dashboardDeckCards {
+    display: none;
+  }
+}
+
+/* Small desktop/large tablet - screens below 1921px */
+@media (min-width: 769px) and (max-width: 1920px) {
+  /* Smaller deck dimensions for this breakpoint */
+  .dashboardDeckCards.deck-builder-mode {
+    width: 800px !important; /* Reduced from 1000px */
+    min-width: 800px !important;
+    max-width: 800px !important;
+  }
+
+  .dashboardDeckCards {
+    width: 90%; /* Slightly larger percentage */
+    max-width: 1200px; /* Reduced max width */
+    gap: 8px; /* Reduced gap */
+    padding: 8px; /* Reduced padding */
+  }
+
+  .dashboardDeckCard {
+    /* Cards maintain aspect ratio but get smaller with container */
+  }
+
+  .dashboardDeckCardImg {
+    /* Image sizing handled by container */
+  }
+
+  .deck-placeholder {
+    font-size: 12px; /* Smaller placeholder text */
+  }
+
+  .context-menu {
+    font-size: 12px; /* Smaller menu font */
+  }
+
+  .context-menu-item {
+    padding: 6px 10px; /* Smaller menu items */
+  }
+}
+
+/* Medium desktop - screens below 2561px but above 1921px */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  /* Keep deck and card sizes the same for this breakpoint as requested */
+  .dashboardDeckCards.deck-builder-mode {
+    width: 1000px !important; /* Keep original size */
+    min-width: 1000px !important;
+    max-width: 1000px !important;
+  }
+
+  .dashboardDeckCards {
+    width: 85%; /* Keep original percentage */
+    max-width: 1600px; /* Keep original max width */
+    gap: 10px; /* Keep original gap */
+    padding: 10px; /* Keep original padding */
+  }
+}

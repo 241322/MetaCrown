@@ -194,3 +194,72 @@ nav::before {
 .logout-button:active {
     transform: translateY(0);
 }
+
+/* ========================================
+   RESPONSIVE NAVBAR ADJUSTMENTS
+   ======================================== */
+
+/* Mobile devices - hidden due to mobile override in index.css */
+@media (max-width: 768px) {
+  nav {
+    display: none;
+  }
+}
+
+/* Small desktop/large tablet - screens below 1921px */
+@media (min-width: 769px) and (max-width: 1920px) {
+  nav {
+    height: 44px; /* Smaller navbar */
+    padding: 0 24px; /* Reduced padding */
+  }
+
+  .crown-logo {
+    height: 28px; /* Smaller logo */
+  }
+
+  .nav-left {
+    gap: 24px; /* Reduced gap */
+  }
+
+  .nav-links {
+    gap: 20px; /* Reduced gap between links */
+  }
+
+  .nav-link {
+    font-size: 14px; /* Smaller font */
+    padding: 8px 16px; /* Smaller padding */
+  }
+
+  .logout-button {
+    font-size: 12px; /* Smaller font */
+    padding: 6px 12px; /* Smaller padding */
+  }
+}
+
+/* Medium desktop - screens below 2561px but above 1921px */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  nav {
+    height: 48px; /* Slightly smaller */
+    padding: 0 28px; /* Slightly reduced padding */
+  }
+
+  .crown-logo {
+    height: 32px; /* Slightly smaller logo */
+  }
+
+  .nav-left {
+    gap: 28px; /* Slightly reduced gap */
+  }
+
+  .nav-links {
+    gap: 22px; /* Slightly reduced gap */
+  }
+
+  .nav-link {
+    font-size: 15px; /* Slightly smaller font */
+  }
+
+  .logout-button {
+    font-size: 13px; /* Slightly smaller font */
+  }
+}

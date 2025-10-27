@@ -1335,18 +1335,77 @@
   background: linear-gradient(135deg, rgba(52, 152, 219, 0.95) 0%, rgba(41, 128, 185, 0.95) 100%);
   color: white;
   border: 2px solid #3498db;
+  animation: loadingPulse 2s ease-in-out infinite;
 }
 
 .alert-box.error {
   background: linear-gradient(135deg, rgba(231, 76, 60, 0.95) 0%, rgba(192, 57, 43, 0.95) 100%);
   color: white;
   border: 2px solid #e74c3c;
+  animation: errorShake 0.5s ease-in-out;
 }
 
 .alert-box.success {
   background: linear-gradient(135deg, rgba(46, 204, 113, 0.95) 0%, rgba(39, 174, 96, 0.95) 100%);
   color: white;
   border: 2px solid #2ecc71;
+  animation: successScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes loadingPulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  }
+  50% { 
+    transform: scale(1.02);
+    box-shadow: 0 12px 35px rgba(52, 152, 219, 0.4);
+  }
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes successScale {
+  0% { transform: scale(0.9); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Individual Section Loading Spinners */
+.player-stats-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: rgba(30, 45, 68, 0.8);
+  border-radius: 16px;
+  border: 2px solid rgba(52, 152, 219, 0.3);
+  margin: 20px 0;
+}
+
+.player-stats-loading .loading-spinner {
+  margin-bottom: 15px;
+}
+
+.player-stats-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: alertSpin 1.2s linear infinite;
+}
+
+.player-stats-loading span {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'YouBlockhead', sans-serif;
 }
 
 /* Alert Content */
@@ -1367,16 +1426,28 @@
 .alert-spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.2);
   border-top: 3px solid white;
+  border-right: 3px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  animation: alertSpin 1s linear infinite;
+  animation: alertSpin 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 @keyframes alertSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { 
+    transform: rotate(0deg);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
+  50% { 
+    transform: rotate(180deg);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  100% { 
+    transform: rotate(360deg);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  }
 }
 
 /* Close Button */
@@ -1467,4 +1538,106 @@
 .arena-name-text {
     font-size: 0.5em;
     line-height: 3rem;
+}
+
+/* ========================================
+   RESPONSIVE DASHBOARD ADJUSTMENTS
+   ======================================== */
+
+/* Mobile devices - hidden due to mobile override in index.css */
+@media (max-width: 768px) {
+  .dashboard-searchbar-wrapper {
+    display: none;
+  }
+}
+
+/* Small desktop/large tablet - screens below 1921px */
+@media (min-width: 769px) and (max-width: 1920px) {
+  .dashboard-searchbar-wrapper {
+    margin-top: 80px; /* Reduced from 100px */
+  }
+
+  .dashboard-searchbar {
+    padding: 10px 24px; /* Reduced padding */
+    width: 360px; /* Smaller width */
+    gap: 12px; /* Reduced gap */
+  }
+
+  .search-icon {
+    width: 28px; /* Smaller icon */
+    height: 28px;
+  }
+
+  .search-input {
+    font-size: 1rem; /* Smaller font */
+  }
+
+  .search-button {
+    padding: 8px 16px; /* Smaller button */
+    font-size: 14px;
+  }
+
+  .main-dashboard-content {
+    padding: 16px; /* Reduced padding */
+    gap: 16px; /* Reduced gap */
+  }
+
+  .dashboard-sections {
+    gap: 16px; /* Reduced gap */
+  }
+
+  .user-info-section,
+  .stats-section,
+  .battles-section {
+    padding: 16px; /* Reduced padding */
+  }
+
+  .stat-item {
+    padding: 12px; /* Reduced padding */
+  }
+
+  .stat-value {
+    font-size: 20px; /* Smaller stat values */
+  }
+
+  .stat-label {
+    font-size: 12px; /* Smaller labels */
+  }
+}
+
+/* Medium desktop - screens below 2561px but above 1921px */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .dashboard-searchbar-wrapper {
+    margin-top: 90px; /* Slightly reduced */
+  }
+
+  .dashboard-searchbar {
+    padding: 11px 26px; /* Slightly reduced padding */
+    width: 390px; /* Slightly smaller width */
+    gap: 14px; /* Slightly reduced gap */
+  }
+
+  .search-icon {
+    width: 30px; /* Slightly smaller icon */
+    height: 30px;
+  }
+
+  .search-input {
+    font-size: 1.1rem; /* Slightly smaller font */
+  }
+
+  .main-dashboard-content {
+    padding: 18px; /* Slightly reduced padding */
+    gap: 18px; /* Slightly reduced gap */
+  }
+
+  .dashboard-sections {
+    gap: 18px; /* Slightly reduced gap */
+  }
+
+  .user-info-section,
+  .stats-section,
+  .battles-section {
+    padding: 18px; /* Slightly reduced padding */
+  }
 }

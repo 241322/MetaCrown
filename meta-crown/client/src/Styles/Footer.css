@@ -83,3 +83,72 @@
     letter-spacing: 0.125rem;
     opacity: 0.7;
 }
+
+/* ========================================
+   RESPONSIVE FOOTER ADJUSTMENTS
+   ======================================== */
+
+/* Mobile devices - hidden due to mobile override in index.css */
+@media (max-width: 768px) {
+  .site-footer {
+    display: none;
+  }
+}
+
+/* Small desktop/large tablet - screens below 1921px */
+@media (min-width: 769px) and (max-width: 1920px) {
+  .site-footer {
+    padding-top: 180px; /* Reduced from 250px */
+    padding-bottom: 8px;
+  }
+
+  .footer-content {
+    width: 95%;
+    max-width: 1200px; /* Reduced max width */
+  }
+
+  .footer-left h4 {
+    font-size: 24px; /* Smaller heading */
+  }
+
+  .footer-left p {
+    font-size: 12px; /* Smaller text */
+  }
+
+  .footer-right-icons {
+    width: 32px; /* Smaller icons */
+    height: 32px;
+  }
+
+  .copyright {
+    font-size: 0.75rem; /* Smaller copyright text */
+  }
+}
+
+/* Medium desktop - screens below 2561px but above 1921px */
+@media (min-width: 1921px) and (max-width: 2560px) {
+  .site-footer {
+    padding-top: 220px; /* Slightly reduced */
+  }
+
+  .footer-content {
+    max-width: 1400px; /* Slightly smaller */
+  }
+
+  .footer-left h4 {
+    font-size: 28px; /* Slightly smaller heading */
+  }
+
+  .footer-left p {
+    font-size: 13px; /* Slightly smaller text */
+  }
+
+  .footer-right-icons {
+    width: 36px; /* Slightly smaller icons */
+    height: 36px;
+  }
+
+  .copyright {
+    font-size: 0.8rem; /* Slightly smaller copyright */
+  }
+}
