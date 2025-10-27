@@ -53,6 +53,62 @@ const ContactMessage = sequelize.define('ContactMessage', {
   updatedAt: false,
 });
 
+// Define Deck Model
+const Deck = sequelize.define('Deck', {
+  deck_id: { 
+    type: DataTypes.INTEGER, 
+    primaryKey: true, 
+    autoIncrement: true 
+  },
+  user_id: { 
+    type: DataTypes.INTEGER, 
+    allowNull: false,
+    references: {
+      model: 'users',
+      key: 'user_id'
+    }
+  },
+  deck_name: { 
+    type: DataTypes.STRING(100), 
+    allowNull: false 
+  },
+  cards: { 
+    type: DataTypes.JSON, 
+    allowNull: false 
+  },
+  avg_elixir: { 
+    type: DataTypes.DECIMAL(3, 1), 
+    allowNull: true 
+  },
+  avg_attack: { 
+    type: DataTypes.INTEGER, 
+    allowNull: true 
+  },
+  avg_defense: { 
+    type: DataTypes.INTEGER, 
+    allowNull: true 
+  },
+  avg_f2p: { 
+    type: DataTypes.INTEGER, 
+    allowNull: true 
+  },
+  created_at: { 
+    type: DataTypes.DATE, 
+    allowNull: false, 
+    defaultValue: DataTypes.NOW 
+  },
+  updated_at: { 
+    type: DataTypes.DATE, 
+    allowNull: false, 
+    defaultValue: DataTypes.NOW 
+  },
+}, {
+  tableName: 'decks',
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
+});
+
 // Database initialization
 let dbInitialized = false;
 
@@ -630,21 +686,136 @@ app.post('/api/contact', requireDatabase, async (req, res) => {
   }
 });
 
-// Deck endpoints (mock for now)
-app.get('/api/decks/user/:userId', (req, res) => {
-  res.json([]);
+// Deck endpoints - Real database operations
+app.get('/api/decks/user/:userId', requireDatabase, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    console.log('Fetching decks for user ID:', userId);
+    
+    const decks = await Deck.findAll({
+      where: { user_id: userId },
+      order: [['created_at', 'DESC']]
+    });
+    
+    // Parse the JSON cards field for each deck
+    const parsedDecks = decks.map(deck => {
+      const deckData = deck.toJSON();
+      try {
+        deckData.cards = typeof deckData.cards === 'string' ? JSON.parse(deckData.cards) : deckData.cards;
+      } catch (error) {
+        console.error('Failed to parse cards for deck', deck.deck_id, ':', error);
+        deckData.cards = [];
+      }
+      return deckData;
+    });
+    
+    console.log('Found decks:', parsedDecks.length);
+    res.json(parsedDecks);
+  } catch (error) {
+    console.error('Failed to fetch user decks:', error);
+    res.status(500).json({ error: 'Failed to fetch decks' });
+  }
 });
 
-app.post('/api/decks', (req, res) => {
-  res.json({ success: true, id: Math.floor(Math.random() * 1000) });
+app.post('/api/decks', requireDatabase, async (req, res) => {
+  try {
+    const { user_id, deck_name, cards, avg_elixir, avg_attack, avg_defense, avg_f2p } = req.body;
+    console.log('Creating new deck for user:', user_id);
+    console.log('Deck data:', { deck_name, cards: cards?.length, avg_elixir, avg_attack, avg_defense, avg_f2p });
+    
+    if (!user_id || !deck_name || !cards) {
+      return res.status(400).json({ error: 'Missing required fields: user_id, deck_name, cards' });
+    }
+    
+    if (!Array.isArray(cards) || cards.length !== 8) {
+      return res.status(400).json({ error: 'Cards must be an array of exactly 8 cards' });
+    }
+    
+    const newDeck = await Deck.create({
+      user_id: parseInt(user_id),
+      deck_name: deck_name.trim(),
+      cards: JSON.stringify(cards),
+      avg_elixir: parseFloat(avg_elixir) || null,
+      avg_attack: parseInt(avg_attack) || null,
+      avg_defense: parseInt(avg_defense) || null,
+      avg_f2p: parseInt(avg_f2p) || null
+    });
+    
+    console.log('Deck created with ID:', newDeck.deck_id);
+    res.json({ success: true, id: newDeck.deck_id, deck: newDeck });
+  } catch (error) {
+    console.error('Failed to create deck:', error);
+    res.status(500).json({ error: 'Failed to create deck' });
+  }
 });
 
-app.put('/api/decks/:deckId', (req, res) => {
-  res.json({ success: true });
+app.put('/api/decks/:deckId', requireDatabase, async (req, res) => {
+  try {
+    const deckId = parseInt(req.params.deckId);
+    const { user_id, deck_name, cards, avg_elixir, avg_attack, avg_defense, avg_f2p } = req.body;
+    console.log('Updating deck ID:', deckId, 'for user:', user_id);
+    
+    if (!user_id || !deck_name || !cards) {
+      return res.status(400).json({ error: 'Missing required fields: user_id, deck_name, cards' });
+    }
+    
+    if (!Array.isArray(cards) || cards.length !== 8) {
+      return res.status(400).json({ error: 'Cards must be an array of exactly 8 cards' });
+    }
+    
+    const [updatedRowsCount] = await Deck.update({
+      deck_name: deck_name.trim(),
+      cards: JSON.stringify(cards),
+      avg_elixir: parseFloat(avg_elixir) || null,
+      avg_attack: parseInt(avg_attack) || null,
+      avg_defense: parseInt(avg_defense) || null,
+      avg_f2p: parseInt(avg_f2p) || null
+    }, {
+      where: { 
+        deck_id: deckId,
+        user_id: parseInt(user_id) // Ensure user can only update their own decks
+      }
+    });
+    
+    if (updatedRowsCount === 0) {
+      return res.status(404).json({ error: 'Deck not found or you do not have permission to update this deck' });
+    }
+    
+    console.log('Deck updated successfully');
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Failed to update deck:', error);
+    res.status(500).json({ error: 'Failed to update deck' });
+  }
 });
 
-app.delete('/api/decks/:deckId', (req, res) => {
-  res.json({ success: true });
+app.delete('/api/decks/:deckId', requireDatabase, async (req, res) => {
+  try {
+    const deckId = parseInt(req.params.deckId);
+    const userId = req.body.user_id || req.query.user_id; // Allow user_id in body or query
+    console.log('Deleting deck ID:', deckId, 'for user:', userId);
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'user_id is required' });
+    }
+    
+    const deletedRowsCount = await Deck.destroy({
+      where: { 
+        deck_id: deckId,
+        user_id: parseInt(userId) // Ensure user can only delete their own decks
+      }
+    });
+    
+    if (deletedRowsCount === 0) {
+      return res.status(404).json({ error: 'Deck not found or you do not have permission to delete this deck' });
+    }
+    
+    console.log('Deck deleted successfully');
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Failed to delete deck:', error);
+    res.status(500).json({ error: 'Failed to delete deck' });
+  }
 });
 
 // Legacy cards endpoint
