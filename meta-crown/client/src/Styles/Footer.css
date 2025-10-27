@@ -95,8 +95,8 @@
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   .site-footer {
     padding-top: 180px; /* Reduced from 250px */
     padding-bottom: 8px;
@@ -122,6 +122,36 @@
 
   .copyright {
     font-size: 0.75rem; /* Smaller copyright text */
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  .site-footer {
+    padding-top: 150px; /* Much reduced from 250px */
+    padding-bottom: 6px;
+  }
+
+  .footer-content {
+    width: 98%;
+    max-width: calc(800px - 400px); /* Much reduced max width by 400px */
+  }
+
+  .footer-left h4 {
+    font-size: 20px; /* Much smaller heading */
+  }
+
+  .footer-left p {
+    font-size: 10px; /* Much smaller text */
+  }
+
+  .footer-right-icons {
+    width: 28px; /* Much smaller icons */
+    height: 28px;
+  }
+
+  .copyright {
+    font-size: 0.7rem; /* Much smaller copyright text */
   }
 }
 

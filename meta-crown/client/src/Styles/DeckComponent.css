@@ -210,8 +210,8 @@
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   /* Smaller deck dimensions for this breakpoint */
   .dashboardDeckCards.deck-builder-mode {
     width: 800px !important; /* Reduced from 1000px */
@@ -244,6 +244,43 @@
 
   .context-menu-item {
     padding: 6px 10px; /* Smaller menu items */
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  /* Much smaller deck dimensions for uncommon screen sizes */
+  .dashboardDeckCards.deck-builder-mode {
+    width: 600px !important; /* Much reduced from 1000px */
+    min-width: 600px !important;
+    max-width: 600px !important;
+  }
+
+  .dashboardDeckCards {
+    width: 95%; /* Much larger percentage */
+    max-width: calc(800px - 400px); /* Reduced max width by 400px */
+    gap: 6px; /* Much reduced gap */
+    padding: 6px; /* Much reduced padding */
+  }
+
+  .dashboardDeckCard {
+    /* Cards maintain aspect ratio but get much smaller with container */
+  }
+
+  .dashboardDeckCardImg {
+    /* Image sizing handled by container */
+  }
+
+  .deck-placeholder {
+    font-size: 10px; /* Much smaller placeholder text */
+  }
+
+  .context-menu {
+    font-size: 10px; /* Much smaller menu font */
+  }
+
+  .context-menu-item {
+    padding: 4px 8px; /* Much smaller menu items */
   }
 }
 

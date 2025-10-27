@@ -118,8 +118,8 @@ code {
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   /* Reduce font sizes by 4px from original */
   h1 {
     font-size: 84px; /* 88px - 4px */
@@ -169,6 +169,62 @@ code {
   
   .deck-component {
     transform: scale(0.9); /* 90% of original size */
+    transform-origin: center;
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  /* Reduce font sizes by 10px from original (6px more than the larger breakpoint) */
+  h1 {
+    font-size: 78px; /* 88px - 10px */
+  }
+
+  h2 {
+    font-size: 50px; /* 60px - 10px */
+  }
+
+  h3 {
+    font-size: 30px; /* 40px - 10px */
+  }
+
+  h4 {
+    font-size: 22px; /* 32px - 10px */
+  }
+
+  h5 {
+    font-size: 15px; /* 25px - 10px */
+  }
+
+  body {
+    font-size: 6px; /* 16px - 10px */
+  }
+
+  /* Reduce all containers by 400px more than the larger breakpoint */
+  .main-container,
+  .content-container,
+  .section-container,
+  .tab-container,
+  .library-section,
+  .builder-section {
+    padding: 12px; /* Even more reduced */
+    margin: 8px; /* Even more reduced */
+    max-width: calc(100% - 400px); /* Reduce containers by 400px */
+  }
+
+  /* Much smaller deck and card sizes for this breakpoint */
+  .deck-grid {
+    gap: 6px; /* Very reduced spacing */
+  }
+  
+  .card-slot,
+  .deck-card {
+    width: 70px; /* Much smaller */
+    height: 84px; /* Maintain aspect ratio */
+  }
+  
+  .deck-component {
+    transform: scale(0.75); /* 75% of original size */
     transform-origin: center;
   }
 }

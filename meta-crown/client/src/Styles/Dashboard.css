@@ -1551,8 +1551,8 @@
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   .dashboard-searchbar-wrapper {
     margin-top: 80px; /* Reduced from 100px */
   }
@@ -1602,6 +1602,62 @@
 
   .stat-label {
     font-size: 12px; /* Smaller labels */
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  .dashboard-searchbar-wrapper {
+    margin-top: 60px; /* Much reduced */
+  }
+
+  .dashboard-searchbar {
+    padding: 8px 20px; /* Much reduced padding */
+    width: 300px; /* Much smaller width */
+    gap: 10px; /* Much reduced gap */
+    max-width: calc(100% - 400px); /* Reduce container by 400px */
+  }
+
+  .search-icon {
+    width: 24px; /* Much smaller icon */
+    height: 24px;
+  }
+
+  .search-input {
+    font-size: 0.9rem; /* Much smaller font */
+  }
+
+  .search-button {
+    padding: 6px 12px; /* Much smaller button */
+    font-size: 12px;
+  }
+
+  .main-dashboard-content {
+    padding: 12px; /* Much reduced padding */
+    gap: 12px; /* Much reduced gap */
+    max-width: calc(100% - 400px); /* Reduce container by 400px */
+  }
+
+  .dashboard-sections {
+    gap: 12px; /* Much reduced gap */
+  }
+
+  .user-info-section,
+  .stats-section,
+  .battles-section {
+    padding: 12px; /* Much reduced padding */
+  }
+
+  .stat-item {
+    padding: 8px; /* Much reduced padding */
+  }
+
+  .stat-value {
+    font-size: 16px; /* Much smaller stat values */
+  }
+
+  .stat-label {
+    font-size: 10px; /* Much smaller labels */
   }
 }
 

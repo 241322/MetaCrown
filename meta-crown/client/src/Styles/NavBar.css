@@ -206,8 +206,8 @@ nav::before {
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   nav {
     height: 44px; /* Smaller navbar */
     padding: 0 24px; /* Reduced padding */
@@ -233,6 +233,36 @@ nav::before {
   .logout-button {
     font-size: 12px; /* Smaller font */
     padding: 6px 12px; /* Smaller padding */
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  nav {
+    height: 40px; /* Much smaller navbar */
+    padding: 0 20px; /* Much reduced padding */
+  }
+
+  .crown-logo {
+    height: 24px; /* Much smaller logo */
+  }
+
+  .nav-left {
+    gap: 20px; /* Much reduced gap */
+  }
+
+  .nav-links {
+    gap: 16px; /* Much reduced gap between links */
+  }
+
+  .nav-link {
+    font-size: 12px; /* Much smaller font */
+    padding: 6px 12px; /* Much smaller padding */
+  }
+
+  .logout-button {
+    font-size: 10px; /* Much smaller font */
+    padding: 4px 8px; /* Much smaller padding */
   }
 }
 

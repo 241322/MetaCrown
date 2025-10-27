@@ -375,7 +375,7 @@
     }
 }
 
-/* Deck Main Container - 80% width, max 1600px */
+/* Deck Main Container - Add spacing between elements */
 .deckCentreDeckMain {
     width: 80% !important;
     max-width: 1600px !important;
@@ -383,36 +383,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 40px; /* Increased gap for better spacing */
 }
 
 /* Left Stats Column */
 .deckCentreDeckStats {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px; /* Reduced from 15px */
     align-items: center;
     flex-shrink: 0;
+    margin-right: 20px; /* Add spacing between stats and deck */
 }
 
 .deckCentreDeckStat {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 8px 16px;
+    gap: 8px; /* Reduced from 10px */
+    padding: 6px 12px; /* Reduced from 8px 16px */
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    border-radius: 10px; /* Slightly smaller radius */
     backdrop-filter: blur(5px);
-    min-width: 100px;
+    min-width: 80px; /* Reduced from 100px */
 }
 
 .deckCentreDeckStatIcon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    width: 20px; /* Reduced from 24px */
+    height: 20px; /* Reduced from 24px */
 }
 
 .deckCentreDeckStatIcon img {
@@ -422,7 +423,7 @@
 }
 
 .deckCentreDeckStatContent {
-    font-size: 16px;
+    font-size: 14px; /* Reduced from 16px */
     font-weight: 600;
     color: #fff;
 }
@@ -431,21 +432,23 @@
 .deckCentreDeckCTA {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px; /* Reduced from 15px */
     align-items: center;
     flex-shrink: 0;
+    margin-left: 20px; /* Add spacing between deck and buttons */
 }
 
 .deckCentreDeckCTAButton {
-    padding: 12px 20px;
+    padding: 8px 16px; /* Reduced from 12px 20px */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 25px;
+    border-radius: 20px; /* Slightly smaller radius */
     color: white;
     font-weight: 600;
+    font-size: 14px; /* Reduced font size */
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
-    min-width: 100px;
+    min-width: 80px; /* Reduced from 100px */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -989,8 +992,8 @@
   }
 }
 
-/* Small desktop/large tablet - screens below 1921px */
-@media (min-width: 769px) and (max-width: 1920px) {
+/* Regular desktop - screens 1671px to 1920px */
+@media (min-width: 1671px) and (max-width: 1920px) {
   .deck-centre-header {
     margin-top: 120px; /* Reduced from 200px */
     width: 95%;
@@ -1005,6 +1008,39 @@
   .deckCentrePageName {
     font-size: 1rem; /* Smaller font */
     padding: 8px; /* Smaller padding */
+  }
+
+  .deckCentreDeckMain {
+    gap: 35px; /* Slightly reduced gap */
+  }
+
+  /* Slightly smaller buttons and stats */
+  .deckCentreDeckStats {
+    gap: 10px;
+  }
+
+  .deckCentreDeckStat {
+    padding: 5px 10px;
+    min-width: 70px;
+  }
+
+  .deckCentreDeckStatIcon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .deckCentreDeckStatContent {
+    font-size: 13px;
+  }
+
+  .deckCentreDeckCTA {
+    gap: 10px;
+  }
+
+  .deckCentreDeckCTAButton {
+    padding: 7px 14px;
+    font-size: 13px;
+    min-width: 70px;
   }
 
   /* Smaller deck and card containers for this breakpoint */
@@ -1037,6 +1073,95 @@
   .deck-action-btn {
     padding: 6px 12px; /* Smaller buttons */
     font-size: 12px;
+  }
+}
+
+/* Small desktop - screens 769px to 1670px (uncommon sizes) */
+@media (min-width: 769px) and (max-width: 1670px) {
+  .deck-centre-header {
+    margin-top: 100px; /* Even more reduced */
+    width: 98%;
+    max-width: 1000px; /* Much smaller max width */
+  }
+
+  .deckCentrePages {
+    max-width: 800px; /* Much smaller max width */
+    width: 95%; /* Even wider percentage */
+  }
+
+  .deckCentrePageName {
+    font-size: 0.9rem; /* Even smaller font */
+    padding: 6px; /* Even smaller padding */
+  }
+
+  .deckCentreDeckMain {
+    gap: 25px; /* Much reduced gap */
+    max-width: calc(100% - 400px); /* Reduce container by 400px */
+  }
+
+  /* Much smaller buttons and stats for uncommon screen sizes */
+  .deckCentreDeckStats {
+    gap: 8px;
+    margin-right: 15px;
+  }
+
+  .deckCentreDeckStat {
+    padding: 4px 8px;
+    min-width: 60px;
+    border-radius: 8px;
+  }
+
+  .deckCentreDeckStatIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .deckCentreDeckStatContent {
+    font-size: 11px;
+  }
+
+  .deckCentreDeckCTA {
+    gap: 8px;
+    margin-left: 15px;
+  }
+
+  .deckCentreDeckCTAButton {
+    padding: 5px 10px;
+    font-size: 11px;
+    min-width: 60px;
+    border-radius: 16px;
+  }
+
+  /* Much smaller deck and card containers */
+  .deck-builder-container {
+    padding: 12px; /* Much reduced padding */
+  }
+
+  .deck-display {
+    transform: scale(0.7); /* 70% of original size */
+    transform-origin: center;
+  }
+
+  .cards-list {
+    gap: 6px; /* Much reduced gap */
+  }
+
+  .card-item {
+    transform: scale(0.8); /* 80% of card size */
+  }
+
+  .library-deck-item {
+    padding: 10px; /* Much reduced padding */
+  }
+
+  .library-deck-stats {
+    gap: 6px; /* Much reduced gap */
+    font-size: 10px; /* Much smaller font */
+  }
+
+  .deck-action-btn {
+    padding: 4px 8px; /* Much smaller buttons */
+    font-size: 10px;
   }
 }
 
