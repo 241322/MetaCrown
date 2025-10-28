@@ -1,7 +1,7 @@
 # MetaCrown - Technical Documentation & Architecture
 
 ## **Project Overview**
-MetaCrown is a **full-stack web application** for Clash Royale players that provides comprehensive game analytics, deck management, and competitive insights. The platform integrates with the official **Clash Royale API** to deliver real-time player statistics, deck optimization tools, and leaderboard rankings.
+MetaCrown is a **full-stack react.js application** for Clash Royale players that provides comprehensive game analytics, deck management, and competitive insights. The platform integrates with the official **Clash Royale API** to deliver real-time player statistics, deck optimization tools, and leaderboard rankings.
 
 ---
 
