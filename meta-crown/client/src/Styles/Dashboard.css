@@ -1279,7 +1279,7 @@
 }
 
 /* Responsive pagination */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .pagination-btn {
     min-width: 35px;
     height: 35px;
@@ -1474,7 +1474,7 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .alert-box {
     margin: 20px;
     min-width: unset;
@@ -1545,7 +1545,7 @@
    ======================================== */
 
 /* Mobile devices - hidden due to mobile override in index.css */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .dashboard-searchbar-wrapper {
     display: none;
   }
@@ -1559,7 +1559,7 @@
 
   .dashboard-searchbar {
     padding: 10px 24px; /* Reduced padding */
-    width: 360px; /* Smaller width */
+    width: 400px; /* Maintain adequate width */
     gap: 12px; /* Reduced gap */
   }
 
@@ -1605,15 +1605,15 @@
   }
 }
 
-/* Small desktop - screens 769px to 1670px (uncommon sizes) */
-@media (min-width: 769px) and (max-width: 1670px) {
+/* Small desktop - screens 1051px to 1670px (uncommon sizes) */
+@media (min-width: 901px) and (max-width: 1438px) {
   .dashboard-searchbar-wrapper {
     margin-top: 60px; /* Much reduced */
   }
 
   .dashboard-searchbar {
     padding: 8px 20px; /* Much reduced padding */
-    width: 300px; /* Much smaller width */
+    width: 350px; /* Maintain adequate width */
     gap: 10px; /* Much reduced gap */
     max-width: calc(100% - 400px); /* Reduce container by 400px */
   }

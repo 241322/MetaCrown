@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_BASE } from "../config/api";
 import "../Styles/Leaderboard.css";
 
 const leaderboardTypes = [
@@ -20,7 +21,7 @@ export default function Leaderboard() {
         setError("");
         
         const currentType = leaderboardTypes.find(type => type.key === activeLeaderboard);
-        const response = await fetch(`http://localhost:6969${currentType.endpoint}`);
+        const response = await fetch(`${API_BASE}${currentType.endpoint}`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch ${activeLeaderboard} leaderboard`);

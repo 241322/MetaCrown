@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { getPlayer, getPlayerBattles, normalizeTag } from "../api/clash";
 import "../Styles/Dashboard.css";
 import PlayerSearch from "../Assets/PlayerSearch.svg";
 import LeftArrow from "../Assets/LeftArrow";
-import Arena24 from "../Assets/Legendary_Arena.webp";
-import Master1 from "../Assets/RankedMaster1.png";
+// import Arena24 from "../Assets/Legendary_Arena.webp";
+// import Master1 from "../Assets/RankedMaster1.png";
 import ElixerIcon from "../Assets/ElixerIcon.png";
 import ATK from "../Assets/ATK.svg";
 import DEF from "../Assets/DEF.svg";
@@ -14,7 +15,7 @@ import DeckComponent from "../Components/DeckComponent";
 
 const DECK_CARD_IDS = [100, 45, 52, 83, 33, 104, 37, 84];
 
-const ASSETS_BASE = process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/';
+const ASSETS_BASE = 'https://metacrown.co.za/assets/';
 
 const toCardSrc = (imageUrl) => {
   const clean = String(imageUrl || '')
@@ -27,8 +28,9 @@ const toCardSrc = (imageUrl) => {
 
 
 const Dashboard = () => {
-  const [search, setSearch] = useState(localStorage.getItem("playerTag") || "#2RC0P82YC");
-  const [focused, setFocused] = useState(false);
+  const navigate = useNavigate();
+  const [search, setSearch] = useState(localStorage.getItem("playerTag") || "");
+  // const [focused, setFocused] = useState(false);
   const [username, setUsername] = useState("");
   const [playerTag, setPlayerTag] = useState("");
   const [clanName, setClanName] = useState("");
@@ -36,7 +38,7 @@ const Dashboard = () => {
   const [crError, setCrError] = useState(null);
   
   // Add state for user's own tag
-  const [userOwnTag, setUserOwnTag] = useState("#2RC0P82YC"); // This should come from user auth/localStorage
+  const [userOwnTag, setUserOwnTag] = useState(localStorage.getItem("userOwnTag") || ""); // Get from localStorage
   
   // Add state for dynamic game mode data
   const [arenaInfo, setArenaInfo] = useState(null);
@@ -46,12 +48,16 @@ const Dashboard = () => {
   // New state for CR deck and loading
   const [currentDeck, setCurrentDeck] = useState([]);
   const [allCards, setAllCards] = useState([]);
-  const [deckLoading, setDeckLoading] = useState(true);
+  const [deckLoading, setDeckLoading] = useState(false); // Start false
+  
+  // Separate loading states for each section
+  const [playerLoading, setPlayerLoading] = useState(false); // Start false
   
   // New state for battle history
   const [battleHistory, setBattleHistory] = useState([]);
-  const [battlesLoading, setBattlesLoading] = useState(true);
+  const [battlesLoading, setBattlesLoading] = useState(false); // Start false
   const [loadingMore, setLoadingMore] = useState(false);
+  // const [hasSearched, setHasSearched] = useState(false); // Track if user has actively searched
   const [allBattles, setAllBattles] = useState([]);
   const [displayedBattles, setDisplayedBattles] = useState(5);
   
@@ -164,7 +170,7 @@ const Dashboard = () => {
 
   // Fetch all cards from CR API once
   useEffect(() => {
-    fetch('http://localhost:6969/api/cr/cards')
+    fetch('https://metacrown.co.za/api/cr/cards')
       .then(res => res.json())
       .then(data => {
         setAllCards(data?.items || []);
@@ -172,7 +178,7 @@ const Dashboard = () => {
       .catch(console.error);
 
     // Keep existing deck cards fetch for ratings
-    fetch("http://localhost:6969/cards")
+    fetch("https://metacrown.co.za/cards")
       .then(res => res.json())
       .then(data => {
         let cardsArray = [];
@@ -213,16 +219,28 @@ const Dashboard = () => {
     }
   }, [crPlayer, allCards]);
 
-  // Load initial player data
+  // Load initial player data on component mount only if user is logged in and has a player_tag
   useEffect(() => {
-    const stored = localStorage.getItem('playerTag') || '#2RC0P82YC';
-    const tag = normalizeTag(stored).slice(1);
-    if (!tag) return;
-    fetchPlayerData(tag);
+    const userId = localStorage.getItem('user_id');
+    const userPlayerTag = localStorage.getItem('playerTag');
+    
+    // Only auto-search if user is logged in AND has a player_tag saved to their account
+    if (userId && userPlayerTag && userPlayerTag.trim() !== '') {
+      const tag = normalizeTag(userPlayerTag).slice(1);
+      if (tag) {
+        // Set initial loading states
+        setPlayerLoading(true);
+        setDeckLoading(true);
+        setBattlesLoading(true);
+        
+        fetchPlayerData(tag);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Function to show alert
-  const showAlertMessage = (message, type = "loading", duration = 3000) => {
+  const showAlertMessage = useCallback((message, type = "loading", duration = 3000) => {
     setAlertMessage(message);
     setAlertType(type);
     setShowAlert(true);
@@ -232,62 +250,125 @@ const Dashboard = () => {
         setShowAlert(false);
       }, duration);
     }
-  };
+  }, []);
 
   // Function to hide alert
   const hideAlert = () => {
     setShowAlert(false);
   };
 
-  // Helper function to fetch player and battles
-  const fetchPlayerData = async (tagNoHash) => {
+  // Optimized function to fetch player and battles in one call
+  const fetchPlayerDataOptimized = async (tagNoHash) => {
     try {
-      showAlertMessage("Loading player data...", "loading");
+      // Show loading immediately
+      showAlertMessage("🔍 Loading player data...", "loading");
+      
+      // Reset loading states
+      setPlayerLoading(true);
       setDeckLoading(true);
       setBattlesLoading(true);
       
-      // Fetch player data and battles in parallel
+      // Try to use a combined endpoint first (faster)
+      const encodedTag = encodeURIComponent('#' + tagNoHash);
+      
+      try {
+        // Attempt combined call
+        const response = await fetch(`https://metacrown.co.za/api/cr/player/${encodedTag}/complete`);
+        if (response.ok) {
+          const data = await response.json();
+          
+          // Process combined data
+          const playerData = data.player;
+          const battlesData = Array.isArray(data.battles) ? data.battles : [];
+          
+          // Set all data at once
+          setCrPlayer(playerData);
+          setUsername(playerData?.name || "");
+          setClanName(playerData?.clan?.name || "No Clan");
+          extractGameModeInfo(playerData);
+          
+          setAllBattles(battlesData);
+          setBattleHistory(battlesData.slice(0, 5));
+          setDisplayedBattles(5);
+          setCurrentPage(1);
+          setShowPagination(false);
+          setCrError(null);
+          
+          // Turn off ALL loading states
+          setPlayerLoading(false);
+          setDeckLoading(false);
+          setBattlesLoading(false);
+          
+          // Show success
+          showAlertMessage(`✅ ${playerData?.name || tagNoHash} loaded successfully!`, "success", 2000);
+          return;
+        }
+      } catch (e) {
+        console.log('Combined endpoint not available, falling back to separate calls');
+      }
+      
+      // Fallback to separate parallel calls
       const [playerData, battlesData] = await Promise.all([
         getPlayer(tagNoHash),
         getPlayerBattles(tagNoHash)
       ]);
       
-      // Debug: Log the first battle to see structure
-      if (battlesData && battlesData.length > 0) {
-        console.log('First battle structure:', JSON.stringify(battlesData[0], null, 2));
-      }
-      
+      // Process and set ALL data at once
       setCrPlayer(playerData);
       setUsername(playerData?.name || "");
       setClanName(playerData?.clan?.name || "No Clan");
-      setAllBattles(battlesData || []);
-      setBattleHistory((battlesData || []).slice(0, 5));
+      extractGameModeInfo(playerData);
+      
+      // Process battle data with proper validation
+      const validBattlesData = Array.isArray(battlesData) ? battlesData : [];
+      setAllBattles(validBattlesData);
+      setBattleHistory(validBattlesData.slice(0, 5));
       setDisplayedBattles(5);
       setCurrentPage(1);
       setShowPagination(false);
       setCrError(null);
       
-      // Extract game mode information
-      extractGameModeInfo(playerData);
+      // Turn off ALL loading states
+      setPlayerLoading(false);
+      setDeckLoading(false);
+      setBattlesLoading(false);
       
-      // Show success message briefly
-      showAlertMessage(`Player "${playerData?.name || tagNoHash}" loaded successfully!`, "success", 2000);
+      // Show success ONLY after everything is loaded
+      const playerName = playerData?.name || tagNoHash;
+      showAlertMessage(`✅ ${playerName} loaded successfully!`, "success", 2000);
       
     } catch (e) {
+      // Handle errors
       setCrError(e.message);
       setUsername("");
       setClanName("");
       setBattleHistory([]);
       setAllBattles([]);
+      setCurrentDeck([]);
+      setDisplayedBattles(0);
+      setCrPlayer(null);
       setShowPagination(false);
       
-      // Show error message
-      showAlertMessage("Please enter a valid Player Tag", "error", 4000);
-    } finally {
+      // Turn off loading states
+      setPlayerLoading(false);
       setDeckLoading(false);
       setBattlesLoading(false);
+      
+      // Show validation error
+      if (e.message.includes('not found')) {
+        showAlertMessage(`❌ Player "${tagNoHash}" not found. Please check the tag.`, "error", 5000);
+      } else if (e.message.includes('429') || e.message.includes('rate limit')) {
+        showAlertMessage(`🚦 Too many requests. Please wait a moment.`, "error", 6000);
+      } else if (e.message.includes('Network Error') || e.message.includes('fetch')) {
+        showAlertMessage(`🌐 Network connection issue. Please check your internet.`, "error", 6000);
+      } else {
+        showAlertMessage(`⚠️ Unable to load player data. Please try again.`, "error", 4000);
+      }
     }
   };
+
+  // Alias the optimized function
+  const fetchPlayerData = fetchPlayerDataOptimized;
 
   // Load more battles (up to 10 total)
   const loadMoreBattles = () => {
@@ -372,13 +453,13 @@ const Dashboard = () => {
     setSearch(value);
   };
 
-  // Prepare deck data for RewindRecord component
-  const playerDeckData = currentDeck.length > 0 
-    ? currentDeck 
-    : deckCards.map(card => ({
-        ...card,
-        src: toCardSrc(card.image_url)
-      }));
+  // Prepare deck data for RewindRecord component (currently unused)
+  // const playerDeckData = currentDeck.length > 0 
+  //   ? currentDeck 
+  //   : deckCards.map(card => ({
+  //       ...card,
+  //       src: toCardSrc(card.image_url)
+  //     }));
 
   // Helper to convert battle data to RewindRecord props
   const formatBattleForRewind = (battle, playerTag) => {
@@ -441,14 +522,14 @@ const Dashboard = () => {
     const fetchUserPlayerTag = async () => {
       const userId = localStorage.getItem("user_id");
       if (!userId) {
-        // Fallback if no user logged in
-        const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+        // No user logged in, keep userOwnTag empty
+        const storedOwnTag = localStorage.getItem("userOwnTag") || "";
         setUserOwnTag(storedOwnTag);
         return;
       }
 
       try {
-        const response = await fetch(`http://localhost:6969/api/users/${userId}`);
+        const response = await fetch(`https://metacrown.co.za/api/users/${userId}`);
         if (response.ok) {
           const userData = await response.json();
           const playerTag = userData.player_tag;
@@ -458,20 +539,20 @@ const Dashboard = () => {
             setUserOwnTag(formattedTag);
             localStorage.setItem("userOwnTag", formattedTag);
           } else {
-            // Fallback if no player_tag in database
-            const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+            // No player_tag in database
+            const storedOwnTag = localStorage.getItem("userOwnTag") || "";
             setUserOwnTag(storedOwnTag);
           }
         } else {
           console.error('Failed to fetch user data:', response.status);
           // Fallback on error
-          const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+          const storedOwnTag = localStorage.getItem("userOwnTag") || "";
           setUserOwnTag(storedOwnTag);
         }
       } catch (error) {
         console.error('Error fetching user player tag:', error);
         // Fallback on error
-        const storedOwnTag = localStorage.getItem("userOwnTag") || "#2RC0P82YC";
+        const storedOwnTag = localStorage.getItem("userOwnTag") || "";
         setUserOwnTag(storedOwnTag);
       }
     };
@@ -488,6 +569,30 @@ const Dashboard = () => {
     setPlayerTag(ownTag);
     localStorage.setItem("playerTag", ownTag);
     fetchPlayerData(tagNoHash);
+  };
+
+  // Deck button functionality
+  const handleCopyDeck = () => {
+    if (!currentDeck || currentDeck.length === 0) {
+      showAlertMessage("No deck to copy!", "error", 3000);
+      return;
+    }
+    
+    // Store deck temporarily in sessionStorage (lost when browser closes)
+    sessionStorage.setItem("copiedDeck", JSON.stringify(currentDeck));
+    showAlertMessage("Deck copied! Go to Deck Centre to paste it.", "success", 3000);
+  };
+
+  const handleImproveDeck = () => {
+    if (!currentDeck || currentDeck.length === 0) {
+      showAlertMessage("No deck to improve!", "error", 3000);
+      return;
+    }
+    
+    // Store deck temporarily and navigate directly to deck centre
+    sessionStorage.setItem("copiedDeck", JSON.stringify(currentDeck));
+    sessionStorage.setItem("autoImport", "true"); // Flag for auto-import
+    navigate("/deck-centre");
   };
 
   return (
@@ -549,64 +654,75 @@ const Dashboard = () => {
           <div className="dashboard-clan-name">{clanName}</div> {/* Changed from playerTag to clanName */}
         </div>
 
-        <div className="bigComponents">
-          <div className="bigComponent">
-            <div className="componentLabel">Trophies</div>
-            <div className="componentAsset">{crPlayer?.trophies ?? 0}</div>
+        {playerLoading ? (
+          <div className="player-stats-loading">
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+            </div>
+            <span>Loading player stats...</span>
           </div>
+        ) : (
+          <>
+            <div className="bigComponents">
+              <div className="bigComponent">
+                <div className="componentLabel">Trophies</div>
+                <div className="componentAsset">{crPlayer?.trophies ?? 0}</div>
+              </div>
 
-          <div className="bigComponent">
-            <div className="componentLabel">Arena</div>
-            <div className="componentAsset">
-              <span className="arena-name-text">{arenaInfo?.name || "Unknown Arena"}</span>
-            </div>
-          </div>
+              <div className="bigComponent">
+                <div className="componentLabel">Arena</div>
+                <div className="componentAsset">
+                  <span className="arena-name-text">{arenaInfo?.name || "Unknown Arena"}</span>
+                </div>
+              </div>
 
-          <div className="bigComponent">
-            <div className="componentLabel">Ranked</div>
-            <div className="componentAsset">
-              <span className="coming-soon-text">Coming Soon</span>
-            </div>
-          </div>
+              <div className="bigComponent">
+                <div className="componentLabel">Ranked</div>
+                <div className="componentAsset">
+                  <span className="coming-soon-text">Coming Soon</span>
+                </div>
+              </div>
 
-          <div className="bigComponent">
-            <div className="componentLabel">Highest Trophies</div>
-            <div className="componentAsset">{crPlayer?.bestTrophies ?? 0}</div>
-          </div>
-        </div>
+              <div className="bigComponent">
+                <div className="componentLabel">Highest Trophies</div>
+                <div className="componentAsset">{crPlayer?.bestTrophies ?? 0}</div>
+              </div>
+            </div>
 
-        <div className="smallComponents">
-          <div className="smallComponent">
-            <div className="smallComponentLabel">Battles Won</div>
-            <div className="smallComponentStat">{crPlayer?.wins ?? 0}</div>
-          </div>
-          <div className="smallComponent">
-            <div className="smallComponentLabel">Three Crown Wins</div>
-            <div className="smallComponentStat">{crPlayer?.threeCrownWins ?? 0}</div>
-          </div>
-          <div className="smallComponent">
-            <div className="smallComponentLabel">King Level</div>
-            <div className="smallComponentStat">{crPlayer?.expLevel ?? 0}</div>
-          </div>
-          <div className="smallComponent">
-            <div className="smallComponentLabel">Cards Found</div>
-            <div className="smallComponentStat">
-              {(crPlayer?.cards?.length ?? 0)}/121
+            <div className="smallComponents">
+              <div className="smallComponent">
+                <div className="smallComponentLabel">Battles Won</div>
+                <div className="smallComponentStat">{crPlayer?.wins ?? 0}</div>
+              </div>
+              <div className="smallComponent">
+                <div className="smallComponentLabel">Three Crown Wins</div>
+                <div className="smallComponentStat">{crPlayer?.threeCrownWins ?? 0}</div>
+              </div>
+              <div className="smallComponent">
+                <div className="smallComponentLabel">King Level</div>
+                <div className="smallComponentStat">{crPlayer?.expLevel ?? 0}</div>
+              </div>
+              <div className="smallComponent">
+                <div className="smallComponentLabel">Cards Found</div>
+                <div className="smallComponentStat">
+                  {(crPlayer?.cards?.length ?? 0)}/121
+                </div>
+              </div>
+              <div className="smallComponent">
+                <div className="smallComponentLabel">Total Donations</div>
+                <div className="smallComponentStat">
+                  {crPlayer?.totalDonations ?? crPlayer?.donations ?? 0}
+                </div>
+              </div>
+              <div className="smallComponent">
+                <div className="smallComponentLabel">Favourite Card</div>
+                <div className="smallComponentStat">
+                  {crPlayer?.currentFavouriteCard?.name ?? "—"}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="smallComponent">
-            <div className="smallComponentLabel">Total Donations</div>
-            <div className="smallComponentStat">
-              {crPlayer?.totalDonations ?? crPlayer?.donations ?? 0}
-            </div>
-          </div>
-          <div className="smallComponent">
-            <div className="smallComponentLabel">Favourite Card</div>
-            <div className="smallComponentStat">
-              {crPlayer?.currentFavouriteCard?.name ?? "—"}
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
       <div className="currentDeckDashboard">
         <h4>Current Deck</h4>
@@ -638,9 +754,8 @@ const Dashboard = () => {
           />
 
           <div className="dashboardDeckCTA">
-            <div className="dashboardDeckCTAButton">Copy</div>
-            <div className="dashboardDeckCTAButton">Improve</div>
-            <div className="dashboardDeckCTAButton">Compare</div>
+            <div className="dashboardDeckCTAButton" onClick={handleCopyDeck}>Copy</div>
+            <div className="dashboardDeckCTAButton" onClick={handleImproveDeck}>Improve</div>
           </div>
         </div>
       </div>
@@ -651,7 +766,7 @@ const Dashboard = () => {
           {battlesLoading ? (
             <div className="battles-loading-spinner">
               <div className="spinner"></div>
-              <span>Loading match history...</span>
+              <span>⚔️ Loading match history...</span>
             </div>
           ) : battleHistory.length > 0 ? (
             <>

@@ -200,7 +200,7 @@ nav::before {
    ======================================== */
 
 /* Mobile devices - hidden due to mobile override in index.css */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   nav {
     display: none;
   }
@@ -236,8 +236,8 @@ nav::before {
   }
 }
 
-/* Small desktop - screens 769px to 1670px (uncommon sizes) */
-@media (min-width: 769px) and (max-width: 1670px) {
+/* Small desktop - screens 1051px to 1670px (uncommon sizes) */
+@media (min-width: 901px) and (max-width: 1438px) {
   nav {
     height: 40px; /* Much smaller navbar */
     padding: 0 20px; /* Much reduced padding */

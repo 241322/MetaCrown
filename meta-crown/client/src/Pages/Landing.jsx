@@ -30,7 +30,8 @@ const Landing = () => {
         const fetchTopCards = async () => {
             try {
                 setLoading(true);
-                const response = await fetch("http://localhost:6969/api/cr/cards");
+                const API_BASE = 'https://metacrown.co.za';
+                const response = await fetch(`${API_BASE}/api/cr/cards`);
                 if (!response.ok) throw new Error("Failed to fetch cards");
                 
                 const data = await response.json();

@@ -84,37 +84,9 @@ code {
    ======================================== */
 
 /* Mobile devices - Show beta message instead of site */
-@media (max-width: 768px) {
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-  
-  body > * {
-    display: none !important;
-  }
-  
-  body::before {
-    content: "MetaCrown is currently in beta and not available on mobile devices. Please visit us on desktop for the full experience!";
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-family: 'YouBlockhead', sans-serif;
-    font-size: 24px;
-    color: var(--white-color);
-    background: var(--secondary-color);
-    padding: 40px;
-    border-radius: 20px;
-    border: 2px solid var(--tertiary-color);
-    box-shadow: var(--indented-shadow);
-    max-width: 600px;
-    line-height: 1.4;
+@media (max-width: 900px) {
+  :root {
+    --hero-height: 70vh;
   }
 }
 
@@ -173,8 +145,8 @@ code {
   }
 }
 
-/* Small desktop - screens 769px to 1670px (uncommon sizes) */
-@media (min-width: 769px) and (max-width: 1670px) {
+/* Small desktop - screens 901px to 1438px (uncommon sizes) */
+@media (min-width: 901px) and (max-width: 1438px) {
   /* Reduce font sizes by 10px from original (6px more than the larger breakpoint) */
   h1 {
     font-size: 78px; /* 88px - 10px */
@@ -200,7 +172,7 @@ code {
     font-size: 6px; /* 16px - 10px */
   }
 
-  /* Reduce all containers by 400px more than the larger breakpoint */
+  /* Reduce all containers by 400px more than the larger breakpoint and center them */
   .main-container,
   .content-container,
   .section-container,
@@ -208,7 +180,7 @@ code {
   .library-section,
   .builder-section {
     padding: 12px; /* Even more reduced */
-    margin: 8px; /* Even more reduced */
+    margin: 8px auto; /* Center containers with auto margins */
     max-width: calc(100% - 400px); /* Reduce containers by 400px */
   }
 

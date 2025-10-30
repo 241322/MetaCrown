@@ -16,6 +16,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from React build (for production)
+app.use(express.static(path.join(__dirname, '../client/build')));
+
 // --- Clash Royale proxy + debug (define BEFORE any app.get('*') fallback) ---
 const CLASH_API_BASE = process.env.CLASH_API_BASE || 'https://api.clashroyale.com/v1';
 const CLASH_API_TOKEN = process.env.CLASH_API_TOKEN;
@@ -239,6 +242,71 @@ app.get('/api/cr/player/:tag/battles', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch battlelog' });
   }
 });
+
+// Combined endpoint for faster loading - fetches both player and battles in one call
+app.get('/api/cr/player/:tag/complete', async (req, res) => {
+  try {
+    const tagNoHash = String(req.params.tag || "").replace(/^#+/, "");
+    const encodedTag = `%23${tagNoHash.toUpperCase()}`;
+    
+    console.log('Fetching complete player data for:', encodedTag);
+    
+    // Fetch both player and battles in parallel
+    const [playerResponse, battlesResponse] = await Promise.all([
+      fetch(`${CLASH_API_BASE}/players/${encodedTag}`, { 
+        headers: { 
+          Authorization: `Bearer ${CLASH_API_TOKEN}`, 
+          Accept: 'application/json' 
+        } 
+      }),
+      fetch(`${CLASH_API_BASE}/players/${encodedTag}/battlelog`, { 
+        headers: { 
+          Authorization: `Bearer ${CLASH_API_TOKEN}`, 
+          Accept: 'application/json' 
+        } 
+      })
+    ]);
+    
+    if (!playerResponse.ok) {
+      const errorText = await playerResponse.text();
+      console.error('Player fetch failed:', playerResponse.status, errorText);
+      return res.status(playerResponse.status).json({ 
+        message: 'Player not found', 
+        status: playerResponse.status 
+      });
+    }
+    
+    const [playerText, battlesText] = await Promise.all([
+      playerResponse.text(),
+      battlesResponse.text()
+    ]);
+    
+    const playerData = JSON.parse(playerText);
+    let battlesData = [];
+    
+    if (battlesResponse.ok) {
+      try {
+        battlesData = JSON.parse(battlesText);
+      } catch (e) {
+        console.error('Battles JSON parse error:', e);
+        battlesData = [];
+      }
+    } else {
+      console.error('Battles fetch failed:', battlesResponse.status);
+    }
+    
+    // Return combined data
+    res.json({
+      player: playerData,
+      battles: Array.isArray(battlesData) ? battlesData : []
+    });
+    
+  } catch (e) {
+    console.error('Combined CR fetch error:', e);
+    res.status(500).json({ message: 'Failed to fetch player data' });
+  }
+});
+
 // --- end CR routes ---
 
 // Example cards endpoint using Sequelize (adjust to your model name)
@@ -264,6 +332,8 @@ const PORT = process.env.PORT || 6969;
     console.log('Database tables synchronized');
   } catch (e) {
     console.error('DB connection failed:', e.message);
+    console.log('Starting server without database...');
+    // Continue anyway - app can still serve React frontend
   }
   app.listen(PORT, () => console.log(`Server running on ${PORT}`));
 })();
@@ -677,4 +747,9 @@ app.delete('/api/decks/:deckId', async (req, res) => {
     console.error('Delete deck error:', e.message);
     res.status(500).json({ message: 'Failed to delete deck', detail: e.message });
   }
+});
+
+// Catch-all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });

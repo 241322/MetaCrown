@@ -36,8 +36,9 @@ const LogIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const API_BASE = 'https://metacrown.co.za';
     try {
-      const res = await fetch('http://localhost:6969/api/auth/login', {
+      const res = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -50,12 +51,26 @@ const LogIn = () => {
         console.error('Login failed:', data);
         return;
       }
-      localStorage.setItem('user_id', data.user_id || '');
-      localStorage.setItem('username', data.username || '');
-      localStorage.setItem('playerTag', data.player_tag || '');
-      localStorage.setItem('email', data.email_address || '');
-      localStorage.setItem('is_admin', data.is_admin || false);
-      navigate('/landing');
+      
+      // Handle nested user object from server response
+      const user = data.user || data;
+      localStorage.setItem('user_id', user.id || user.user_id || '');
+      localStorage.setItem('username', user.username || '');
+      localStorage.setItem('playerTag', user.player_tag || '');
+      localStorage.setItem('email', user.email || user.email_address || '');
+      localStorage.setItem('is_admin', user.is_admin || false);
+      localStorage.setItem('token', data.token || '');
+      
+      console.log('Login successful, stored user data:', {
+        user_id: user.id || user.user_id,
+        username: user.username,
+        email: user.email || user.email_address
+      });
+      
+      // Trigger custom event to update NavBar
+      window.dispatchEvent(new Event('userUpdated'));
+      
+      navigate('/dashboard');
     } catch (err) {
       console.error(err);
     }

@@ -345,7 +345,7 @@
 }
 
 /* Responsive adjustments for DeckCentre */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .deck-component-wrapper .dashboardDeckCards,
     .deckcentre-deck-container {
         width: 90% !important; /* More space on mobile */
@@ -483,7 +483,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .deckCentreDeckMain {
         width: 95%;
     }
@@ -666,7 +666,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .library-deck-item .dashboardDeckCards {
         transform: scale(0.7);
         max-width: 350px;
@@ -985,7 +985,7 @@
    ======================================== */
 
 /* Mobile devices - hidden due to mobile override in index.css */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .deck-centre-header,
   .deckCentrePages {
     display: none;
@@ -1077,7 +1077,7 @@
 }
 
 /* Small desktop - screens 769px to 1670px (uncommon sizes) */
-@media (min-width: 769px) and (max-width: 1670px) {
+@media (min-width: 901px) and (max-width: 1438px) {
   .deck-centre-header {
     margin-top: 100px; /* Even more reduced */
     width: 98%;
@@ -1114,6 +1114,7 @@
   .deckCentreDeckStatIcon {
     width: 16px;
     height: 16px;
+    transform: scale(0.85); /* Make images smaller for small desktop */
   }
 
   .deckCentreDeckStatContent {
@@ -1148,6 +1149,11 @@
 
   .card-item {
     transform: scale(0.8); /* 80% of card size */
+  }
+
+  /* Scale down deck card images specifically */
+  .dashboardDeckCards {
+    transform: scale(0.85); /* Make deck cards smaller */
   }
 
   .library-deck-item {

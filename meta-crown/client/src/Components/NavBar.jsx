@@ -11,8 +11,29 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Set initial username
     setUsername(localStorage.getItem("username") || "Profile");
     setIsAdmin(localStorage.getItem("is_admin") === "true");
+    
+    // Listen for storage changes (when localStorage is updated)
+    const handleStorageChange = () => {
+      setUsername(localStorage.getItem("username") || "Profile");
+      setIsAdmin(localStorage.getItem("is_admin") === "true");
+    };
+    
+    // Custom event listener for localStorage changes within same tab
+    const handleUserUpdate = () => {
+      setUsername(localStorage.getItem("username") || "Profile");
+      setIsAdmin(localStorage.getItem("is_admin") === "true");
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('userUpdated', handleUserUpdate);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userUpdated', handleUserUpdate);
+    };
   }, []);
 
   // Close dropdown when clicking outside
@@ -36,6 +57,8 @@ const NavBar = () => {
     localStorage.removeItem("email");
     localStorage.removeItem("playerTag");
     localStorage.removeItem("userOwnTag");
+    localStorage.removeItem("is_admin");
+    localStorage.removeItem("token");
     // Add any other user-related localStorage items you might have
     
     // Close dropdown

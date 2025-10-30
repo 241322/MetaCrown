@@ -18,7 +18,7 @@ function AppContent() {
   const [data, setData] = useState([])
   useEffect(() => {
     document.title = "MetaCrown";
-    fetch("http://localhost:6969/cards")
+    fetch("https://metacrown.co.za/cards")
       .then((response) => response.json())
       .then((data) => setData(data))
       .catch((error) => console.error("Error fetching cards:", error));

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "../Styles/DeckCentre.css";
 import DeckComponent from "../Components/DeckComponent";
+import { API_BASE } from "../config/api";
 import ElixerIcon from "../Assets/ElixerIcon.png";
 import ATK from "../Assets/ATK.svg";
 import DEF from "../Assets/DEF.svg";
@@ -28,11 +29,13 @@ const DeckCentre = () => {
     const fetchCards = async () => {
       try {
         setCardsLoading(true);
-        const response = await fetch('http://localhost:6969/api/cr/cards');
+        
+        const response = await fetch(`${API_BASE}/api/cr/cards`);
         const data = await response.json();
         setAllCards(data?.items || []);
       } catch (error) {
         console.error('Failed to fetch cards:', error);
+        // You could add a toast notification here if you have one
       } finally {
         setCardsLoading(false);
       }
@@ -50,7 +53,7 @@ const DeckCentre = () => {
       try {
         setLoadingDecks(true);
         console.log('Fetching decks for user ID:', userId);
-        const response = await fetch(`http://localhost:6969/api/decks/user/${userId}`);
+        const response = await fetch(`https://metacrown.co.za/api/decks/user/${userId}`);
         if (response.ok) {
           const decks = await response.json();
           console.log('Fetched decks:', decks);
@@ -104,6 +107,30 @@ const DeckCentre = () => {
       fetchUserDecks();
     }
   }, [activeTab]);
+
+  // Check for copied deck on component mount and handle auto-import
+  useEffect(() => {
+    const copiedDeck = sessionStorage.getItem("copiedDeck");
+    const autoImport = sessionStorage.getItem("autoImport");
+    
+    if (copiedDeck) {
+      try {
+        const deck = JSON.parse(copiedDeck);
+        if (autoImport === "true") {
+          // Auto-import from Improve button
+          setSelectedDeck(deck);
+          setSaveMessage("Deck imported from Dashboard! You can now modify and save it.");
+          setTimeout(() => setSaveMessage(""), 5000);
+          
+          // Clear the auto-import flag but keep the deck for manual imports
+          sessionStorage.removeItem("autoImport");
+        }
+      } catch (error) {
+        console.error("Error parsing copied deck:", error);
+        sessionStorage.removeItem("copiedDeck");
+      }
+    }
+  }, []);
 
   // Get cards that are currently in the deck
   const cardsInDeck = selectedDeck.filter(card => card !== null).map(card => card.id);
@@ -270,7 +297,7 @@ const DeckCentre = () => {
       .replace(/\\/g, '/')
       .replace(/^\/+/, '');
     const withFolder = clean.startsWith('Cards/') ? clean : `Cards/${clean}`;
-    return `${process.env.REACT_APP_ASSETS_BASE || 'http://localhost:6969/assets/'}${withFolder}`;
+    return `https://metacrown.co.za/assets/${withFolder}`;
   };
 
   // Save deck function
@@ -322,7 +349,7 @@ const DeckCentre = () => {
 
       if (editingDeckId) {
         // Update existing deck
-        response = await fetch(`http://localhost:6969/api/decks/${editingDeckId}`, {
+        response = await fetch(`https://metacrown.co.za/api/decks/${editingDeckId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -332,7 +359,7 @@ const DeckCentre = () => {
         successMessage = "Deck updated successfully!";
       } else {
         // Create new deck
-        response = await fetch('http://localhost:6969/api/decks', {
+        response = await fetch('https://metacrown.co.za/api/decks', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -368,7 +395,7 @@ const DeckCentre = () => {
               const fetchUserDecks = async () => {
                 try {
                   setLoadingDecks(true);
-                  const response = await fetch(`http://localhost:6969/api/decks/user/${userId}`);
+                  const response = await fetch(`https://metacrown.co.za/api/decks/user/${userId}`);
                   if (response.ok) {
                     const decks = await response.json();
                     setSavedDecks(decks);
@@ -454,7 +481,7 @@ const DeckCentre = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:6969/api/decks/${deckId}`, {
+      const response = await fetch(`https://metacrown.co.za/api/decks/${deckId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -478,6 +505,35 @@ const DeckCentre = () => {
       console.error('Delete deck error:', error);
       setSaveMessage("Failed to delete deck. Please try again.");
       setTimeout(() => setSaveMessage(""), 5000);
+    }
+  };
+
+  // Handle importing copied deck
+  const handleImportDeck = () => {
+    const copiedDeck = sessionStorage.getItem("copiedDeck");
+    
+    if (!copiedDeck) {
+      setSaveMessage("No deck copied! Use the Copy button on Dashboard first.");
+      setTimeout(() => setSaveMessage(""), 5000);
+      return;
+    }
+    
+    try {
+      const deck = JSON.parse(copiedDeck);
+      if (!Array.isArray(deck) || deck.length !== 8) {
+        setSaveMessage("Invalid deck format!");
+        setTimeout(() => setSaveMessage(""), 5000);
+        return;
+      }
+      
+      setSelectedDeck(deck);
+      setSaveMessage("Deck imported successfully! You can now modify and save it.");
+      setTimeout(() => setSaveMessage(""), 5000);
+    } catch (error) {
+      console.error("Error importing deck:", error);
+      setSaveMessage("Error importing deck. Please try copying again.");
+      setTimeout(() => setSaveMessage(""), 5000);
+      sessionStorage.removeItem("copiedDeck");
     }
   };
 
@@ -579,7 +635,7 @@ const DeckCentre = () => {
               {/* Right CTA Buttons */}
               <div className="deckCentreDeckCTA">
                 <div className="deckCentreDeckCTAButton">Copy</div>
-                <div className="deckCentreDeckCTAButton">Import</div>
+                <div className="deckCentreDeckCTAButton" onClick={handleImportDeck}>Import</div>
                 {editingDeckId && (
                   <div 
                     className="deckCentreDeckCTAButton"
@@ -637,7 +693,7 @@ const DeckCentre = () => {
               {cardsLoading ? (
                 <div className="cards-loading">
                   <div className="spinner"></div>
-                  <span>Loading cards...</span>
+                  <span>🃏 Loading Clash Royale cards...</span>
                 </div>
               ) : (
                 availableCards.map((card) => (

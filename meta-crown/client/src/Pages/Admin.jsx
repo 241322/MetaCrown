@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../config/api";
 import "../Styles/Admin.css";
 
 const Admin = () => {
@@ -23,7 +24,7 @@ const Admin = () => {
       setIsAuthorized(true);
 
       try {
-        const response = await fetch(`http://localhost:6969/api/admin/messages?user_id=${userId}`);
+        const response = await fetch(`${API_BASE}/api/admin/messages?user_id=${userId}`);
         if (response.ok) {
           const messagesData = await response.json();
           setMessages(messagesData);
@@ -44,11 +45,45 @@ const Admin = () => {
     checkAdminAndFetchMessages();
   }, [navigate]);
 
-  const handleMarkAsRead = async (messageId) => {
+  const handleDeleteMessage = async (messageId) => {
+    // Confirmation dialog to prevent accidental deletion
+    if (!window.confirm("Are you sure you want to mark this message as read? This will delete it permanently from the database.")) {
+      return;
+    }
+
     const userId = localStorage.getItem("user_id");
     
     try {
-      const response = await fetch(`http://localhost:6969/api/admin/messages/${messageId}/read`, {
+      const response = await fetch(`${API_BASE}/api/admin/messages/${messageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user_id: parseInt(userId) }),
+      });
+
+      if (response.ok) {
+        // Remove the message from local state immediately
+        setMessages(prevMessages =>
+          prevMessages.filter(msg => msg.message_id !== messageId)
+        );
+        // Close the message details panel if this message was being viewed
+        setSelectedMessage(null);
+      } else {
+        console.error("Failed to delete message:", response.status);
+        alert("Failed to delete message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      alert("Error deleting message. Please try again.");
+    }
+  };
+
+  const handleMarkAsReadOnly = async (messageId) => {
+    const userId = localStorage.getItem("user_id");
+    
+    try {
+      const response = await fetch(`${API_BASE}/api/admin/messages/${messageId}/read`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +92,7 @@ const Admin = () => {
       });
 
       if (response.ok) {
-        // Update local state
+        // Update local state to mark as read
         setMessages(prevMessages =>
           prevMessages.map(msg =>
             msg.message_id === messageId ? { ...msg, is_read: true } : msg
@@ -102,7 +137,13 @@ const Admin = () => {
                   className={`message-item ${!message.is_read ? 'unread' : ''} ${
                     selectedMessage?.message_id === message.message_id ? 'selected' : ''
                   }`}
-                  onClick={() => setSelectedMessage(message)}
+                  onClick={() => {
+                    setSelectedMessage(message);
+                    // Mark as read when opening if not already read
+                    if (!message.is_read) {
+                      handleMarkAsReadOnly(message.message_id);
+                    }
+                  }}
                 >
                   <div className="message-header">
                     <div className="message-from">
@@ -126,14 +167,12 @@ const Admin = () => {
                 <div className="message-details-header">
                   <h3>{selectedMessage.subject}</h3>
                   <div className="message-actions">
-                    {!selectedMessage.is_read && (
-                      <button
-                        className="mark-read-btn"
-                        onClick={() => handleMarkAsRead(selectedMessage.message_id)}
-                      >
-                        Mark as Read
-                      </button>
-                    )}
+                    <button
+                      className="mark-read-btn"
+                      onClick={() => handleDeleteMessage(selectedMessage.message_id)}
+                    >
+                      Mark as Read
+                    </button>
                     <button
                       className="close-btn"
                       onClick={() => setSelectedMessage(null)}
@@ -151,7 +190,7 @@ const Admin = () => {
                     <strong>Date:</strong> {formatDate(selectedMessage.created_at)}
                   </div>
                   <div className="info-row">
-                    <strong>Status:</strong> {selectedMessage.is_read ? 'Read' : 'Unread'}
+                    <strong>Status:</strong> {selectedMessage.is_read ? 'Read' : 'New'}
                   </div>
                 </div>
                 

@@ -1,0 +1,25 @@
+{
+  "short_name": "Meta Crown",
+  "name": "Meta Crown",
+  "icons": [
+    {
+      "src": "../src/Assets/crown.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "../src/Assets/crown.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "../src/Assets/crown.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f29e00",
+  "background_color": "#0F1B2A"
+}
