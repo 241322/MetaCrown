@@ -9,9 +9,10 @@
 This project's complete documentation is organized in the `Documentation` directory:
 
 ### 📖 **Main Documentation Files**
-- **[� 1_SETUP.md](./Documentation/1_SETUP.md)** - Complete project setup, installation, and usage guide
+- **[🚀 1_SETUP.md](./Documentation/1_SETUP.md)** - Complete project setup, installation, and usage guide
 - **[🎯 2_DECK_MANAGEMENT.md](./Documentation/2_DECK_MANAGEMENT.md)** - Deck management system documentation  
 - **[⚙️ 3_TECHNICAL_DOCUMENTATION.md](./Documentation/3_TECHNICAL_DOCUMENTATION.md)** - Technical architecture and API reference
+- **[📈 4_SEO_MARKETING.md](./Documentation/4_SEO_MARKETING.md)** - SEO implementation and digital marketing strategy
 
 ## 🚀 Quick Start
 
