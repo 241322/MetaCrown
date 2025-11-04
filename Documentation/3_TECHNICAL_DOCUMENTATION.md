@@ -305,6 +305,47 @@ CREATE TABLE contact_messages (
 - **Environment Variables**: Production API tokens, database credentials, email/SMS config
 - **Server Configuration**: `production-server.js` with hardcoded production settings
 
+### **Hosting Platform Selection & Justification**
+
+#### **cPanel Node.js Implementation**
+The production deployment utilizes **cPanel's Node.js App feature** rather than traditional cloud providers (AWS, Azure, GCP) for the following technical and business reasons:
+
+**Domain Integration:**
+- **Pre-existing domain registration**: The `metacrown.co.za` domain was registered through a hosting provider with integrated cPanel management
+- **Seamless DNS management**: Direct domain-to-hosting integration eliminates complex DNS configuration
+- **SSL certificate automation**: Built-in Let's Encrypt SSL provisioning and renewal
+
+**Technical Capabilities:**
+- **Node.js 22.18.0 runtime**: Latest LTS version support with native ES modules
+- **MySQL database integration**: Direct database provisioning without external configuration  
+- **File management**: Intuitive cPanel File Manager for deployment and maintenance
+- **Environment separation**: Clear backend/frontend directory structure for organized deployment
+
+**Operational Advantages:**
+- **Simplified deployment pipeline**: Direct file upload deployment suitable for MVP and production testing
+- **Integrated monitoring**: cPanel metrics and logs for application performance tracking
+- **Cost efficiency**: Shared hosting model appropriate for initial production deployment
+- **Maintenance accessibility**: Web-based management interface for non-DevOps team members
+
+#### **Cloud Provider Comparison & Future Considerations**
+
+**Current cPanel Setup vs Cloud Alternatives:**
+
+| Feature | cPanel Node.js | AWS/Azure/GCP | MetaCrown Decision |
+|---------|---------------|---------------|-------------------|
+| **Initial Setup** | Immediate | Complex configuration | ✅ Rapid deployment |
+| **Scaling** | Limited | Horizontal/Vertical | Current traffic sufficient |
+| **Cost** | Fixed monthly | Usage-based | ✅ Predictable budgeting |
+| **DevOps Complexity** | Minimal | High | ✅ Small team advantage |
+| **Domain Integration** | Native | External DNS setup | ✅ Existing registration |
+
+**Migration Pathway:**
+As MetaCrown scales beyond current capacity, the architecture supports migration to:
+- **Containerization**: Docker deployment for cloud portability
+- **Database migration**: MySQL export/import to cloud database services
+- **CDN integration**: Static asset distribution through cloud CDNs
+- **Microservices**: API separation for cloud-native architecture
+
 ### **Build & Deployment Process**
 ```bash
 # Development workflow
