@@ -59,7 +59,7 @@ The MetaCrown Deck Management System is a comprehensive CRUD (Create, Read, Upda
 -- Database: metacrownco_meta_crown_db (Production)
 -- Alternative: meta_crown_db (Development)
 
--- Import complete production schema with card data
+-- Import complete schema with card data
 mysql -u root -p meta_crown_db < metacrownco_meta_crown_db.sql
 ```
 

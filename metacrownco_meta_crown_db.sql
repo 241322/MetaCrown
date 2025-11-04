@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 26, 2025 at 09:20 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Nov 04, 2025 at 09:37 PM
+-- Server version: 11.4.8-MariaDB-cll-lve
+-- PHP Version: 8.4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `meta_crown_db`
+-- Database: `metacrownco_meta_crown_db`
 --
 
 -- --------------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE `cards` (
   `defense_rating` tinyint(4) DEFAULT NULL CHECK (`defense_rating` between 0 and 10),
   `f2p_rating` tinyint(4) DEFAULT NULL CHECK (`f2p_rating` between 0 and 10),
   `name_norm` varchar(255) GENERATED ALWAYS AS (lcase(trim(`name`))) STORED
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Dumping data for table `cards`
@@ -190,15 +190,16 @@ CREATE TABLE `contact_messages` (
   `is_read` tinyint(1) DEFAULT 0,
   `admin_response` text DEFAULT NULL,
   `created_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Dumping data for table `contact_messages`
 --
 
 INSERT INTO `contact_messages` (`message_id`, `name`, `email`, `subject`, `message`, `is_read`, `admin_response`, `created_at`) VALUES
-(1, 'Jordan', 'jordan96fourie@gmail.com', 'Test', ' This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -', 0, NULL, '2025-10-26 16:11:46'),
-(2, 'Jordan', 'jordan96fourie@gmail.com', 'Test 2', '22222 This is a test, I am testing this -This is a test, I am testing this -This is a test, I am testing this -', 0, NULL, '2025-10-26 16:13:22');
+(4, 'Jordan', 'test@email.com', 'Test ', 'Hierdie is \'n toets van\'n ander pc af om seker te maak die website load die boodkappe vir die admin op enige site', 1, NULL, '2025-10-28 06:23:08'),
+(5, 'Tsunagi', 'ManUtd@gmail.com', 'Presentation', 'This is a test ', 1, NULL, '2025-10-28 07:33:29'),
+(6, 'Stefan', 'venterstefand@gmail.com', 'clash account ', 'Why is my clash royale account broken', 1, NULL, '2025-11-01 21:12:16');
 
 -- --------------------------------------------------------
 
@@ -217,16 +218,15 @@ CREATE TABLE `decks` (
   `avg_f2p` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Dumping data for table `decks`
 --
 
 INSERT INTO `decks` (`deck_id`, `user_id`, `deck_name`, `cards`, `avg_elixir`, `avg_attack`, `avg_defense`, `avg_f2p`, `created_at`, `updated_at`) VALUES
-(2, 1, 'My Lumberloon', '[{\"name\":\"Lumberjack\",\"id\":26000035,\"maxLevel\":6,\"maxEvolutionLevel\":1,\"elixirCost\":4,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png\"},{\"name\":\"Barbarians\",\"id\":26000008,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":5,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/TvJsuu2S4yhyk1jVYUAQwdKOnW4U77KuWWOTPOWnwfI.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/TvJsuu2S4yhyk1jVYUAQwdKOnW4U77KuWWOTPOWnwfI.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/TvJsuu2S4yhyk1jVYUAQwdKOnW4U77KuWWOTPOWnwfI.png\"},{\"name\":\"Balloon\",\"id\":26000006,\"maxLevel\":9,\"elixirCost\":5,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png\"},\"rarity\":\"epic\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png\"},{\"name\":\"Wizard\",\"id\":26000017,\"maxLevel\":12,\"maxEvolutionLevel\":1,\"elixirCost\":5,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\"},\"rarity\":\"rare\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\"},{\"name\":\"Rage\",\"id\":28000002,\"maxLevel\":9,\"elixirCost\":2,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/bGP21OOmcpHMJ5ZA79bHVV2D-NzPtDkvBskCNJb7pg0.png\"},\"rarity\":\"epic\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/bGP21OOmcpHMJ5ZA79bHVV2D-NzPtDkvBskCNJb7pg0.png\"},{\"name\":\"Bats\",\"id\":26000049,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":2,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\"},{\"name\":\"Electro Wizard\",\"id\":26000042,\"maxLevel\":6,\"elixirCost\":4,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/RsFaHgB3w6vXsTjXdPr3x8l_GbV9TbOUCvIx07prbrQ.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/RsFaHgB3w6vXsTjXdPr3x8l_GbV9TbOUCvIx07prbrQ.png\"},{\"name\":\"Ice Spirit\",\"id\":26000030,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":1,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\"}]', 3.5, 5, 5, 5, '2025-10-23 08:29:03', '2025-10-23 23:26:38'),
-(3, 1, '2.3 Berserker Cycle', '[{\"name\":\"Berserker\",\"id\":26000102,\"maxLevel\":14,\"elixirCost\":2,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png\"},{\"name\":\"Cannon\",\"id\":27000000,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\"},{\"name\":\"Dart Goblin\",\"id\":26000040,\"maxLevel\":12,\"maxEvolutionLevel\":1,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png\"},\"rarity\":\"rare\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png\"},{\"name\":\"Skeletons\",\"id\":26000010,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":1,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\"},{\"name\":\"Electro Spirit\",\"id\":26000084,\"maxLevel\":14,\"elixirCost\":1,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png\"},{\"name\":\"Rocket\",\"id\":28000003,\"maxLevel\":12,\"elixirCost\":6,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/Ie07nQNK9CjhKOa4-arFAewi4EroqaA-86Xo7r5tx94.png\"},\"rarity\":\"rare\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/Ie07nQNK9CjhKOa4-arFAewi4EroqaA-86Xo7r5tx94.png\"},{\"name\":\"Fire Spirit\",\"id\":26000031,\"maxLevel\":14,\"elixirCost\":1,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png\"},{\"name\":\"Ice Spirit\",\"id\":26000030,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":1,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\"}]', 2.3, 5, 5, 5, '2025-10-23 11:30:56', '2025-10-23 23:27:38'),
-(5, 1, 'Pickle toucher', '[{\"name\":\"Cannon\",\"id\":27000000,\"maxLevel\":14,\"maxEvolutionLevel\":1,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png\"},{\"name\":\"Mega Knight\",\"id\":26000055,\"maxLevel\":6,\"maxEvolutionLevel\":1,\"elixirCost\":7,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\",\"evolutionMedium\":\"https://api-assets.clashroyale.com/cardevolutions/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\"},{\"name\":\"Boss Bandit\",\"id\":26000103,\"maxLevel\":4,\"elixirCost\":6,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/nuceG9o7rAyvyc7D3sp2QSiRYtSOEgraq0NJkDf729s.png\"},\"rarity\":\"champion\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/nuceG9o7rAyvyc7D3sp2QSiRYtSOEgraq0NJkDf729s.png\"},{\"name\":\"Ice Wizard\",\"id\":26000023,\"maxLevel\":6,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/W3dkw0HTw9n1jB-zbknY2w3wHuyuLxSRIAV5fUT1SEY.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/W3dkw0HTw9n1jB-zbknY2w3wHuyuLxSRIAV5fUT1SEY.png\"},{\"name\":\"Berserker\",\"id\":26000102,\"maxLevel\":14,\"elixirCost\":2,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png\"},\"rarity\":\"common\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png\"},{\"name\":\"Princess\",\"id\":26000026,\"maxLevel\":6,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/bAwMcqp9EKVIKH3ZLm_m0MqZFSG72zG-vKxpx8aKoVs.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/bAwMcqp9EKVIKH3ZLm_m0MqZFSG72zG-vKxpx8aKoVs.png\"},{\"name\":\"Vines\",\"id\":28000026,\"maxLevel\":9,\"elixirCost\":3,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/V5sJlPuo2WBRtirJ1lGEPJA4NvQ0KPwFeMrpxLX5z_8.png\"},\"rarity\":\"epic\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/V5sJlPuo2WBRtirJ1lGEPJA4NvQ0KPwFeMrpxLX5z_8.png\"},{\"name\":\"The Log\",\"id\":28000011,\"maxLevel\":6,\"elixirCost\":2,\"iconUrls\":{\"medium\":\"https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png\"},\"rarity\":\"legendary\",\"imageUrl\":\"https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png\"}]', 3.6, 5, 5, 5, '2025-10-26 14:20:04', '2025-10-26 14:20:04');
+(10, 15, 'main deck', '\"[{\\\"name\\\":\\\"Bats\\\",\\\"id\\\":26000049,\\\"maxLevel\\\":14,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":2,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\\\"},\\\"rarity\\\":\\\"common\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png\\\"},{\\\"name\\\":\\\"Valkyrie\\\",\\\"id\\\":26000011,\\\"maxLevel\\\":12,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png\\\"},\\\"rarity\\\":\\\"rare\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png\\\"},{\\\"name\\\":\\\"Firecracker\\\",\\\"id\\\":26000064,\\\"maxLevel\\\":14,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":3,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/c1rL3LO1U2D9-TkeFfAC18gP3AO8ztSwrcHMZplwL2Q.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/c1rL3LO1U2D9-TkeFfAC18gP3AO8ztSwrcHMZplwL2Q.png\\\"},\\\"rarity\\\":\\\"common\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/c1rL3LO1U2D9-TkeFfAC18gP3AO8ztSwrcHMZplwL2Q.png\\\"},{\\\"name\\\":\\\"Skeleton Army\\\",\\\"id\\\":26000012,\\\"maxLevel\\\":9,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":3,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/fAOToOi1pRy7svN2xQS6mDkhQw2pj9m_17FauaNqyl4.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/fAOToOi1pRy7svN2xQS6mDkhQw2pj9m_17FauaNqyl4.png\\\"},\\\"rarity\\\":\\\"epic\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/fAOToOi1pRy7svN2xQS6mDkhQw2pj9m_17FauaNqyl4.png\\\"},{\\\"name\\\":\\\"Furnace\\\",\\\"id\\\":27000010,\\\"maxLevel\\\":12,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png\\\"},\\\"rarity\\\":\\\"rare\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png\\\"},{\\\"name\\\":\\\"The Log\\\",\\\"id\\\":28000011,\\\"maxLevel\\\":6,\\\"elixirCost\\\":2,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png\\\"},\\\"rarity\\\":\\\"legendary\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png\\\"},{\\\"name\\\":\\\"Mega Knight\\\",\\\"id\\\":26000055,\\\"maxLevel\\\":6,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":7,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\\\"},\\\"rarity\\\":\\\"legendary\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png\\\"},{\\\"name\\\":\\\"Hog Rider\\\",\\\"id\\\":26000021,\\\"maxLevel\\\":12,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png\\\"},\\\"rarity\\\":\\\"rare\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png\\\"}]\"', 3.6, 5, 5, 5, '2025-10-28 16:42:35', '2025-10-28 16:42:35'),
+(11, 19, 'Oui Oui', '\"[{\\\"name\\\":\\\"Ice Spirit\\\",\\\"id\\\":26000030,\\\"maxLevel\\\":14,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":1,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\\\"},\\\"rarity\\\":\\\"common\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png\\\"},{\\\"name\\\":\\\"Baby Dragon\\\",\\\"id\\\":26000015,\\\"maxLevel\\\":9,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png\\\"},\\\"rarity\\\":\\\"epic\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png\\\"},{\\\"name\\\":\\\"Inferno Dragon\\\",\\\"id\\\":26000037,\\\"maxLevel\\\":6,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/y5HDbKtTbWG6En6TGWU0xoVIGs1-iQpIP4HC-VM7u8A.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/y5HDbKtTbWG6En6TGWU0xoVIGs1-iQpIP4HC-VM7u8A.png\\\"},\\\"rarity\\\":\\\"legendary\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/y5HDbKtTbWG6En6TGWU0xoVIGs1-iQpIP4HC-VM7u8A.png\\\"},{\\\"name\\\":\\\"Knight\\\",\\\"id\\\":26000000,\\\"maxLevel\\\":14,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":3,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png\\\"},\\\"rarity\\\":\\\"common\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png\\\"},{\\\"name\\\":\\\"Battle Healer\\\",\\\"id\\\":26000068,\\\"maxLevel\\\":12,\\\"elixirCost\\\":4,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/KdwXcoigS2Kg-cgA7BJJIANbUJG6SNgjetRQ-MegZ08.png\\\"},\\\"rarity\\\":\\\"rare\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/KdwXcoigS2Kg-cgA7BJJIANbUJG6SNgjetRQ-MegZ08.png\\\"},{\\\"name\\\":\\\"Wizard\\\",\\\"id\\\":26000017,\\\"maxLevel\\\":12,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":5,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\\\"},\\\"rarity\\\":\\\"rare\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png\\\"},{\\\"name\\\":\\\"Golem\\\",\\\"id\\\":26000009,\\\"maxLevel\\\":9,\\\"elixirCost\\\":8,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/npdmCnET7jmVjJvjJQkFnNSNnDxYHDBigbvIAloFMds.png\\\"},\\\"rarity\\\":\\\"epic\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/npdmCnET7jmVjJvjJQkFnNSNnDxYHDBigbvIAloFMds.png\\\"},{\\\"name\\\":\\\"Skeletons\\\",\\\"id\\\":26000010,\\\"maxLevel\\\":14,\\\"maxEvolutionLevel\\\":1,\\\"elixirCost\\\":1,\\\"iconUrls\\\":{\\\"medium\\\":\\\"https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\\\",\\\"evolutionMedium\\\":\\\"https://api-assets.clashroyale.com/cardevolutions/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\\\"},\\\"rarity\\\":\\\"common\\\",\\\"imageUrl\\\":\\\"https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png\\\"}]\"', 3.8, 5, 5, 5, '2025-11-01 21:09:09', '2025-11-01 21:09:09');
 
 -- --------------------------------------------------------
 
@@ -243,14 +243,27 @@ CREATE TABLE `users` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `is_admin` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`user_id`, `email_address`, `password`, `player_tag`, `username`, `created_at`, `updated_at`, `is_admin`) VALUES
-(1, 'poalsesxander@gmail.com', '$2b$10$lbUCnqHmgz8UqpMpZROBH.JGohMIl7WSq1thmPYDhjrPeC9JxZmj6', '#2RC0P82YC', 'x.ander.OS', '2025-10-15 22:45:21', '2025-10-15 22:45:21', 1);
+(1, 'poalsesxander@gmail.com', '$2b$12$T.ZKo7Km/1my./Nn8Ca5VeEjGyP4ktzOzm1Rgj7ymV8WGk7hKylxG', '#2RC0P82YC', 'x.ander.OS', '2025-10-27 06:37:55', '2025-10-27 07:06:26', 1),
+(8, '241077@virtualwindow.co.za', '$2b$12$A6HepASC16leRyGD7oIsUesScaySkbsOx/3JyuHRufZ0MiUOj6P86', '#ANGIEVR05', 'AngievR05', '2025-10-28 07:04:26', '2025-10-28 07:04:26', 0),
+(9, 'kai@gmail.com', '$2b$12$cN3SQQp3MMdHH7FXtTbGhuA9voPOs12x/H.Y4aRbigUszpK/KjUfO', '#PY0YVJRYR', 'Synergyy', '2025-10-28 07:40:12', '2025-10-28 07:40:12', 0),
+(10, 'ps4xanderstrydom@gmail.com', '$2b$12$Y2dyPEw684GTDdrbmvTcdOFIz9w.At0ilwnWna/I4/Y2QXkmf8vvy', '#CVYV808YY', 'Early', '2025-10-28 08:13:18', '2025-10-28 08:13:18', 0),
+(11, 'meyermarkus513@gmail.com', '$2b$12$vvCPk1VGllfovubmph0pUO1ax9q4bwyynasxlEeq8zr4cOYI5UxSu', '#1', 'PeanutButterBrood', '2025-10-28 09:25:16', '2025-10-28 09:25:16', 0),
+(12, 'zanderkdebeer@gmail.com', '$2b$12$wYfCeQF4Hzlo9lFyCs062uyxJvtd.xMWl/PjIqmWvWvmaA8.cMzS.', '#IFORGOR', 'Octaneology', '2025-10-28 11:30:16', '2025-10-28 11:30:16', 0),
+(13, 'corbyncrobinson@gmail.com', '$2b$12$6k3etDJxQrZaYov.n3tOCe.J4vNmbTy9rNs4nOMqt3MOZjC/4vJTW', '#JPG', 'Corbyn', '2025-10-28 12:16:30', '2025-10-28 12:16:30', 0),
+(14, 'Saucegod@gmail.com', '$2b$12$D62A4JJ5xlK2jmQvTH2TJ.8pJIEAytyOBdrpsv0nDdj.x6OZwD93S', '#123', 'SauceGod', '2025-10-28 12:41:43', '2025-10-28 12:41:43', 0),
+(15, 'jacques.vorster135@gmail.com', '$2b$12$L5FyaDQQVb0ToqIgksLWzeyzQO82U0m2Akil5edPjUx9mJimwaw1i', '#YJULCYOJ9', 'Slet_sappies', '2025-10-28 16:37:14', '2025-10-28 16:37:14', 0),
+(16, 'alex.poalses@gmail.com', '$2b$12$qcPkPg9e9sxzGArguns0XuhGLhiAVKjteVSV1pEqoV0losOw9D56W', '#29L0UJC', 'alex.poalses@gmail.com', '2025-10-29 05:56:16', '2025-10-29 05:56:16', 0),
+(17, 'orlandopretoria@gmail.com', '$2b$12$ARPF7D.4/ghi21OR9gej.u6rO3nNIJ1ZBSuIx77ii7KA.bNH3uEsS', '#8JYQRPYQR', 'Rouge_Revenant', '2025-10-29 09:41:44', '2025-10-29 09:41:44', 0),
+(18, '21100471@virtualwindow.co.za', '$2b$12$dgAvrx3uZrhLgtAObFlNFeAvMjMzHUeyIr.8/9b7A4uS2oxuvfBUa', '#2198', 'MRV', '2025-10-29 13:49:55', '2025-10-29 13:49:55', 0),
+(19, 'venterstefand@gmail.com', '$2b$12$WTaj6uAGfw/Z64PAFEd3m.kaBDApKsDJsYf6a/StdU/Wvuzxu1716', '#123456', 'Stefan V', '2025-11-01 21:04:59', '2025-11-01 21:04:59', 0),
+(52, 'test@gmail.com', '$2b$12$xb7FLDLcLr/FHTs2w4n7deqAOd.z4Cvu76A3BKqnHwGiUiruo1Kd6', '#TEST', 'test', '2025-11-04 09:30:46', '2025-11-04 09:30:46', 0);
 
 --
 -- Indexes for dumped tables
@@ -300,19 +313,19 @@ ALTER TABLE `cards`
 -- AUTO_INCREMENT for table `contact_messages`
 --
 ALTER TABLE `contact_messages`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `decks`
 --
 ALTER TABLE `decks`
-  MODIFY `deck_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `deck_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Constraints for dumped tables

@@ -390,7 +390,7 @@ MetaCrown/
 │   │   ├── production-server.js      # Production server with CORS
 │   │   ├── package.json              # Backend dependencies
 │   │   └── [various server files]    # Alternative server configurations
-│   ├── meta_crown_db.sql            # Complete database schema and data
+│   ├── metacrownco_meta_crown_db.sql # Production database export with complete schema and data
 │   ├── DECK_MANAGEMENT.md           # Deck system documentation
 │   └── package.json                 # Root project configuration
 ├── TECHNICAL_DOCUMENTATION.md       # This comprehensive technical guide
@@ -473,7 +473,7 @@ npm install
 # Set up database
 mysql -u root -p
 CREATE DATABASE meta_crown_db;
-mysql -u root -p meta_crown_db < meta_crown_db.sql
+mysql -u root -p meta_crown_db < metacrownco_meta_crown_db.sql
 
 # Start development servers
 # Terminal 1: Backend server
