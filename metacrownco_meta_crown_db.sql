@@ -250,20 +250,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `email_address`, `password`, `player_tag`, `username`, `created_at`, `updated_at`, `is_admin`) VALUES
-(1, 'poalsesxander@gmail.com', '$2b$12$T.ZKo7Km/1my./Nn8Ca5VeEjGyP4ktzOzm1Rgj7ymV8WGk7hKylxG', '#2RC0P82YC', 'x.ander.OS', '2025-10-27 06:37:55', '2025-10-27 07:06:26', 1),
-(8, '241077@virtualwindow.co.za', '$2b$12$A6HepASC16leRyGD7oIsUesScaySkbsOx/3JyuHRufZ0MiUOj6P86', '#ANGIEVR05', 'AngievR05', '2025-10-28 07:04:26', '2025-10-28 07:04:26', 0),
-(9, 'kai@gmail.com', '$2b$12$cN3SQQp3MMdHH7FXtTbGhuA9voPOs12x/H.Y4aRbigUszpK/KjUfO', '#PY0YVJRYR', 'Synergyy', '2025-10-28 07:40:12', '2025-10-28 07:40:12', 0),
-(10, 'ps4xanderstrydom@gmail.com', '$2b$12$Y2dyPEw684GTDdrbmvTcdOFIz9w.At0ilwnWna/I4/Y2QXkmf8vvy', '#CVYV808YY', 'Early', '2025-10-28 08:13:18', '2025-10-28 08:13:18', 0),
-(11, 'meyermarkus513@gmail.com', '$2b$12$vvCPk1VGllfovubmph0pUO1ax9q4bwyynasxlEeq8zr4cOYI5UxSu', '#1', 'PeanutButterBrood', '2025-10-28 09:25:16', '2025-10-28 09:25:16', 0),
-(12, 'zanderkdebeer@gmail.com', '$2b$12$wYfCeQF4Hzlo9lFyCs062uyxJvtd.xMWl/PjIqmWvWvmaA8.cMzS.', '#IFORGOR', 'Octaneology', '2025-10-28 11:30:16', '2025-10-28 11:30:16', 0),
-(13, 'corbyncrobinson@gmail.com', '$2b$12$6k3etDJxQrZaYov.n3tOCe.J4vNmbTy9rNs4nOMqt3MOZjC/4vJTW', '#JPG', 'Corbyn', '2025-10-28 12:16:30', '2025-10-28 12:16:30', 0),
-(14, 'Saucegod@gmail.com', '$2b$12$D62A4JJ5xlK2jmQvTH2TJ.8pJIEAytyOBdrpsv0nDdj.x6OZwD93S', '#123', 'SauceGod', '2025-10-28 12:41:43', '2025-10-28 12:41:43', 0),
-(15, 'jacques.vorster135@gmail.com', '$2b$12$L5FyaDQQVb0ToqIgksLWzeyzQO82U0m2Akil5edPjUx9mJimwaw1i', '#YJULCYOJ9', 'Slet_sappies', '2025-10-28 16:37:14', '2025-10-28 16:37:14', 0),
-(16, 'alex.poalses@gmail.com', '$2b$12$qcPkPg9e9sxzGArguns0XuhGLhiAVKjteVSV1pEqoV0losOw9D56W', '#29L0UJC', 'alex.poalses@gmail.com', '2025-10-29 05:56:16', '2025-10-29 05:56:16', 0),
-(17, 'orlandopretoria@gmail.com', '$2b$12$ARPF7D.4/ghi21OR9gej.u6rO3nNIJ1ZBSuIx77ii7KA.bNH3uEsS', '#8JYQRPYQR', 'Rouge_Revenant', '2025-10-29 09:41:44', '2025-10-29 09:41:44', 0),
-(18, '21100471@virtualwindow.co.za', '$2b$12$dgAvrx3uZrhLgtAObFlNFeAvMjMzHUeyIr.8/9b7A4uS2oxuvfBUa', '#2198', 'MRV', '2025-10-29 13:49:55', '2025-10-29 13:49:55', 0),
-(19, 'venterstefand@gmail.com', '$2b$12$WTaj6uAGfw/Z64PAFEd3m.kaBDApKsDJsYf6a/StdU/Wvuzxu1716', '#123456', 'Stefan V', '2025-11-01 21:04:59', '2025-11-01 21:04:59', 0),
-(52, 'test@gmail.com', '$2b$12$xb7FLDLcLr/FHTs2w4n7deqAOd.z4Cvu76A3BKqnHwGiUiruo1Kd6', '#TEST', 'test', '2025-11-04 09:30:46', '2025-11-04 09:30:46', 0);
+  
 
 --
 -- Indexes for dumped tables
