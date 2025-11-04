@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.dad18d72.css",
-    "main.js": "/static/js/main.741cab4e.js",
+    "main.css": "/static/css/main.e0c112fc.css",
+    "main.js": "/static/js/main.398b9407.js",
     "static/js/488.ea80e16e.chunk.js": "/static/js/488.ea80e16e.chunk.js",
-    "static/media/backgroundSignUp.jpg": "/static/media/backgroundSignUp.6296ece7b66f71aff672.jpg",
-    "static/media/Card Evolution.png": "/static/media/Card Evolution.132bd943ee8abd6bf38c.png",
     "static/media/crown.png": "/static/media/crown.a9c18bda7b5a5dd3b6b3.png",
+    "static/media/Card Evolution.png": "/static/media/Card Evolution.c5a85e4526254977f880.png",
     "static/media/heroKings.png": "/static/media/heroKings.abb55891913619dedb4b.png",
     "static/media/404.png": "/static/media/404.5e23830173c4808a356b.png",
+    "static/media/backgroundSignUp.jpg": "/static/media/backgroundSignUp.4c57c20a9928264d633b.jpg",
     "static/media/Balloon_card_render.png": "/static/media/Balloon_card_render.a15e082277a7ef272a6c.png",
     "static/media/DEF.svg": "/static/media/DEF.93d64e1504e7abd02d2d3799261113ee.svg",
     "static/media/Artboard 1.png": "/static/media/Artboard 1.4351baf63bb5ae7ff301.png",
@@ -31,12 +31,12 @@
     "static/media/footerBackground.svg": "/static/media/footerBackground.043d190cb38451433a1f.svg",
     "static/media/PlayerSearch.svg": "/static/media/PlayerSearch.b0f800ed518b7572635fddb967f672de.svg",
     "index.html": "/index.html",
-    "main.dad18d72.css.map": "/static/css/main.dad18d72.css.map",
-    "main.741cab4e.js.map": "/static/js/main.741cab4e.js.map",
+    "main.e0c112fc.css.map": "/static/css/main.e0c112fc.css.map",
+    "main.398b9407.js.map": "/static/js/main.398b9407.js.map",
     "488.ea80e16e.chunk.js.map": "/static/js/488.ea80e16e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dad18d72.css",
-    "static/js/main.741cab4e.js"
+    "static/css/main.e0c112fc.css",
+    "static/js/main.398b9407.js"
   ]
 }

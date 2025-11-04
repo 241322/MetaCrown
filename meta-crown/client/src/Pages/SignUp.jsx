@@ -24,6 +24,7 @@ const SignUp = () => {
   const [submitted1, setSubmitted1] = useState(false);
   const [focus1, setFocus1] = useState({ email: false, password: false, password2: false });
   const [touched1, setTouched1] = useState({ email: false, password: false, password2: false });
+  const [errorMessage, setErrorMessage] = useState("");
 
   // Step 2 fields
   const [username, setUsername] = useState("");
@@ -96,6 +97,20 @@ const SignUp = () => {
   const handleStep1 = async (e) => {
     e.preventDefault();
     setSubmitted1(true);
+    setErrorMessage("");
+    
+    // Validate email
+    if (!emailValid) {
+      setErrorMessage("Please enter a valid email address");
+      return;
+    }
+    
+    // Validate password match
+    if (!password2Valid) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+    
     if (!emailValid || !passwordValid || !password2Valid || isAdvancing) return;
 
     setIsAdvancing(true);
@@ -205,7 +220,10 @@ const SignUp = () => {
               type="email"
               placeholder="Email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => {
+                setEmail(e.target.value);
+                if (errorMessage) setErrorMessage("");
+              }}
               onFocus={() => setFocus1(f => ({ ...f, email: true }))}
               onBlur={() => setTouched1(t => ({ ...t, email: true }))}
               className={`splashInput${focus1.email ? " focused" : ""}`}
@@ -237,7 +255,10 @@ const SignUp = () => {
               type="password"
               placeholder="Repeat Password"
               value={password2}
-              onChange={e => setPassword2(e.target.value)}
+              onChange={e => {
+                setPassword2(e.target.value);
+                if (errorMessage) setErrorMessage("");
+              }}
               onFocus={() => setFocus1(f => ({ ...f, password2: true }))}
               onBlur={() => setFocus1(f => ({ ...f, password2: false }))}
               className={`splashInput${focus1.password2 ? " focused" : ""}`}
@@ -249,10 +270,10 @@ const SignUp = () => {
                   : {}
               }
             />
-            {submitted1 && !password2Valid && (
-              <span style={{ color: "#E74C3C", fontSize: "0.9rem" }}>
-                Passwords do not match or are too short
-              </span>
+            {errorMessage && (
+              <div className="error-message">
+                {errorMessage}
+              </div>
             )}
             <div className="cta-row">
               <button

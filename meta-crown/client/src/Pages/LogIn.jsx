@@ -11,6 +11,8 @@ const LogIn = () => {
   // const [submitted, setSubmitted] = useState(false);
   const [focus, setFocus] = useState({ email: false, password: false });
   const [touched, setTouched] = useState({ email: false, password: false });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // Validation
   const emailValid = /\S+@\S+\.\S+/.test(email);
@@ -36,6 +38,16 @@ const LogIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    setIsLoading(true);
+    
+    // Client-side validation
+    if (!emailValid || !passwordValid) {
+      setErrorMessage("It appears you have entered an invalid email address or password");
+      setIsLoading(false);
+      return;
+    }
+    
     const API_BASE = 'https://metacrown.co.za';
     try {
       const res = await fetch(`${API_BASE}/api/auth/login`, {
@@ -49,6 +61,8 @@ const LogIn = () => {
       const data = await res.json();
       if (!res.ok) {
         console.error('Login failed:', data);
+        setErrorMessage("It appears you have entered an invalid email address or password");
+        setIsLoading(false);
         return;
       }
       
@@ -73,6 +87,8 @@ const LogIn = () => {
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
+      setErrorMessage("It appears you have entered an invalid email address or password");
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +117,10 @@ const LogIn = () => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (errorMessage) setErrorMessage("");
+            }}
             onBlur={() => setTouched((t) => ({ ...t, email: true }))}
             onFocus={() => setFocus((f) => ({ ...f, email: true }))}
             className={`splashInput${
@@ -119,7 +138,10 @@ const LogIn = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              if (errorMessage) setErrorMessage("");
+            }}
             onBlur={() => setTouched((t) => ({ ...t, password: true }))}
             onFocus={() => setFocus((f) => ({ ...f, password: true }))}
             className={`splashInput${
@@ -133,6 +155,11 @@ const LogIn = () => {
                 : {}
             }
           />
+          {errorMessage && (
+            <div className="error-message">
+              {errorMessage}
+            </div>
+          )}
           <div className="cta-row">
             <button
               className="splashButton"
@@ -145,9 +172,9 @@ const LogIn = () => {
             <button
               className="splashButton"
               type="submit"
-              disabled={!emailValid || !passwordValid}
+              disabled={!emailValid || !passwordValid || isLoading}
             >
-              Log In
+              {isLoading ? "Logging In..." : "Log In"}
             </button>
           </div>
         </form>
