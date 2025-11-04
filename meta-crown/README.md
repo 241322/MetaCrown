@@ -272,7 +272,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Website**: [metacrown.co.za](https://metacrown.co.za)
-- **Email**: support@metacrown.co.za
 - **Issues**: GitHub Issues tab
 - **Documentation**: See `TECHNICAL_DOCUMENTATION.md` for detailed technical specs
 
