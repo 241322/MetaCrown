@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.842506d1.css",
-    "main.js": "/static/js/main.d8331dba.js",
+    "main.css": "/static/css/main.dad18d72.css",
+    "main.js": "/static/js/main.741cab4e.js",
     "static/js/488.ea80e16e.chunk.js": "/static/js/488.ea80e16e.chunk.js",
     "static/media/backgroundSignUp.jpg": "/static/media/backgroundSignUp.6296ece7b66f71aff672.jpg",
     "static/media/Card Evolution.png": "/static/media/Card Evolution.132bd943ee8abd6bf38c.png",
@@ -31,12 +31,12 @@
     "static/media/footerBackground.svg": "/static/media/footerBackground.043d190cb38451433a1f.svg",
     "static/media/PlayerSearch.svg": "/static/media/PlayerSearch.b0f800ed518b7572635fddb967f672de.svg",
     "index.html": "/index.html",
-    "main.842506d1.css.map": "/static/css/main.842506d1.css.map",
-    "main.d8331dba.js.map": "/static/js/main.d8331dba.js.map",
+    "main.dad18d72.css.map": "/static/css/main.dad18d72.css.map",
+    "main.741cab4e.js.map": "/static/js/main.741cab4e.js.map",
     "488.ea80e16e.chunk.js.map": "/static/js/488.ea80e16e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.842506d1.css",
-    "static/js/main.d8331dba.js"
+    "static/css/main.dad18d72.css",
+    "static/js/main.741cab4e.js"
   ]
 }

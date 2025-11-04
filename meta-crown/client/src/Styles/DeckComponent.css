@@ -203,8 +203,8 @@
    RESPONSIVE DECK COMPONENT ADJUSTMENTS
    ======================================== */
 
-/* Mobile devices - hidden due to mobile override in index.css */
-@media (max-width: 900px) {
+/* Mobile devices - max-width 1291px */
+@media (max-width: 1291px) {
   .dashboardDeckCards {
     display: none;
   }
@@ -248,7 +248,7 @@
 }
 
 /* Small desktop - screens 1051px to 1670px (uncommon sizes) */
-@media (min-width: 901px) and (max-width: 1438px) {
+@media (min-width: 1292px) and (max-width: 1670px) {
   /* Much smaller deck dimensions for uncommon screen sizes */
   .dashboardDeckCards.deck-builder-mode {
     width: 600px !important; /* Much reduced from 1000px */

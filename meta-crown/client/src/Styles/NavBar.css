@@ -199,8 +199,8 @@ nav::before {
    RESPONSIVE NAVBAR ADJUSTMENTS
    ======================================== */
 
-/* Mobile devices - hidden due to mobile override in index.css */
-@media (max-width: 900px) {
+/* Mobile devices - max-width 1291px */
+@media (max-width: 1291px) {
   nav {
     display: none;
   }
@@ -237,7 +237,7 @@ nav::before {
 }
 
 /* Small desktop - screens 1051px to 1670px (uncommon sizes) */
-@media (min-width: 901px) and (max-width: 1438px) {
+@media (min-width: 1292px) and (max-width: 1670px) {
   nav {
     height: 40px; /* Much smaller navbar */
     padding: 0 20px; /* Much reduced padding */

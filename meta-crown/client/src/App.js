@@ -13,6 +13,7 @@ import LogIn from "./Pages/LogIn";
 import SignUp from "./Pages/SignUp";
 import NotFound from "./Pages/NotFound";
 import Footer from "./Components/Footer";
+import MobileOverlay from "./Components/MobileOverlay";
 
 function AppContent() {
   const [data, setData] = useState([])
@@ -32,6 +33,7 @@ function AppContent() {
 
   return (
     <div className="app-shell">
+      <MobileOverlay />
       {!hideNavBar && <NavBar />}
       <main className="app-main">
         <Routes>
