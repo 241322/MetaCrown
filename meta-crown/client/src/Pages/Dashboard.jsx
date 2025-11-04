@@ -661,6 +661,23 @@ const Dashboard = () => {
             </div>
             <span>Loading player stats...</span>
           </div>
+        ) : !crPlayer && isViewingOwnDashboard && (!userOwnTag || userOwnTag === '#') ? (
+          <div className="no-player-tag-message">
+            <div className="no-player-tag-content">
+              <h3>No Player Tag Found</h3>
+              <p>It looks like you haven't connected your Clash Royale player tag yet.</p>
+              <p>To see your stats and battle history, please:</p>
+              <ol>
+                <li>Go to your <strong>Profile</strong> page</li>
+                <li>Add your Clash Royale player tag</li>
+                <li>Return to your dashboard to see your stats</li>
+              </ol>
+              <p className="help-text">
+                Don't know your player tag? Open Clash Royale, tap on your profile, 
+                and copy the tag that starts with #.
+              </p>
+            </div>
+          </div>
         ) : (
           <>
             <div className="bigComponents">

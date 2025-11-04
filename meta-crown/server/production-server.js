@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Sequelize, DataTypes } from 'sequelize';
@@ -132,6 +133,7 @@ const initializeDatabase = async () => {
 initializeDatabase();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Serve static files from React build

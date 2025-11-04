@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.e0c112fc.css",
-    "main.js": "/static/js/main.398b9407.js",
+    "main.css": "/static/css/main.2c5661f2.css",
+    "main.js": "/static/js/main.a4e048ca.js",
     "static/js/488.ea80e16e.chunk.js": "/static/js/488.ea80e16e.chunk.js",
     "static/media/crown.png": "/static/media/crown.a9c18bda7b5a5dd3b6b3.png",
-    "static/media/Card Evolution.png": "/static/media/Card Evolution.c5a85e4526254977f880.png",
+    "static/media/Card Evolution.png": "/static/media/Card Evolution.0bd0c52da86a576e8dcc.png",
     "static/media/heroKings.png": "/static/media/heroKings.abb55891913619dedb4b.png",
     "static/media/404.png": "/static/media/404.5e23830173c4808a356b.png",
     "static/media/backgroundSignUp.jpg": "/static/media/backgroundSignUp.4c57c20a9928264d633b.jpg",
@@ -31,12 +31,12 @@
     "static/media/footerBackground.svg": "/static/media/footerBackground.043d190cb38451433a1f.svg",
     "static/media/PlayerSearch.svg": "/static/media/PlayerSearch.b0f800ed518b7572635fddb967f672de.svg",
     "index.html": "/index.html",
-    "main.e0c112fc.css.map": "/static/css/main.e0c112fc.css.map",
-    "main.398b9407.js.map": "/static/js/main.398b9407.js.map",
+    "main.2c5661f2.css.map": "/static/css/main.2c5661f2.css.map",
+    "main.a4e048ca.js.map": "/static/js/main.a4e048ca.js.map",
     "488.ea80e16e.chunk.js.map": "/static/js/488.ea80e16e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e0c112fc.css",
-    "static/js/main.398b9407.js"
+    "static/css/main.2c5661f2.css",
+    "static/js/main.a4e048ca.js"
   ]
 }
