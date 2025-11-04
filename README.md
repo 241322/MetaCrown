@@ -6,16 +6,16 @@
 
 ## 📚 Documentation
 
-This project's complete documentation is organized in the `ReadMe Files` directory:
+This project's complete documentation is organized in the `Documentation` directory:
 
 ### 📖 **Main Documentation Files**
-- **[📄 1_README.md](./ReadMe%20Files/1_README.md)** - Complete project overview, setup, and usage guide
-- **[🎯 2_DECK_MANAGEMENT.md](./ReadMe%20Files/2_DECK_MANAGEMENT.md)** - Deck management system documentation  
-- **[⚙️ 3_TECHNICAL_DOCUMENTATION.md](./ReadMe%20Files/3_TECHNICAL_DOCUMENTATION.md)** - Technical architecture and API reference
+- **[� 1_SETUP.md](./Documentation/1_SETUP.md)** - Complete project setup, installation, and usage guide
+- **[🎯 2_DECK_MANAGEMENT.md](./Documentation/2_DECK_MANAGEMENT.md)** - Deck management system documentation  
+- **[⚙️ 3_TECHNICAL_DOCUMENTATION.md](./Documentation/3_TECHNICAL_DOCUMENTATION.md)** - Technical architecture and API reference
 
 ## 🚀 Quick Start
 
-For complete setup instructions, see [1_README.md](./ReadMe%20Files/1_README.md)
+For complete setup instructions, see [1_SETUP.md](./Documentation/1_SETUP.md)
 
 ### Prerequisites
 - Node.js (v18.0 or higher)
@@ -59,4 +59,4 @@ MetaCrown is a full-stack web application that provides Clash Royale players wit
 
 ---
 
-**For detailed information, please refer to the complete documentation in the [ReadMe Files](./ReadMe%20Files/) directory.**
+**For detailed information, please refer to the complete documentation in the [Documentation](./Documentation/) directory.**
