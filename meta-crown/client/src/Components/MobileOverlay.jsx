@@ -18,8 +18,8 @@ const MobileOverlay = () => {
             <h3>To access MetaCrown:</h3>
             <ul>
               <li>Visit us on a desktop computer or laptop</li>
-              <li>Use a screen resolution of at least 1292px width</li>
-              <li>Ensure you have a mouse or trackpad for optimal interaction</li>
+              <li>Rotate your device to landscape mode (if on tablet)</li>
+              <li>Use a larger screen for optimal deck building experience</li>
             </ul>
           </div>
           <div className="mobile-contact">

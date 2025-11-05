@@ -1,4 +1,4 @@
-/* Mobile Overlay - Only visible on screens ≤1291px */
+/* Mobile Overlay - Show for portrait orientation (mobile usage) and small landscape screens */
 .mobile-overlay {
   position: fixed;
   top: 0;
@@ -14,13 +14,27 @@
   box-sizing: border-box;
 }
 
-/* Show mobile overlay only on mobile devices */
-@media (max-width: 1291px) {
+/* Show mobile overlay for portrait screens (mobile devices) */
+@media (orientation: portrait) {
   .mobile-overlay {
     display: flex;
   }
   
-  /* Hide the main app content on mobile */
+  /* Hide the main app content on portrait screens */
+  .app-shell > nav,
+  .app-shell > main,
+  .app-shell > footer {
+    display: none !important;
+  }
+}
+
+/* Also show for very small landscape screens (phones in landscape) */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mobile-overlay {
+    display: flex;
+  }
+  
+  /* Hide the main app content on small landscape screens */
   .app-shell > nav,
   .app-shell > main,
   .app-shell > footer {

@@ -1,3 +1,16 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+# Important pages for search engines
+Allow: /dashboard
+Allow: /deck-centre
+Allow: /leaderboard
+Allow: /help
+
+# Sitemap location
+Sitemap: https://metacrown.co.za/sitemap.xml
+
+# Block admin areas (if any)
+Disallow: /admin
+Disallow: /api/
