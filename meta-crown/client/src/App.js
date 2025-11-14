@@ -26,8 +26,8 @@ function AppContent() {
   }, []);
   const location = useLocation();
   // List of routes where NavBar should be hidden
-  const hideNavBarRoutes = ["/", "/login", "/signup"];
-  const hideFooterRoutes = ["/", "/login", "/signup"];
+  const hideNavBarRoutes = ["/splash", "/login", "/signup"];
+  const hideFooterRoutes = ["/splash", "/login", "/signup"];
   const hideNavBar = hideNavBarRoutes.includes(location.pathname);
   const hideFooter = hideFooterRoutes.includes(location.pathname);
 
@@ -37,10 +37,10 @@ function AppContent() {
       {!hideNavBar && <NavBar />}
       <main className="app-main">
         <Routes>
-          <Route path="/" element={<Splash />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/splash" element={<Splash />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/landing" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/deck-centre" element={<DeckCentre />} />
           <Route path="/leaderboard" element={<Leaderboard />} />

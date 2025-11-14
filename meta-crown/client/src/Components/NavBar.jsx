@@ -12,18 +12,21 @@ const NavBar = () => {
 
   useEffect(() => {
     // Set initial username
-    setUsername(localStorage.getItem("username") || "Profile");
+    const storedUsername = localStorage.getItem("username");
+    setUsername(storedUsername || "");
     setIsAdmin(localStorage.getItem("is_admin") === "true");
     
     // Listen for storage changes (when localStorage is updated)
     const handleStorageChange = () => {
-      setUsername(localStorage.getItem("username") || "Profile");
+      const storedUsername = localStorage.getItem("username");
+      setUsername(storedUsername || "");
       setIsAdmin(localStorage.getItem("is_admin") === "true");
     };
     
     // Custom event listener for localStorage changes within same tab
     const handleUserUpdate = () => {
-      setUsername(localStorage.getItem("username") || "Profile");
+      const storedUsername = localStorage.getItem("username");
+      setUsername(storedUsername || "");
       setIsAdmin(localStorage.getItem("is_admin") === "true");
     };
     
@@ -64,14 +67,14 @@ const NavBar = () => {
     // Close dropdown
     setShowDropdown(false);
     
-    // Navigate to splash screen (initial load page)
+    // Navigate to landing page
     navigate("/");
   };
 
   return (
     <nav>
       <div className="nav-left">
-        <Link to="/landing">
+        <Link to="/">
           <img src={crown} alt="Crown Logo" className="crown-logo" />
         </Link>
         <ul className="nav-main-links">
@@ -87,26 +90,32 @@ const NavBar = () => {
         </ul>
       </div>
       <ul className="nav-right-links">
-        <li className="username-dropdown-container" ref={dropdownRef}>
-          <div 
-            className="username-button"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            {username}
-          </div>
-          {showDropdown && (
-            <div className="username-dropdown">
-              <button 
-                className="logout-button"
-                onClick={handleLogout}
+        {username ? (
+          <>
+            <li className="username-dropdown-container" ref={dropdownRef}>
+              <div 
+                className="username-button"
+                onClick={() => setShowDropdown(!showDropdown)}
               >
-                Log Out
-              </button>
-            </div>
-          )}
-        </li>
-        {isAdmin && (
-          <li><NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""}>Admin</NavLink></li>
+                {username}
+              </div>
+              {showDropdown && (
+                <div className="username-dropdown">
+                  <button 
+                    className="logout-button"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </li>
+            {isAdmin && (
+              <li><NavLink to="/admin" className={({ isActive }) => isActive ? "active-link" : ""}>Admin</NavLink></li>
+            )}
+          </>
+        ) : (
+          <li><NavLink to="/splash" className={({ isActive }) => isActive ? "active-link" : ""}>Sign Up</NavLink></li>
         )}
         <li><NavLink to="/help" className={({ isActive }) => isActive ? "active-link" : ""}>Help</NavLink></li>
       </ul>
