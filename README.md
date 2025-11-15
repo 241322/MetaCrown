@@ -344,17 +344,15 @@ Future scalability options include containerization with Docker and migration to
 
 ---
 
-## Contributors
+## Developer
+
+**Xander Poalses**  
+Student Number: 241322  
+Open Window Institute
 
 <a href="https://github.com/241322/MetaCrown/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=241322/MetaCrown" />
 </a>
-
----
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -367,4 +365,4 @@ Special thanks to:
 
 ---
 
-**Built with ❤️ for the Clash Royale community**
+**Built with ❤️ for the Clash Royale community by Xander Poalses**
